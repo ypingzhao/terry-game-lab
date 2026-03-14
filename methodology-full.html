@@ -311,11 +311,11 @@
         /* Section Numbering */
         .section-title::before {
             content: attr(data-section-number);
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             width: 45px;
             height: 45px;
-            line-height: 45px;
-            text-align: center;
             background: linear-gradient(135deg, #f15bb5 0%, #00f5d4 100%);
             color: #0f0c29;
             border-radius: 12px;
