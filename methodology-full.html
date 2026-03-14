@@ -64,7 +64,7 @@
         
         /* Header */
         .header {
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(20px);
             position: sticky;
             top: 0;
@@ -136,12 +136,8 @@
         }
         
         @keyframes titleGlow {
-            0% {
-                filter: brightness(1);
-            }
-            100% {
-                filter: brightness(1.3);
-            }
+            0% { filter: brightness(1); }
+            100% { filter: brightness(1.3); }
         }
         
         .hero p {
@@ -154,14 +150,14 @@
         
         .version-badge {
             display: inline-block;
-            background: rgba(255, 215, 0, 0.2);
+            background: rgba(0, 245, 212, 0.2);
             color: var(--accent-gold);
             padding: 0.5rem 1rem;
             border-radius: 20px;
             font-size: 0.875rem;
             font-weight: 600;
             margin-top: 1rem;
-            border: 1px solid rgba(255, 215, 0, 0.3);
+            border: 1px solid rgba(0, 245, 212, 0.3);
             letter-spacing: 0.05em;
             text-transform: uppercase;
         }
@@ -204,7 +200,7 @@
         }
         
         .nav-tag:hover {
-            background: rgba(255, 215, 0, 0.2);
+            background: rgba(0, 245, 212, 0.2);
             border-color: var(--accent-gold);
             transform: translateY(-2px);
         }
@@ -302,7 +298,7 @@
             justify-content: center;
             background: var(--secondary-gradient);
             border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(245, 87, 108, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 187, 249, 0.3);
         }
         
         .section-title {
@@ -330,7 +326,7 @@
         .dimension-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-            border-color: rgba(255, 215, 0, 0.3);
+            border-color: rgba(241, 91, 181, 0.3);
         }
         
         .dimension-title {
@@ -356,16 +352,18 @@
         }
         
         .score-section {
-            background: rgba(0, 0, 0, 0.15);
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 16px;
             padding: 1.5rem;
         }
         
-        .score-label {
+        .score-section .score-label {
             font-weight: 600;
             color: var(--accent-gold);
             margin-bottom: 1rem;
             font-size: 1.1rem;
+            font-family: inherit;
+            min-width: auto;
         }
         
         .score-criteria {
@@ -373,7 +371,7 @@
             color: var(--text-secondary);
             font-size: 0.95rem;
             padding: 0.75rem;
-            background: rgba(255, 215, 0, 0.1);
+            background: rgba(0, 245, 212, 0.1);
             border-radius: 10px;
             border-left: 3px solid var(--accent-gold);
             font-weight: 400;
@@ -414,7 +412,7 @@
         
         /* Footer */
         footer {
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
             padding: 2rem;
             text-align: center;
             border-top: 1px solid var(--card-border);
@@ -775,35 +773,4 @@
                     <p class="dimension-definition">游戏对操作精确度的要求（粗放/精准/极致）</p>
                     <div class="score-section">
                         <div class="score-label">评估维度</div>
-                        <div class="score-criteria">容错率、判定框、连招复杂度</div>
-                        <div class="score-grid">
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-0)">0</span>
-                                <span class="score-text">不需要任何操作，全自动运行</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-1)">1</span>
-                                <span class="score-text">操作极其粗放，容错率100%，不需要任何精度</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-2)">2</span>
-                                <span class="score-text">操作精度要求低，容错率高，判定框大</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-3)">3</span>
-                                <span class="score-text">有一定精度要求，容错率适中，判定合理，连招有一定复杂度</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-4)">4</span>
-                                <span class="score-text">精度要求高，容错率低，判定精确，连招复杂度高</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-5)">5</span>
-                                <span class="score-text">精度要求极致，判定完美，操作深度极深，业内标杆</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="dimension-card">
-                    <h3 class="dimension
+                        <div class="score-criteria">
