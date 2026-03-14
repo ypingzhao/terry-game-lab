@@ -392,11 +392,20 @@
         .score-item {
             display: flex;
             gap: 0.8rem;
-            align-items: flex-start;
-            padding: 0.75rem;
+            align-items: center;
+            padding: 0.75rem 1rem;
             border-radius: 10px;
             background: rgba(255, 255, 255, 0.05);
             transition: background 0.2s ease;
+            flex-wrap: nowrap;
+        }
+        
+        .score-value {
+            min-width: 30px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            font-family: 'JetBrains Mono', monospace;
+            flex-shrink: 0;
         }
         
         .score-item:hover {
