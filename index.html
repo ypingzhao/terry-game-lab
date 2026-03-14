@@ -39,7 +39,82 @@
             font-size: 1.5rem;
             font-weight: 300;
             opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+        
+        /* Cyberpunk Countdown */
+        .countdown-container {
             margin-bottom: 3rem;
+            text-align: center;
+        }
+        
+        .countdown-title {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .countdown {
+            display: inline-flex;
+            gap: 1rem;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 1.5rem 2rem;
+            border-radius: 15px;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5),
+                        inset 0 0 20px rgba(0, 255, 255, 0.1);
+            font-family: 'Courier New', monospace;
+        }
+        
+        .countdown-unit {
+            text-align: center;
+        }
+        
+        .countdown-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff,
+                         0 0 20px #00ffff,
+                         0 0 30px #00ffff;
+            animation: flicker 2s infinite;
+        }
+        
+        .countdown-separator {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff,
+                         0 0 20px #ff00ff;
+            animation: pulse 1s infinite;
+        }
+        
+        .countdown-label {
+            font-size: 0.7rem;
+            opacity: 0.8;
+            margin-top: 0.3rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        @keyframes flicker {
+            0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+                opacity: 1;
+            }
+            20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+                opacity: 0.6;
+            }
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.3;
+            }
         }
         
         .features {
@@ -75,155 +150,6 @@
             line-height: 1.6;
         }
         
-
-        
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(5px);
-        }
-        
-        .modal-content {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin: 5% auto;
-            padding: 2rem;
-            border-radius: 20px;
-            width: 90%;
-            max-width: 1200px;
-            max-height: 80vh;
-            overflow-y: auto;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            animation: modalSlideIn 0.3s ease;
-        }
-        
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .close-modal {
-            color: rgba(255, 255, 255, 0.8);
-            float: right;
-            font-size: 2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-        
-        .close-modal:hover {
-            color: white;
-        }
-        
-        .modal-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-        
-        .modal-header h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-        
-        .modal-header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        
-        .methodology-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-        
-        .dimension-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: transform 0.3s ease;
-        }
-        
-        .dimension-card:hover {
-            transform: translateY(-3px);
-        }
-        
-        .dimension-icon {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-        
-        .dimension-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: #ffd700;
-        }
-        
-        .dimension-item {
-            margin-bottom: 1rem;
-            padding-left: 1rem;
-            border-left: 3px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        .dimension-item h4 {
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-            color: #a8edea;
-        }
-        
-        .dimension-item p {
-            font-size: 0.85rem;
-            opacity: 0.8;
-            line-height: 1.5;
-            margin-bottom: 0.5rem;
-        }
-        
-        .score-standard {
-            font-size: 0.75rem;
-            background: rgba(255, 215, 0, 0.15);
-            padding: 0.5rem;
-            border-radius: 8px;
-            border-left: 3px solid #ffd700;
-            margin-top: 0.5rem;
-        }
-        
-        .score-standard strong {
-            color: #ffd700;
-        }
-        
-        .score-indicator {
-            display: flex;
-            gap: 0.25rem;
-            margin-top: 0.3rem;
-        }
-        
-        .score-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            opacity: 0.6;
-        }
-        
-        .score-dot.bad { background: #ff4757; }
-        .score-dot.poor { background: #ffa502; }
-        .score-dot.good { background: #2ed573; }
-        .score-dot.excellent { background: #1e90ff; }
-        
         footer {
             margin-top: 4rem;
             font-size: 0.9rem;
@@ -243,6 +169,19 @@
                 grid-template-columns: 1fr;
                 padding: 0 1rem;
             }
+            
+            .countdown {
+                padding: 1rem;
+                gap: 0.5rem;
+            }
+            
+            .countdown-number {
+                font-size: 2rem;
+            }
+            
+            .countdown-separator {
+                font-size: 2rem;
+            }
         }
     </style>
 </head>
@@ -250,6 +189,27 @@
     <div class="container">
         <h1>Terry Game Lab</h1>
         <p class="subtitle">游戏行业分析 · 设计研究 · 体验评测</p>
+        
+        <!-- Cyberpunk Countdown -->
+        <div class="countdown-container">
+            <div class="countdown-title">🚧 剩余开发时间</div>
+            <div class="countdown">
+                <div class="countdown-unit">
+                    <div class="countdown-number" id="hours">00</div>
+                    <div class="countdown-label">时</div>
+                </div>
+                <div class="countdown-separator">:</div>
+                <div class="countdown-unit">
+                    <div class="countdown-number" id="minutes">10</div>
+                    <div class="countdown-label">分</div>
+                </div>
+                <div class="countdown-separator">:</div>
+                <div class="countdown-unit">
+                    <div class="countdown-number" id="seconds">00</div>
+                    <div class="countdown-label">秒</div>
+                </div>
+            </div>
+        </div>
         
         <div class="features">
             <div class="feature-card">
@@ -275,7 +235,7 @@
             <div class="feature-card">
                 <a href="methodology.html" style="color: inherit; text-decoration: none;">
                     <h3>🧩 游戏设计方法论</h3>
-                    <p>科学的游戏评判维度体系，从核心体验到商业化的全流程设计指南</p>
+                    <p>科学的游戏评判维度体系，从核心体验到商业化的全流程设计指南<br><small style="font-size: 0.8rem; opacity: 0.7;">完整版含67个专业评估维度</small></p>
                 </a>
             </div>
         </div>
@@ -285,6 +245,35 @@
         </footer>
     </div>
     
-
+    <script>
+        // Countdown Timer
+        let countdownTime = 10 * 60; // 10 minutes in seconds
+        
+        function updateCountdown() {
+            const hours = Math.floor(countdownTime / 3600);
+            const minutes = Math.floor((countdownTime % 3600) / 60);
+            const seconds = countdownTime % 60;
+            
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+            
+            if (countdownTime > 0) {
+                countdownTime--;
+            } else {
+                // Countdown finished
+                document.querySelector('.countdown').style.borderColor = '#00ff00';
+                document.querySelector('.countdown').style.boxShadow = '0 0 20px rgba(0, 255, 0, 0.5), inset 0 0 20px rgba(0, 255, 0, 0.1)';
+                document.querySelectorAll('.countdown-number').forEach(el => {
+                    el.style.color = '#00ff00';
+                    el.style.textShadow = '0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00';
+                });
+            }
+        }
+        
+        // Update every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown(); // Initial update
+    </script>
 </body>
 </html>
