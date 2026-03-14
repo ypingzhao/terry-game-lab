@@ -39,6 +39,63 @@
             mix-blend-mode: overlay;
         }
         
+        /* CRT Scanline Effect */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.15),
+                    rgba(0, 0, 0, 0.15) 1px,
+                    transparent 1px,
+                    transparent 2px
+                ),
+                radial-gradient(
+                    circle at center,
+                    transparent 0%,
+                    rgba(0, 0, 0, 0.2) 90%,
+                    rgba(0, 0, 0, 0.4) 100%
+                );
+            pointer-events: none;
+            z-index: 9999;
+            animation: scanline 6s linear infinite;
+        }
+        
+        /* CRT Signal Sweep */
+        .crt-sweep {
+            position: fixed;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 20%;
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                rgba(0, 255, 255, 0.1) 50%,
+                transparent 100%
+            );
+            pointer-events: none;
+            z-index: 10000;
+            animation: sweep 30s linear infinite;
+        }
+        
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(2px); }
+        }
+        
+        @keyframes sweep {
+            0% { top: -100%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+        
         .container {
             text-align: center;
             padding: 2rem;
@@ -203,6 +260,9 @@
     </style>
 </head>
 <body>
+    <!-- CRT Sweep Effect -->
+    <div class="crt-sweep"></div>
+
     <div class="container">
         <h1>Terry Game Lab</h1>
         <p class="subtitle">游戏行业分析 · 设计研究 · 体验评测</p>
