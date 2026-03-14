@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏设计方法论 - Terry Game Lab</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --card-border: rgba(255, 255, 255, 0.15);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.85);
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --accent-gold: #ffd700;
+            --accent-cyan: #a8edea;
+            --accent-red: #ff4757;
+            --accent-orange: #ffa502;
+            --accent-green: #2ed573;
+            --accent-blue: #1e90ff;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.7;
+        }
+        
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--card-border);
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .logo:hover {
+            opacity: 0.9;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--accent-gold);
+        }
+        
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 5rem 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+            background: linear-gradient(45deg, #ffffff, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* Quick Nav */
+        .quick-nav {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto 4rem;
+            border: 1px solid var(--card-border);
+        }
+        
+        .quick-nav h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-gold);
+        }
+        
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+        
+        .nav-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .nav-tag:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem 5rem;
+        }
+        
+        .dimension-section {
+            margin-bottom: 5rem;
+            scroll-margin-top: 120px;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--card-border);
+        }
+        
+        .section-icon {
+            font-size: 2.5rem;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--secondary-gradient);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(245, 87, 108, 0.3);
+        }
+        
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+        }
+        
+        .dimension-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--card-border);
+            transition: all 0.3s ease;
+        }
+        
+        .dimension-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+        
+        .dimension-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .dimension-desc {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--card-border);
+        }
+        
+        .score-section {
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+        
+        .score-label {
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        .score-level {
+            margin-bottom: 0.8rem;
+            padding: 0.7rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: background 0.2s ease;
+        }
+        
+        .score-level:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .score-header {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .score-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .score-dot.bad { background: var(--accent-red); }
+        .score-dot.poor { background: var(--accent-orange); }
+        .score-dot.good { background: var(--accent-green); }
+        .score-dot.excellent { background: var(--accent-blue); }
+        
+        .score-range {
+            font-weight: 600;
+            min-width: 80px;
+        }
+        
+        .score-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            padding-left: 22px;
+        }
+        
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid var(--card-border);
+        }
+        
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 1rem;
+            }
+            
+            .logo {
+                font-size: 1.4rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding: 3rem 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .quick-nav {
+                margin: 0 1rem 3rem;
+                padding: 1.5rem;
+            }
+            
+            .nav-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 0 1rem 3rem;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+            }
+            
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dimension-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                🎮 Terry Game Lab
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="methodology.html" style="color: var(--accent-gold);">设计方法论</a></li>
+                <li><a href="#">游戏评测</a></li>
+                <li><a href="#">行业报告</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>🎮 游戏设计方法论</h1>
+        <p>科学的游戏评判维度体系，从核心体验到商业化的全流程设计指南，帮助你打造高品质的游戏体验</p>
+    </section>
+
+    <!-- Quick Navigation -->
+    <section class="quick-nav">
+        <h3>📋 快速导航</h3>
+        <div class="nav-grid">
+            <a href="#core-experience" class="nav-tag">❤️ 核心体验</a>
+            <a href="#content-quality" class="nav-tag">🎨 内容品质</a>
+            <a href="#monetization" class="nav-tag">💰 商业化设计</a>
+            <a href="#social-ecosystem" class="nav-tag">👥 社交生态</a>
+            <a href="#long-term" class="nav-tag">📈 长线运营</a>
+            <a href="#market" class="nav-tag">⚔️ 市场竞争力</a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- 核心体验维度 -->
+        <section id="core-experience" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">❤️</div>
+                <h2 class="section-title">核心体验</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">🎯 玩法机制</h3>
+                    <p class="dimension-desc">核心循环设计、操作手感、难度曲线、创新程度、玩法深度、策略空间</p>
+                    <div class="score-section">
+                        <div class="score-label">评分标准</div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot bad"></span>
+                                <span class="score-range">1-2分</span>
+                            </div>
+                            <p class="score-desc">核心循环枯燥重复，操作反人类，难度断崖式波动，毫无乐趣可言</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot poor"></span>
+                                <span class="score-range">3-4分</span>
+                            </div>
+                            <p class="score-desc">核心循环清晰但缺乏变化，操作基本流畅，难度梯度不合理，可玩性一般</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot good"></span>
+                                <span class="score-range">5-6分</span>
+                            </div>
+                            <p class="score-desc">核心循环有乐趣，操作手感良好，难度曲线平滑，有一定策略性，可玩性尚可</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">7-8分</span>
+                            </div>
+                            <p class="score-desc">核心循环容易上瘾，操作反馈精准，难度设计有层次，策略空间充足，可玩性强</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">9-10分</span>
+                            </div>
+                            <p class="score-desc">有突破性创新玩法，操作手感极致，难度曲线堪称教科书级，策略深度极强，开创玩法新品类</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">⚖️ 数值平衡</h3>
+                    <p class="dimension-desc">成长曲线、经济系统、战斗平衡、付费与非付费玩家差距、长期数值稳定性</p>
+                    <div class="score-section">
+                        <div class="score-label">评分标准</div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot bad"></span>
+                                <span class="score-range">1-2分</span>
+                            </div>
+                            <p class="score-desc">数值崩坏，成长体验极差，付费碾压严重，经济系统完全失控，无法正常游戏</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot poor"></span>
+                                <span class="score-range">3-4分</span>
+                            </div>
+                            <p class="score-desc">有明显数值bug，成长卡点过多，付费差距过大，通胀严重，游戏体验受严重影响</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot good"></span>
+                                <span class="score-range">5-6分</span>
+                            </div>
+                            <p class="score-desc">基本数值平衡，成长体验顺畅，付费差距在可接受范围内，基本不影响游戏体验</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">7-8分</span>
+                            </div>
+                            <p class="score-desc">数值设计精良，成长曲线完美，付费与免费玩家各有生存空间，长期稳定</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">9-10分</span>
+                            </div>
+                            <p class="score-desc">数值体系可作为行业标杆，长期稳定无通胀，平衡设计精妙，堪称艺术品</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">🖱️ 用户体验</h3>
+                    <p class="dimension-desc">界面交互、新手引导、加载速度、BUG数量、流畅度、无障碍设计</p>
+                    <div class="score-section">
+                        <div class="score-label">评分标准</div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot bad"></span>
+                                <span class="score-range">1-2分</span>
+                            </div>
+                            <p class="score-desc">界面混乱，新手引导缺失，频繁闪退卡顿，BUG多到无法正常游戏</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot poor"></span>
+                                <span class="score-range">3-4分</span>
+                            </div>
+                            <p class="score-desc">界面学习成本高，引导不完善，加载慢，有影响体验的BUG，流畅度一般</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot good"></span>
+                                <span class="score-range">5-6分</span>
+                            </div>
+                            <p class="score-desc">界面清晰易用，引导基本完整，运行流畅，偶发不影响体验的小BUG</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">7-8分</span>
+                            </div>
+                            <p class="score-desc">交互设计人性化，引导体验优秀，加载迅速，几乎无BUG，流畅度极佳</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">9-10分</span>
+                            </div>
+                            <p class="score-desc">用户体验行业顶尖，交互零学习成本，极致流畅，零感知BUG，体验丝滑</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 内容品质维度 -->
+        <section id="content-quality" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">🎨</div>
+                <h2 class="section-title">内容品质</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">🖼️ 美术表现</h3>
+                    <p class="dimension-desc">美术风格统一性、画面精度、特效质量、动画流畅度、人物设计、场景表现</p>
+                    <div class="score-section">
+                        <div class="score-label">评分标准</div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot bad"></span>
+                                <span class="score-range">1-2分</span>
+                            </div>
+                            <p class="score-desc">美术风格混乱，画面粗糙，特效廉价，动画生硬跳帧，毫无美感</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot poor"></span>
+                                <span class="score-range">3-4分</span>
+                            </div>
+                            <p class="score-desc">有基本美术风格，画面精度一般，特效和动画有明显瑕疵，美感不足</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot good"></span>
+                                <span class="score-range">5-6分</span>
+                            </div>
+                            <p class="score-desc">美术风格统一，画面达到行业标准，特效动画流畅自然，符合大众审美</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">7-8分</span>
+                            </div>
+                            <p class="score-desc">美术风格辨识度高，画面精美，特效华丽，动画生动有灵魂，视觉享受</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">9-10分</span>
+                            </div>
+                            <p class="score-desc">美术风格极具开创性，画面达到艺术级别，过目不忘，自成一派，引领行业审美</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">🔊 音频设计</h3>
+                    <p class="dimension-desc">背景音乐、音效质量、配音水平、音频与场景匹配度、音频沉浸感</p>
+                    <div class="score-section">
+                        <div class="score-label">评分标准</div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot bad"></span>
+                                <span class="score-range">1-2分</span>
+                            </div>
+                            <p class="score-desc">音乐刺耳，音效劣质，配音出戏，与场景完全不搭，建议关声音玩</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot poor"></span>
+                                <span class="score-range">3-4分</span>
+                            </div>
+                            <p class="score-desc">音乐普通，音效基本够用，配音一般，匹配度一般，可有可无</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot good"></span>
+                                <span class="score-range">5-6分</span>
+                            </div>
+                            <p class="score-desc">BGM好听，音效清晰，配音专业，与场景匹配良好，提升体验</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">7-8分</span>
+                            </div>
+                            <p class="score-desc">音乐记忆点强，音效反馈精准，配音有代入感，沉浸感强，单独听也享受</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">9-10分</span>
+                            </div>
+                            <p class="score-desc">音频堪称艺术品，音乐传世级，音效成为文化符号，配音深入人心，OST单独发售</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">📖 剧情叙事</h3>
+                    <p class="dimension-desc">世界观完整性、剧情节奏、人物塑造、叙事手法、玩家代入感、剧情深度</p>
+                    <div class="score-section">
+                        <div class="score-label">评分标准</div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot bad"></span>
+                                <span class="score-range">1-2分</span>
+                            </div>
+                            <p class="score-desc">世界观破碎，剧情逻辑混乱，人物扁平，代入感为零，直接跳过</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot poor"></span>
+                                <span class="score-range">3-4分</span>
+                            </div>
+                            <p class="score-desc">有基本世界观，剧情平淡流水账，人物标签化，代入感弱，可看可不看</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot good"></span>
+                                <span class="score-range">5-6分</span>
+                            </div>
+                            <p class="score-desc">世界观完整，剧情流畅，人物有特点，有一定代入感，值得一看</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">7-8分</span>
+                            </div>
+                            <p class="score-desc">世界观宏大自洽，剧情跌宕起伏，人物立体鲜活，代入感强，追着看</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">9-10分</span>
+                            </div>
+                            <p class="score-desc">叙事手法开创性，剧情发人深省，人物成为文化符号，影响一代玩家</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 商业化维度 -->
+        <section id="monetization" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">💰</div>
+                <h2 class="section-title">商业化设计</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">💳 付费设计</h3>
+                    <p class="dimension-desc">付费点合理性、付费性价比、付费深度、逼氪程度、付费与实力转化率</p>
+                    <div class="score-section">
+                        <div class="score-label">评分标准</div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot bad"></span>
+                                <span class="score-range">1-2分</span>
+                            </div>
+                            <p class="score-desc">强逼氪，不充钱完全玩不下去，付费性价比极低，吃相难看，口碑崩坏</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot poor"></span>
+                                <span class="score-range">3-4分</span>
+                            </div>
+                            <p class="score-desc">付费点密集，逼氪感强，性价比低，付费提升巨大，普通玩家体验差</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot good"></span>
+                                <span class="score-range">5-6分</span>
+                            </div>
+                            <p class="score-desc">付费点合理，性价比适中，有逼氪但可接受，付费提升明显，不充也能玩</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">7-8分</span>
+                            </div>
+                            <p class="score-desc">付费点设计巧妙，性价比高，无明显逼氪，付费与免费各有乐趣，玩家自愿付费</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">9-10分</span>
+                            </div>
+                            <p class="score-desc">付费完全自愿，玩家主动掏钱支持，付费体验极佳，口碑零差评，用爱发电</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">📊 经济系统</h3>
+                    <p class="dimension-desc">货币体系稳定性、资源产出消耗平衡、交易系统设计、通货膨胀控制</p>
+                    <div class="score-section">
+                        <div class="score-label">评分标准</div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot bad"></span>
+                                <span class="score-range">1-2分</span>
+                            </div>
+                            <p class="score-desc">经济系统完全崩溃，恶性通胀，货币贬值，产出消耗严重失衡，经济崩盘</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot poor"></span>
+                                <span class="score-range">3-4分</span>
+                            </div>
+                            <p class="score-desc">经济系统有明显缺陷，通胀严重，资源过剩或匮乏问题突出，经济不稳定</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot good"></span>
+                                <span class="score-range">5-6分</span>
+                            </div>
+                            <p class="score-desc">经济基本稳定，产出消耗平衡，通胀在可控范围内，经济体系健康</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">7-8分</span>
+                            </div>
+                            <p class="score-desc">经济体系设计精良，长期稳定，交易系统活跃，无明显通胀，经济充满活力</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">9-10分</span>
+                            </div>
+                            <p class="score-desc">经济系统堪称教科书级，自我调节能力极强，可运行数年仍健康，形成闭环生态</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">🎡 活动运营</h3>
+                    <p class="dimension-desc">活动频率、活动奖励性价比、活动趣味性、运营活动对平衡性的影响</p>
+                    <div class="score-section">
+                        <div class="score-label">评分标准</div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot bad"></span>
+                                <span class="score-range">1-2分</span>
+                            </div>
+                            <p class="score-desc">活动频繁到影响正常游戏，奖励抠门，纯氪金活动，严重破坏平衡，玩家怨声载道</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot poor"></span>
+                                <span class="score-range">3-4分</span>
+                            </div>
+                            <p class="score-desc">活动过多，奖励一般，趣味性低，对平衡性有一定影响，玩家参与度低</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot good"></span>
+                                <span class="score-range">5-6分</span>
+                            </div>
+                            <p class="score-desc">活动频率适中，奖励达标，有一定趣味性，基本不影响平衡，玩家愿意参与</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">7-8分</span>
+                            </div>
+                            <p class="score-desc">活动创意十足，奖励丰厚，玩家参与热情高，完全不影响平衡，甚至提升留存</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">9-10分</span>
+                            </div>
+                            <p class="score-desc">活动成为游戏特色，玩家主动期待，甚至能反向带动游戏口碑，形成文化现象</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 社交生态维度 -->
+        <section id="social-ecosystem" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">👥</div>
+                <h2 class="section-title">社交生态</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">🤝 社交系统</h3>
+                    <p class="dimension-desc">社交功能完整性、玩家交互设计、公会/帮派系统、社交需求满足度</p>
+                    <div class="score-section">
+                        <div class="score-label">评分标准</div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot bad"></span>
+                                <span class="score-range">1-2分</span>
+                            </div>
+                            <p class="score-desc">几乎无社交功能，玩家零交互，社交需求完全无法满足，像单机游戏</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot poor"></span>
+                                <span class="score-range">3-4分</span>
+                            </div>
+                            <p class="score-desc">有基础社交功能，但设计简陋，交互体验差，社交粘性弱，可有可无</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot good"></span>
+                                <span class="score-range">5-6分</span>
+                            </div>
+                            <p class="score-desc">社交功能完整，交互顺畅，公会等系统可用，能满足基本社交需求</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">7-8分</span>
+                            </div>
+                            <p class="score-desc">社交系统设计精妙，玩家交互活跃，公会凝聚力强，社交粘性高，因社交留存</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">9-10分</span>
+                            </div>
+                            <p class="score-desc">社交系统成为核心卖点，形成独特社区文化，玩家因社交长期留存，甚至线下交友</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">⚔️ PVP设计</h3>
+                    <p class="dimension-desc">竞技公平性、匹配机制、段位体系、PVP奖励、对抗乐趣、外挂防控</p>
+                    <div class="score-section">
+                        <div class="score-label">评分标准</div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot bad"></span>
+                                <span class="score-range">1-2分</span>
+                            </div>
+                            <p class="score-desc">匹配机制混乱，段位形同虚设，外挂泛滥，完全没有公平性，没人愿意玩</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot poor"></span>
+                                <span class="score-range">3-4分</span>
+                            </div>
+                            <p class="score-desc">匹配不够精准，段位水分大，外挂较多，公平性较差，体验不好</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot good"></span>
+                                <span class="score-range">5-6分</span>
+                            </div>
+                            <p class="score-desc">匹配基本公平，段位体系合理，外挂防控有效，有一定对抗乐趣</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">7-8分</span>
+                            </div>
+                            <p class="score-desc">匹配精准，段位设计科学，外挂极少，对抗刺激有乐趣，玩家愿意花时间玩</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">9-10分</span>
+                            </div>
+                            <p class="score-desc">PVP设计成为行业标杆，绝对公平，电竞级体验，玩家百玩不厌，形成职业赛事</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">💬 社区氛围</h3>
+                    <p class="dimension-desc">官方与玩家互动、玩家社区活跃度、负面舆情处理、玩家归属感</p>
+                    <div class="score-section">
+                        <div class="score-label">评分标准</div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot bad"></span>
+                                <span class="score-range">1-2分</span>
+                            </div>
+                            <p class="score-desc">官方完全无视玩家，社区死寂，负面舆情满天飞，玩家毫无归属感，骂声一片</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot poor"></span>
+                                <span class="score-range">3-4分</span>
+                            </div>
+                            <p class="score-desc">官方互动极少，社区活跃度低，舆情处理不及时，归属感弱，玩家怨气大</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot good"></span>
+                                <span class="score-range">5-6分</span>
+                            </div>
+                            <p class="score-desc">官方定期互动，社区有一定活跃度，舆情处理得当，有基本归属感</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">7-8分</span>
+                            </div>
+                            <p class="score-desc">官方积极响应玩家，社区活跃正向，舆情处理及时，归属感强，玩家护着游戏</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">9-10分</span>
+                            </div>
+                            <p class="score-desc">官方与玩家打成一片，社区氛围极佳，玩家有强烈的主人翁意识，自发维护游戏</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 长线运营维度 -->
+        <section id="long-term" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">📈</div>
+                <h2 class="section-title">长线运营</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">🔄 内容更新</h3>
+                    <p class="dimension-desc">更新频率、新内容质量、版本迭代节奏、老内容复用、玩法拓展性</p>
+                    <div class="score-section">
+                        <div class="score-label">评分标准</div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot bad"></span>
+                                <span class="score-range">1-2分</span>
+                            </div>
+                            <p class="score-desc">半年不更新，更新内容敷衍，玩法无任何拓展性，很快玩腻</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot poor"></span>
+                                <span class="score-range">3-4分</span>
+                            </div>
+                            <p class="score-desc">更新频率低，新内容质量差，版本迭代无规划，内容越更越差</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot good"></span>
+                                <span class="score-range">5-6分</span>
+                            </div>
+                            <p class="score-desc">更新频率适中，新内容质量达标，迭代节奏合理，有一定拓展性</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">7-8分</span>
+                            </div>
+                            <p class="score-desc">更新规律稳定，新内容质量高，玩法拓展性强，越更越好玩</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">9-10分</span>
+                            </div>
+                            <p class="score-desc">更新总能超出玩家期待，内容延展性极强，运营多年仍充满活力</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">📅 留存设计</h3>
+                    <p class="dimension-desc">日常任务设计、签到奖励、长期目标设定、玩家生命周期管理</p>
+                    <div class="score-section">
+                        <div class="score-label">评分标准</div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot bad"></span>
+                                <span class="score-range">1-2分</span>
+                            </div>
+                            <p class="score-desc">日常任务繁重像上班，毫无乐趣，玩家上线几分钟就流失，留不住人</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot poor"></span>
+                                <span class="score-range">3-4分</span>
+                            </div>
+                            <p class="score-desc">日常任务偏多，奖励一般，缺乏长期目标，留存能力弱，玩家玩不久</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot good"></span>
+                                <span class="score-range">5-6分</span>
+                            </div>
+                            <p class="score-desc">日常任务设计合理，奖励达标，有明确长期目标，留存尚可，能玩几个月</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">7-8分</span>
+                            </div>
+                            <p class="score-desc">日常任务有趣，奖励丰厚，长期目标清晰，玩家愿意长期留存，能玩1-2年</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">9-10分</span>
+                            </div>
+                            <p class="score-desc">留存设计精妙，玩家主动每天上线，甚至能玩数年之久，成为生活的一部分</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">🛡️ 反作弊机制</h3>
+                    <p class="dimension-desc">外挂检测效率、封号机制、作弊成本、公平游戏环境维护能力</p>
+                    <div class="score-section">
+                        <div class="score-label">评分标准</div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot bad"></span>
+                                <span class="score-range">1-2分</span>
+                            </div>
+                            <p class="score-desc">外挂泛滥，官方完全不管，作弊零成本，公平环境完全破坏，没法玩</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot poor"></span>
+                                <span class="score-range">3-4分</span>
+                            </div>
+                            <p class="score-desc">外挂较多，反作弊效率低，作弊成本低，公平性差，影响体验</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot good"></span>
+                                <span class="score-range">5-6分</span>
+                            </div>
+                            <p class="score-desc">反作弊基本有效，外挂较少，封号机制合理，环境基本公平</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">7-8分</span>
+                            </div>
+                            <p class="score-desc">反作弊效率高，外挂极少，作弊成本高，环境公平，玩家放心玩</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">9-10分</span>
+                            </div>
+                            <p class="score-desc">反作弊技术行业顶尖，外挂几乎绝迹，绝对公平的游戏环境，零作弊</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 市场竞争力维度 -->
+        <section id="market" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">⚔️</div>
+                <h2 class="section-title">市场竞争力</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">✨ 差异化优势</h3>
+                    <p class="dimension-desc">核心卖点独特性、与竞品差异点、创新程度、不可替代性</p>
+                    <div class="score-section">
+                        <div class="score-label">评分标准</div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot bad"></span>
+                                <span class="score-range">1-2分</span>
+                            </div>
+                            <p class="score-desc">完全换皮抄袭，无任何独特卖点，与竞品高度同质化，毫无竞争力</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot poor"></span>
+                                <span class="score-range">3-4分</span>
+                            </div>
+                            <p class="score-desc">有微小差异化，但亮点不足，很容易被竞品模仿，竞争力弱</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot good"></span>
+                                <span class="score-range">5-6分</span>
+                            </div>
+                            <p class="score-desc">有明确差异化卖点，有一定创新，与竞品有明显区别，有一定竞争力</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">7-8分</span>
+                            </div>
+                            <p class="score-desc">差异化优势明显，创新点突出，具备一定竞争壁垒，不容易被超越</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">9-10分</span>
+                            </div>
+                            <p class="score-desc">开创性新品类，差异化优势巨大，形成垄断性竞争壁垒，定义品类标准</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">🎯 受众匹配度</h3>
+                    <p class="dimension-desc">目标用户定位精准度、用户群体规模、用户付费能力、用户留存潜力</p>
+                    <div class="score-section">
+                        <div class="score-label">评分标准</div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot bad"></span>
+                                <span class="score-range">1-2分</span>
+                            </div>
+                            <p class="score-desc">目标用户定位完全错误，用户群体极小，付费能力极低，没人愿意玩</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot poor"></span>
+                                <span class="score-range">3-4分</span>
+                            </div>
+                            <p class="score-desc">用户定位有偏差，群体规模有限，付费能力一般，市场空间小</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot good"></span>
+                                <span class="score-range">5-6分</span>
+                            </div>
+                            <p class="score-desc">用户定位基本精准，群体规模足够，付费能力达标，有不错的市场空间</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">7-8分</span>
+                            </div>
+                            <p class="score-desc">用户定位非常精准，群体规模庞大，付费意愿和能力强，市场空间大</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">9-10分</span>
+                            </div>
+                            <p class="score-desc">精准命中蓝海市场，用户付费能力极强，留存潜力巨大，天花板极高</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">⏳ 生命周期</h3>
+                    <p class="dimension-desc">产品可运营时长、品类生命周期、IP价值潜力、长线发展空间</p>
+                    <div class="score-section">
+                        <div class="score-label">评分标准</div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot bad"></span>
+                                <span class="score-range">1-2分</span>
+                            </div>
+                            <p class="score-desc">品类生命周期极短，产品3个月内必死，无任何长线价值，赚快钱都难</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot poor"></span>
+                                <span class="score-range">3-4分</span>
+                            </div>
+                            <p class="score-desc">品类生命周期1年左右，产品可运营6-12个月，长线空间有限，赚一波就走</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot good"></span>
+                                <span class="score-range">5-6分</span>
+                            </div>
+                            <p class="score-desc">品类生命周期稳定，产品可运营1-2年，有一定长线发展空间</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">7-8分</span>
+                            </div>
+                            <p class="score-desc">品类生命周期长，产品可运营3-5年，IP价值潜力大，值得长期投入</p>
+                        </div>
+                        
+                        <div class="score-level">
+                            <div class="score-header">
+                                <span class="score-dot excellent"></span>
+                                <span class="score-range">9-10分</span>
+                            </div>
+                            <p class="score-desc">长青品类，产品可运营5年以上，具备成为超级IP的潜力，影响几代玩家</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 Terry Game Lab. Powered by passion for games.</p>
+    </footer>
+</body>
+</html>
