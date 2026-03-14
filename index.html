@@ -192,7 +192,39 @@
             font-size: 0.85rem;
             opacity: 0.8;
             line-height: 1.5;
+            margin-bottom: 0.5rem;
         }
+        
+        .score-standard {
+            font-size: 0.75rem;
+            background: rgba(255, 215, 0, 0.15);
+            padding: 0.5rem;
+            border-radius: 8px;
+            border-left: 3px solid #ffd700;
+            margin-top: 0.5rem;
+        }
+        
+        .score-standard strong {
+            color: #ffd700;
+        }
+        
+        .score-indicator {
+            display: flex;
+            gap: 0.25rem;
+            margin-top: 0.3rem;
+        }
+        
+        .score-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+        
+        .score-dot.bad { background: #ff4757; }
+        .score-dot.poor { background: #ffa502; }
+        .score-dot.good { background: #2ed573; }
+        .score-dot.excellent { background: #1e90ff; }
         
         footer {
             margin-top: 4rem;
@@ -271,16 +303,58 @@
                     <div class="dimension-item">
                         <h4>玩法机制</h4>
                         <p>核心循环设计、操作手感、难度曲线、创新程度、玩法深度、策略空间</p>
+                        <div class="score-standard">
+                            <strong>评分标准：</strong><br>
+                            ✅ <strong>1-2分：</strong>核心循环枯燥重复，操作反人类，难度断崖式波动<br>
+                            ✅ <strong>3-4分：</strong>核心循环清晰但缺乏变化，操作基本流畅，难度梯度不合理<br>
+                            ✅ <strong>5-6分：</strong>核心循环有乐趣，操作手感良好，难度曲线平滑，有一定策略性<br>
+                            ✅ <strong>7-8分：</strong>核心循环 addictive，操作反馈精准，难度设计有层次，策略空间充足<br>
+                            ✅ <strong>9-10分：</strong>有突破性创新玩法，操作手感极致，难度曲线堪称教科书级，策略深度极强
+                            <div class="score-indicator">
+                                <span class="score-dot bad"></span>
+                                <span class="score-dot poor"></span>
+                                <span class="score-dot good"></span>
+                                <span class="score-dot excellent"></span>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="dimension-item">
                         <h4>数值平衡</h4>
                         <p>成长曲线、经济系统、战斗平衡、付费与非付费玩家差距、长期数值稳定性</p>
+                        <div class="score-standard">
+                            <strong>评分标准：</strong><br>
+                            ✅ <strong>1-2分：</strong>数值崩坏，成长体验极差，付费碾压严重，经济系统完全失控<br>
+                            ✅ <strong>3-4分：</strong>有明显数值bug，成长卡点过多，付费差距过大，通胀严重<br>
+                            ✅ <strong>5-6分：</strong>基本数值平衡，成长体验顺畅，付费差距在可接受范围内<br>
+                            ✅ <strong>7-8分：</strong>数值设计精良，成长曲线完美，付费与免费玩家各有生存空间<br>
+                            ✅ <strong>9-10分：</strong>数值体系可作为行业标杆，长期稳定无通胀，平衡设计精妙
+                            <div class="score-indicator">
+                                <span class="score-dot bad"></span>
+                                <span class="score-dot poor"></span>
+                                <span class="score-dot good"></span>
+                                <span class="score-dot excellent"></span>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="dimension-item">
                         <h4>用户体验</h4>
                         <p>界面交互、新手引导、加载速度、BUG数量、流畅度、无障碍设计</p>
+                        <div class="score-standard">
+                            <strong>评分标准：</strong><br>
+                            ✅ <strong>1-2分：</strong>界面混乱，新手引导缺失，频繁闪退卡顿，BUG多到无法正常游戏<br>
+                            ✅ <strong>3-4分：</strong>界面学习成本高，引导不完善，加载慢，有影响体验的BUG<br>
+                            ✅ <strong>5-6分：</strong>界面清晰易用，引导基本完整，运行流畅，偶发不影响体验的小BUG<br>
+                            ✅ <strong>7-8分：</strong>交互设计人性化，引导体验优秀，加载迅速，几乎无BUG<br>
+                            ✅ <strong>9-10分：</strong>用户体验行业顶尖，交互零学习成本，极致流畅，零感知BUG
+                            <div class="score-indicator">
+                                <span class="score-dot bad"></span>
+                                <span class="score-dot poor"></span>
+                                <span class="score-dot good"></span>
+                                <span class="score-dot excellent"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -292,16 +366,58 @@
                     <div class="dimension-item">
                         <h4>美术表现</h4>
                         <p>美术风格统一性、画面精度、特效质量、动画流畅度、人物设计、场景表现</p>
+                        <div class="score-standard">
+                            <strong>评分标准：</strong><br>
+                            ✅ <strong>1-2分：</strong>美术风格混乱，画面粗糙，特效廉价，动画生硬跳帧<br>
+                            ✅ <strong>3-4分：</strong>有基本美术风格，画面精度一般，特效和动画有明显瑕疵<br>
+                            ✅ <strong>5-6分：</strong>美术风格统一，画面达到行业标准，特效动画流畅自然<br>
+                            ✅ <strong>7-8分：</strong>美术风格辨识度高，画面精美，特效华丽，动画生动有灵魂<br>
+                            ✅ <strong>9-10分：</strong>美术风格极具开创性，画面达到艺术级别，过目不忘，自成一派
+                            <div class="score-indicator">
+                                <span class="score-dot bad"></span>
+                                <span class="score-dot poor"></span>
+                                <span class="score-dot good"></span>
+                                <span class="score-dot excellent"></span>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="dimension-item">
                         <h4>音频设计</h4>
                         <p>背景音乐、音效质量、配音水平、音频与场景匹配度、音频沉浸感</p>
+                        <div class="score-standard">
+                            <strong>评分标准：</strong><br>
+                            ✅ <strong>1-2分：</strong>音乐刺耳，音效劣质，配音出戏，与场景完全不搭<br>
+                            ✅ <strong>3-4分：</strong>音乐普通，音效基本够用，配音一般，匹配度一般<br>
+                            ✅ <strong>5-6分：</strong>BGM好听，音效清晰，配音专业，与场景匹配良好<br>
+                            ✅ <strong>7-8分：</strong>音乐记忆点强，音效反馈精准，配音有代入感，沉浸感强<br>
+                            ✅ <strong>9-10分：</strong>音频堪称艺术品，音乐传世级，音效成为文化符号，配音深入人心
+                            <div class="score-indicator">
+                                <span class="score-dot bad"></span>
+                                <span class="score-dot poor"></span>
+                                <span class="score-dot good"></span>
+                                <span class="score-dot excellent"></span>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="dimension-item">
                         <h4>剧情叙事</h4>
                         <p>世界观完整性、剧情节奏、人物塑造、叙事手法、玩家代入感、剧情深度</p>
+                        <div class="score-standard">
+                            <strong>评分标准：</strong><br>
+                            ✅ <strong>1-2分：</strong>世界观破碎，剧情逻辑混乱，人物扁平，代入感为零<br>
+                            ✅ <strong>3-4分：</strong>有基本世界观，剧情平淡流水账，人物标签化，代入感弱<br>
+                            ✅ <strong>5-6分：</strong>世界观完整，剧情流畅，人物有特点，有一定代入感<br>
+                            ✅ <strong>7-8分：</strong>世界观宏大自洽，剧情跌宕起伏，人物立体鲜活，代入感强<br>
+                            ✅ <strong>9-10分：</strong>叙事手法开创性，剧情发人深省，人物成为文化符号，影响一代玩家
+                            <div class="score-indicator">
+                                <span class="score-dot bad"></span>
+                                <span class="score-dot poor"></span>
+                                <span class="score-dot good"></span>
+                                <span class="score-dot excellent"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -313,16 +429,58 @@
                     <div class="dimension-item">
                         <h4>付费设计</h4>
                         <p>付费点合理性、付费性价比、付费深度、逼氪程度、付费与实力转化率</p>
+                        <div class="score-standard">
+                            <strong>评分标准：</strong><br>
+                            ✅ <strong>1-2分：</strong>强逼氪，不充钱完全玩不下去，付费性价比极低，吃相难看<br>
+                            ✅ <strong>3-4分：</strong>付费点密集，逼氪感强，性价比低，付费提升巨大<br>
+                            ✅ <strong>5-6分：</strong>付费点合理，性价比适中，有逼氪但可接受，付费提升明显<br>
+                            ✅ <strong>7-8分：</strong>付费点设计巧妙，性价比高，无明显逼氪，付费与免费各有乐趣<br>
+                            ✅ <strong>9-10分：</strong>付费完全自愿，玩家主动掏钱支持，付费体验极佳，口碑零差评
+                            <div class="score-indicator">
+                                <span class="score-dot bad"></span>
+                                <span class="score-dot poor"></span>
+                                <span class="score-dot good"></span>
+                                <span class="score-dot excellent"></span>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="dimension-item">
                         <h4>经济系统</h4>
                         <p>货币体系稳定性、资源产出消耗平衡、交易系统设计、通货膨胀控制</p>
+                        <div class="score-standard">
+                            <strong>评分标准：</strong><br>
+                            ✅ <strong>1-2分：</strong>经济系统完全崩溃，恶性通胀，货币贬值，产出消耗严重失衡<br>
+                            ✅ <strong>3-4分：</strong>经济系统有明显缺陷，通胀严重，资源过剩或匮乏问题突出<br>
+                            ✅ <strong>5-6分：</strong>经济基本稳定，产出消耗平衡，通胀在可控范围内<br>
+                            ✅ <strong>7-8分：</strong>经济体系设计精良，长期稳定，交易系统活跃，无明显通胀<br>
+                            ✅ <strong>9-10分：</strong>经济系统堪称教科书级，自我调节能力极强，可运行数年仍健康
+                            <div class="score-indicator">
+                                <span class="score-dot bad"></span>
+                                <span class="score-dot poor"></span>
+                                <span class="score-dot good"></span>
+                                <span class="score-dot excellent"></span>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="dimension-item">
                         <h4>活动运营</h4>
                         <p>活动频率、活动奖励性价比、活动趣味性、运营活动对平衡性的影响</p>
+                        <div class="score-standard">
+                            <strong>评分标准：</strong><br>
+                            ✅ <strong>1-2分：</strong>活动频繁到影响正常游戏，奖励抠门，纯氪金活动，严重破坏平衡<br>
+                            ✅ <strong>3-4分：</strong>活动过多，奖励一般，趣味性低，对平衡性有一定影响<br>
+                            ✅ <strong>5-6分：</strong>活动频率适中，奖励达标，有一定趣味性，基本不影响平衡<br>
+                            ✅ <strong>7-8分：</strong>活动创意十足，奖励丰厚，玩家参与热情高，完全不影响平衡<br>
+                            ✅ <strong>9-10分：</strong>活动成为游戏特色，玩家主动期待，甚至能反向带动游戏口碑
+                            <div class="score-indicator">
+                                <span class="score-dot bad"></span>
+                                <span class="score-dot poor"></span>
+                                <span class="score-dot good"></span>
+                                <span class="score-dot excellent"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -334,16 +492,58 @@
                     <div class="dimension-item">
                         <h4>社交系统</h4>
                         <p>社交功能完整性、玩家交互设计、公会/帮派系统、社交需求满足度</p>
+                        <div class="score-standard">
+                            <strong>评分标准：</strong><br>
+                            ✅ <strong>1-2分：</strong>几乎无社交功能，玩家零交互，社交需求完全无法满足<br>
+                            ✅ <strong>3-4分：</strong>有基础社交功能，但设计简陋，交互体验差，社交粘性弱<br>
+                            ✅ <strong>5-6分：</strong>社交功能完整，交互顺畅，公会等系统可用，能满足基本社交需求<br>
+                            ✅ <strong>7-8分：</strong>社交系统设计精妙，玩家交互活跃，公会凝聚力强，社交粘性高<br>
+                            ✅ <strong>9-10分：</strong>社交系统成为核心卖点，形成独特社区文化，玩家因社交长期留存
+                            <div class="score-indicator">
+                                <span class="score-dot bad"></span>
+                                <span class="score-dot poor"></span>
+                                <span class="score-dot good"></span>
+                                <span class="score-dot excellent"></span>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="dimension-item">
                         <h4>PVP设计</h4>
                         <p>竞技公平性、匹配机制、段位体系、PVP奖励、对抗乐趣、外挂防控</p>
+                        <div class="score-standard">
+                            <strong>评分标准：</strong><br>
+                            ✅ <strong>1-2分：</strong>匹配机制混乱，段位形同虚设，外挂泛滥，完全没有公平性<br>
+                            ✅ <strong>3-4分：</strong>匹配不够精准，段位水分大，外挂较多，公平性较差<br>
+                            ✅ <strong>5-6分：</strong>匹配基本公平，段位体系合理，外挂防控有效，有一定对抗乐趣<br>
+                            ✅ <strong>7-8分：</strong>匹配精准，段位设计科学，外挂极少，对抗刺激有乐趣<br>
+                            ✅ <strong>9-10分：</strong>PVP设计成为行业标杆，绝对公平，电竞级体验，玩家百玩不厌
+                            <div class="score-indicator">
+                                <span class="score-dot bad"></span>
+                                <span class="score-dot poor"></span>
+                                <span class="score-dot good"></span>
+                                <span class="score-dot excellent"></span>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="dimension-item">
                         <h4>社区氛围</h4>
                         <p>官方与玩家互动、玩家社区活跃度、负面舆情处理、玩家归属感</p>
+                        <div class="score-standard">
+                            <strong>评分标准：</strong><br>
+                            ✅ <strong>1-2分：</strong>官方完全无视玩家，社区死寂，负面舆情满天飞，玩家毫无归属感<br>
+                            ✅ <strong>3-4分：</strong>官方互动极少，社区活跃度低，舆情处理不及时，归属感弱<br>
+                            ✅ <strong>5-6分：</strong>官方定期互动，社区有一定活跃度，舆情处理得当，有基本归属感<br>
+                            ✅ <strong>7-8分：</strong>官方积极响应玩家，社区活跃正向，舆情处理及时，归属感强<br>
+                            ✅ <strong>9-10分：</strong>官方与玩家打成一片，社区氛围极佳，玩家有强烈的主人翁意识
+                            <div class="score-indicator">
+                                <span class="score-dot bad"></span>
+                                <span class="score-dot poor"></span>
+                                <span class="score-dot good"></span>
+                                <span class="score-dot excellent"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -355,16 +555,58 @@
                     <div class="dimension-item">
                         <h4>内容更新</h4>
                         <p>更新频率、新内容质量、版本迭代节奏、老内容复用、玩法拓展性</p>
+                        <div class="score-standard">
+                            <strong>评分标准：</strong><br>
+                            ✅ <strong>1-2分：</strong>半年不更新，更新内容敷衍，玩法无任何拓展性<br>
+                            ✅ <strong>3-4分：</strong>更新频率低，新内容质量差，版本迭代无规划<br>
+                            ✅ <strong>5-6分：</strong>更新频率适中，新内容质量达标，迭代节奏合理<br>
+                            ✅ <strong>7-8分：</strong>更新规律稳定，新内容质量高，玩法拓展性强<br>
+                            ✅ <strong>9-10分：</strong>更新总能超出玩家期待，内容延展性极强，越更新越好
+                            <div class="score-indicator">
+                                <span class="score-dot bad"></span>
+                                <span class="score-dot poor"></span>
+                                <span class="score-dot good"></span>
+                                <span class="score-dot excellent"></span>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="dimension-item">
                         <h4>留存设计</h4>
                         <p>日常任务设计、签到奖励、长期目标设定、玩家生命周期管理</p>
+                        <div class="score-standard">
+                            <strong>评分标准：</strong><br>
+                            ✅ <strong>1-2分：</strong>日常任务繁重像上班，毫无乐趣，玩家上线几分钟就流失<br>
+                            ✅ <strong>3-4分：</strong>日常任务偏多，奖励一般，缺乏长期目标，留存能力弱<br>
+                            ✅ <strong>5-6分：</strong>日常任务设计合理，奖励达标，有明确长期目标，留存尚可<br>
+                            ✅ <strong>7-8分：</strong>日常任务有趣，奖励丰厚，长期目标清晰，玩家愿意长期留存<br>
+                            ✅ <strong>9-10分：</strong>留存设计精妙，玩家主动每天上线，甚至能玩数年之久
+                            <div class="score-indicator">
+                                <span class="score-dot bad"></span>
+                                <span class="score-dot poor"></span>
+                                <span class="score-dot good"></span>
+                                <span class="score-dot excellent"></span>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="dimension-item">
                         <h4>反作弊机制</h4>
                         <p>外挂检测效率、封号机制、作弊成本、公平游戏环境维护能力</p>
+                        <div class="score-standard">
+                            <strong>评分标准：</strong><br>
+                            ✅ <strong>1-2分：</strong>外挂泛滥，官方完全不管，作弊零成本，公平环境完全破坏<br>
+                            ✅ <strong>3-4分：</strong>外挂较多，反作弊效率低，作弊成本低，公平性差<br>
+                            ✅ <strong>5-6分：</strong>反作弊基本有效，外挂较少，封号机制合理，环境基本公平<br>
+                            ✅ <strong>7-8分：</strong>反作弊效率高，外挂极少，作弊成本高，环境公平<br>
+                            ✅ <strong>9-10分：</strong>反作弊技术行业顶尖，外挂几乎绝迹，绝对公平的游戏环境
+                            <div class="score-indicator">
+                                <span class="score-dot bad"></span>
+                                <span class="score-dot poor"></span>
+                                <span class="score-dot good"></span>
+                                <span class="score-dot excellent"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
@@ -376,16 +618,58 @@
                     <div class="dimension-item">
                         <h4>差异化优势</h4>
                         <p>核心卖点独特性、与竞品差异点、创新程度、不可替代性</p>
+                        <div class="score-standard">
+                            <strong>评分标准：</strong><br>
+                            ✅ <strong>1-2分：</strong>完全换皮抄袭，无任何独特卖点，与竞品高度同质化<br>
+                            ✅ <strong>3-4分：</strong>有微小差异化，但亮点不足，很容易被竞品模仿<br>
+                            ✅ <strong>5-6分：</strong>有明确差异化卖点，有一定创新，与竞品有明显区别<br>
+                            ✅ <strong>7-8分：</strong>差异化优势明显，创新点突出，具备一定竞争壁垒<br>
+                            ✅ <strong>9-10分：</strong>开创性新品类，差异化优势巨大，形成垄断性竞争壁垒
+                            <div class="score-indicator">
+                                <span class="score-dot bad"></span>
+                                <span class="score-dot poor"></span>
+                                <span class="score-dot good"></span>
+                                <span class="score-dot excellent"></span>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="dimension-item">
                         <h4>受众匹配度</h4>
                         <p>目标用户定位精准度、用户群体规模、用户付费能力、用户留存潜力</p>
+                        <div class="score-standard">
+                            <strong>评分标准：</strong><br>
+                            ✅ <strong>1-2分：</strong>目标用户定位完全错误，用户群体极小，付费能力极低<br>
+                            ✅ <strong>3-4分：</strong>用户定位有偏差，群体规模有限，付费能力一般<br>
+                            ✅ <strong>5-6分：</strong>用户定位基本精准，群体规模足够，付费能力达标<br>
+                            ✅ <strong>7-8分：</strong>用户定位非常精准，群体规模庞大，付费意愿和能力强<br>
+                            ✅ <strong>9-10分：</strong>精准命中蓝海市场，用户付费能力极强，留存潜力巨大
+                            <div class="score-indicator">
+                                <span class="score-dot bad"></span>
+                                <span class="score-dot poor"></span>
+                                <span class="score-dot good"></span>
+                                <span class="score-dot excellent"></span>
+                            </div>
+                        </div>
                     </div>
                     
                     <div class="dimension-item">
                         <h4>生命周期</h4>
                         <p>产品可运营时长、品类生命周期、IP价值潜力、长线发展空间</p>
+                        <div class="score-standard">
+                            <strong>评分标准：</strong><br>
+                            ✅ <strong>1-2分：</strong>品类生命周期极短，产品3个月内必死，无任何长线价值<br>
+                            ✅ <strong>3-4分：</strong>品类生命周期1年左右，产品可运营6-12个月，长线空间有限<br>
+                            ✅ <strong>5-6分：</strong>品类生命周期稳定，产品可运营1-2年，有一定长线发展空间<br>
+                            ✅ <strong>7-8分：</strong>品类生命周期长，产品可运营3-5年，IP价值潜力大<br>
+                            ✅ <strong>9-10分：</strong>长青品类，产品可运营5年以上，具备成为超级IP的潜力
+                            <div class="score-indicator">
+                                <span class="score-dot bad"></span>
+                                <span class="score-dot poor"></span>
+                                <span class="score-dot good"></span>
+                                <span class="score-dot excellent"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
