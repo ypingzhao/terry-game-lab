@@ -290,39 +290,42 @@
             }
         }
         
-        // Auto-refresh control
-        let refreshInterval;
-        let isDevelopmentMode = true;
+        // Countdown persistence
+        const countdownKey = 'terry-game-lab-countdown';
+        const countdownEndKey = 'terry-game-lab-countdown-end';
         
-        function startAutoRefresh() {
-            if (isDevelopmentMode && !refreshInterval) {
-                refreshInterval = setInterval(() => {
-                    fetch(window.location.href, { cache: 'no-store' })
-                        .then(res => res.text())
-                        .then(html => {
-                            const newDoc = new DOMParser().parseFromString(html, 'text/html');
-                            const newContent = newDoc.querySelector('.container').innerHTML;
-                            const currentContent = document.querySelector('.container').innerHTML;
-                            
-                            if (newContent !== currentContent) {
-                                window.location.reload();
-                            }
-                        });
-                }, 5000); // Check every 5 seconds
-            }
-        }
-        
-        function stopAutoRefresh() {
-            if (refreshInterval) {
-                clearInterval(refreshInterval);
-                refreshInterval = null;
+        // Initialize countdown
+        function initCountdown() {
+            const endTime = localStorage.getItem(countdownEndKey);
+            const now = Date.now();
+            
+            if (endTime && now < endTime) {
+                // Resume existing countdown
+                countdownTime = Math.ceil((endTime - now) / 1000);
+            } else {
+                // Start new countdown
+                countdownTime = 30 * 60; // 30 minutes
+                localStorage.setItem(countdownEndKey, now + countdownTime * 1000);
             }
         }
         
         // Update every second
         setInterval(updateCountdown, 1000);
+        initCountdown();
         updateCountdown(); // Initial update
-        startAutoRefresh(); // Start auto-refresh in development mode
+        
+        // Auto-refresh only when countdown finishes
+        function checkCompletion() {
+            const endTime = localStorage.getItem(countdownEndKey);
+            if (endTime && Date.now() >= endTime) {
+                // Countdown finished, refresh once
+                localStorage.removeItem(countdownEndKey);
+                window.location.reload();
+            }
+        }
+        
+        // Check every minute for completion
+        setInterval(checkCompletion, 60000);
     </script>
 </body>
 </html>
