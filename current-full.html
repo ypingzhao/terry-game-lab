@@ -1,0 +1,3602 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏设计方法论 - 完整维度版 | Terry Game Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            --secondary-gradient: linear-gradient(135deg, #00f5d4 0%, #00bbf9 100%);
+            --card-bg: rgba(15, 12, 41, 0.85);
+            --card-border: rgba(0, 245, 212, 0.2);
+            --text-primary: #ffffff;
+            --text-secondary: rgba(255, 255, 255, 0.92);
+            --text-muted: rgba(255, 255, 255, 0.7);
+            --accent-gold: #00f5d4;
+            --accent-cyan: #f15bb5;
+            --score-0: #ff4757;
+            --score-1: #ff6b6b;
+            --score-2: #ffd166;
+            --score-3: #06d6a0;
+            --score-4: #118ab2;
+            --score-5: #073b4c;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.75;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+            letter-spacing: 0.01em;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') 
+                center/cover no-repeat;
+            opacity: 0.08;
+            z-index: -1;
+            mix-blend-mode: screen;
+            background-attachment: fixed;
+        }
+        
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid var(--card-border);
+        }
+        
+        .nav-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            letter-spacing: -0.02em;
+        }
+        
+        .logo:hover {
+            opacity: 0.9;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            font-weight: 500;
+        }
+        
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--accent-gold);
+        }
+        
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 20px rgba(0, 245, 212, 0.5), 0 0 40px rgba(0, 245, 212, 0.3);
+            letter-spacing: -0.03em;
+            background: linear-gradient(45deg, #00f5d4, #f15bb5, #00bbf9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+        
+        @keyframes titleGlow {
+            0% { filter: brightness(1); }
+            100% { filter: brightness(1.3); }
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            margin: 0 auto;
+            font-weight: 400;
+        }
+        
+        .version-badge {
+            display: inline-block;
+            background: rgba(0, 245, 212, 0.2);
+            color: var(--accent-gold);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            border: 1px solid rgba(0, 245, 212, 0.3);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        
+        /* Quick Nav */
+        .quick-nav {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto 4rem;
+            border: 1px solid var(--card-border);
+        }
+        
+        .quick-nav h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+        
+        .nav-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+        
+        .nav-tag {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.8rem 1.2rem;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            font-size: 0.95rem;
+        }
+        
+        .nav-tag:hover {
+            background: rgba(0, 245, 212, 0.2);
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+        }
+        
+        /* Scoring Guide */
+        .scoring-guide {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto 4rem;
+            border: 1px solid var(--card-border);
+        }
+        
+        .scoring-guide h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-gold);
+            font-weight: 700;
+        }
+        
+        .score-levels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .score-level-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: background 0.2s ease;
+        }
+        
+        .score-level-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .score-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .score-dot.score-0 { background: var(--score-0); }
+        .score-dot.score-1 { background: var(--score-1); }
+        .score-dot.score-2 { background: var(--score-2); }
+        .score-dot.score-3 { background: var(--score-3); }
+        .score-dot.score-4 { background: var(--score-4); }
+        .score-dot.score-5 { background: var(--score-5); }
+        
+        .score-label {
+            font-weight: 600;
+            min-width: 60px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .score-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 2rem 5rem;
+        }
+        
+        .dimension-section {
+            margin-bottom: 5rem;
+            scroll-margin-top: 120px;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            margin-bottom: 2.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--card-border);
+        }
+        
+        .section-icon {
+            font-size: 2.5rem;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--secondary-gradient);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 187, 249, 0.3);
+        }
+        
+        .section-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.02em;
+        }
+        
+        /* Section Numbering */
+        .section-title::before {
+            content: attr(data-section-number);
+            display: inline-block;
+            width: 45px;
+            height: 45px;
+            line-height: 45px;
+            text-align: center;
+            background: linear-gradient(135deg, #f15bb5 0%, #00f5d4 100%);
+            color: #0f0c29;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 800;
+            margin-right: 1rem;
+            box-shadow: 0 4px 15px rgba(241, 91, 181, 0.4);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #00f5d4 0%, #00bbf9 100%);
+            border: 2px solid #00f5d4;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #0f0c29;
+            cursor: pointer;
+            z-index: 10000;
+            box-shadow: 0 0 20px rgba(0, 245, 212, 0.5),
+                        inset 0 0 10px rgba(0, 245, 212, 0.3);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            animation: buttonGlow 2s ease-in-out infinite alternate;
+        }
+        
+        .back-to-top.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 30px rgba(0, 245, 212, 0.7),
+                        inset 0 0 15px rgba(0, 245, 212, 0.4);
+        }
+        
+        @keyframes buttonGlow {
+            0% { filter: brightness(1); }
+            100% { filter: brightness(1.3); }
+        }
+        
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem;
+        }
+        
+        @media (max-width: 1024px) {
+            .items-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+        
+        .dimension-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid var(--card-border);
+            transition: all 0.3s ease;
+        }
+        
+        .dimension-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            border-color: rgba(241, 91, 181, 0.3);
+        }
+        
+        .dimension-title {
+            font-size: 1.35rem;
+            font-weight: 600;
+            color: var(--accent-cyan);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            letter-spacing: -0.01em;
+            text-shadow: 0 0 10px rgba(241, 91, 181, 0.4);
+        }
+        
+        .dimension-definition {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--card-border);
+            font-style: italic;
+            font-weight: 400;
+        }
+        
+        .score-section {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+        
+        .score-section .score-label {
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+            font-family: inherit;
+            min-width: auto;
+        }
+        
+        .score-criteria {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            padding: 0.75rem;
+            background: rgba(0, 245, 212, 0.1);
+            border-radius: 10px;
+            border-left: 3px solid var(--accent-gold);
+            font-weight: 400;
+        }
+        
+        .score-grid {
+            display: grid;
+            gap: 0.8rem;
+        }
+        
+        .score-item {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: background 0.2s ease;
+            flex-wrap: nowrap;
+        }
+        
+        .score-value {
+            min-width: 30px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            font-family: 'JetBrains Mono', monospace;
+            flex-shrink: 0;
+        }
+        
+        .score-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            flex: 1;
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        footer {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid var(--card-border);
+        }
+        
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 1rem;
+            }
+            
+            .logo {
+                font-size: 1.4rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero {
+                padding: 3rem 1rem;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1rem;
+            }
+            
+            .quick-nav {
+                margin: 0 1rem 3rem;
+                padding: 1.5rem;
+            }
+            
+            .nav-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .scoring-guide {
+                margin: 0 1rem 3rem;
+                padding: 1.5rem;
+            }
+            
+            .score-levels {
+                grid-template-columns: 1fr;
+            }
+            
+            .container {
+                padding: 0 1rem 3rem;
+            }
+            
+            .section-title {
+                font-size: 1.6rem;
+            }
+            
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dimension-card {
+                padding: 1.5rem;
+            }
+            
+            .back-to-top {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                🎮 Terry Game Lab
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">首页</a></li>
+                <li><a href="methodology.html">精简版方法论</a></li>
+                <li><a href="methodology-full.html" class="active">完整版维度表</a></li>
+                <li><a href="#">游戏评测</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>🎮 游戏设计方法论 - 完整版</h1>
+        <p>基于67个专业评估维度的科学游戏评判体系，覆盖从核心玩法到商业化的全流程设计标准</p>
+        <span class="version-badge">📊 维度版本：2026.03 | 评估粒度：0-5分制</span>
+    </section>
+
+    <!-- Scoring Guide -->
+    <section class="scoring-guide">
+        <h3>📋 评分标准说明</h3>
+        <div class="score-levels">
+            <div class="score-level-item">
+                <span class="score-dot score-0"></span>
+                <span class="score-label">0分</span>
+                <span class="score-desc">完全没有/缺失</span>
+            </div>
+            <div class="score-level-item">
+                <span class="score-dot score-1"></span>
+                <span class="score-label">1分</span>
+                <span class="score-desc">极差/行业下游</span>
+            </div>
+            <div class="score-level-item">
+                <span class="score-dot score-2"></span>
+                <span class="score-label">2分</span>
+                <span class="score-desc">较差/低于平均</span>
+            </div>
+            <div class="score-level-item">
+                <span class="score-dot score-3"></span>
+                <span class="score-label">3分</span>
+                <span class="score-desc">合格/行业平均</span>
+            </div>
+            <div class="score-level-item">
+                <span class="score-dot score-4"></span>
+                <span class="score-label">4分</span>
+                <span class="score-desc">优秀/行业上游</span>
+            </div>
+            <div class="score-level-item">
+                <span class="score-dot score-5"></span>
+                <span class="score-label">5分</span>
+                <span class="score-desc">顶尖/业内标杆</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quick Navigation -->
+    <section class="quick-nav">
+        <h3>⚡ 快速导航</h3>
+        <div class="nav-grid">
+            <a href="#challenge" class="nav-tag">⚔️ 挑战</a>
+            <a href="#control" class="nav-tag">🎮 操作</a>
+            <a href="#strategy" class="nav-tag">🧠 策略</a>
+            <a href="#growth" class="nav-tag">📈 成长</a>
+            <a href="#audiovisual" class="nav-tag">🎨 画音</a>
+            <a href="#fantasy" class="nav-tag">🌌 幻想</a>
+            <a href="#competition" class="nav-tag">🏆 竞争</a>
+            <a href="#story" class="nav-tag">📖 剧情</a>
+            <a href="#destruction" class="nav-tag">💥 破坏</a>
+            <a href="#emotion" class="nav-tag">❤️ 情感</a>
+            <a href="#character" class="nav-tag">👤 人设</a>
+            <a href="#design" class="nav-tag">⚙️ 设计</a>
+            <a href="#collection" class="nav-tag">🎁 收集</a>
+            <a href="#exploration" class="nav-tag">🗺️ 探索</a>
+            <a href="#team" class="nav-tag">👥 团队</a>
+            <a href="#casual" class="nav-tag">☕ 休闲</a>
+            <a href="#theme" class="nav-tag">🎭 题材</a>
+            <a href="#ip" class="nav-tag">©️ IP</a>
+            <a href="#monetization" class="nav-tag">💰 商业化</a>
+            <a href="#technology" class="nav-tag">🔧 技术</a>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- 挑战维度 -->
+        <section id="challenge" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">⚔️</div>
+                <h2 class="section-title" data-section-number="01">挑战</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">挑战难度梯度</h3>
+                    <p class="dimension-definition">从新手教程到高难度内容的难度曲线设计是否合理</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">难度曲线平滑度、学习曲线、挫败感控制</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有挑战难度梯度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">挑战难度梯度极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">挑战难度梯度较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">挑战难度梯度合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">挑战难度梯度优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">挑战难度梯度顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">挑战类型多样性</h3>
+                    <p class="dimension-definition">游戏提供的挑战类型（操作/策略/解谜/反应）的丰富程度</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">挑战类型数量、机制组合、玩法层次</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有挑战类型多样性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">挑战类型多样性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">挑战类型多样性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">挑战类型多样性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">挑战类型多样性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">挑战类型多样性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">失败惩罚机制</h3>
+                    <p class="dimension-definition">玩家失败后的惩罚程度（轻度/中度/重度/永久死亡）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">重玩成本、进度保留、资源损失</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有失败惩罚机制</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">失败惩罚机制极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">失败惩罚机制较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">失败惩罚机制合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">失败惩罚机制优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">失败惩罚机制顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">挑战目标</h3>
+                    <p class="dimension-definition">游戏提供了明确的短中长期的追求目标</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">目标设计数量类型、目标设计合理性</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有挑战目标</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">挑战目标极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">挑战目标较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">挑战目标合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">挑战目标优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">挑战目标顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 操作维度 -->
+        <section id="control" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">🎮</div>
+                <h2 class="section-title" data-section-number="02">操作</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">操作响应速度</h3>
+                    <p class="dimension-definition">输入指令到游戏反馈的延迟时间</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">帧数稳定性、输入延迟ms数</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有操作响应速度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">操作响应速度极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">操作响应速度较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">操作响应速度合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">操作响应速度优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">操作响应速度顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">操作精细化程度</h3>
+                    <p class="dimension-definition">游戏对操作精确度的要求（粗放/精准/极致）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">容错率、判定框、连招复杂度</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有操作精细化程度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">操作精细化程度极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">操作精细化程度较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">操作精细化程度合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">操作精细化程度优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">操作精细化程度顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">操作反馈质量</h3>
+                    <p class="dimension-definition">操作后的视觉/听觉/触觉反馈清晰度</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">打击感、震动反馈、音效配合</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有操作反馈质量</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">操作反馈质量极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">操作反馈质量较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">操作反馈质量合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">操作反馈质量优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">操作反馈质量顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">操作学习曲线</h3>
+                    <p class="dimension-definition">掌握基本操作和高级技巧所需时间</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">教程完整性、上手难度、深度技巧</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有操作学习曲线</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">操作学习曲线极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">操作学习曲线较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">操作学习曲线合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">操作学习曲线优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">操作学习曲线顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 策略维度 -->
+        <section id="strategy" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">🧠</div>
+                <h2 class="section-title" data-section-number="03">策略</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">策略深度</h3>
+                    <p class="dimension-definition">游戏机制允许的策略组合与变化空间</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">有效策略数量、策略层次、思考空间</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有策略深度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">策略深度极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">策略深度较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">策略深度合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">策略深度优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">策略深度顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">策略类型</h3>
+                    <p class="dimension-definition">策略的表现形式（资源管理/阵容搭配/路线规划等）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">策略维度数量、机制耦合度</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有策略类型</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">策略类型极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">策略类型较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">策略类型合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">策略类型优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">策略类型顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">策略容错性</h3>
+                    <p class="dimension-definition">策略失误后的可挽回程度</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">试错成本、策略调整窗口期</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有策略容错性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">策略容错性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">策略容错性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">策略容错性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">策略容错性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">策略容错性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">策略趣味延续性</h3>
+                    <p class="dimension-definition">策略趣味随版本/玩家发现的变化潜力</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">平衡性设计、策略寿命、更新频率</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有策略趣味延续性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">策略趣味延续性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">策略趣味延续性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">策略趣味延续性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">策略趣味延续性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">策略趣味延续性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 成长维度 -->
+        <section id="growth" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">📈</div>
+                <h2 class="section-title" data-section-number="04">成长</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">成长系统类型</h3>
+                    <p class="dimension-definition">成长机制的表现形式（等级/技能树/装备/符文等）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">系统复杂度、自由度、深度</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有成长系统类型</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">成长系统类型极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">成长系统类型较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">成长系统类型合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">成长系统类型优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">成长系统类型顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">成长可感知性</h3>
+                    <p class="dimension-definition">成长带来的能力提升是否能被玩家明显感知</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">数值跃升幅度、技能解锁频率、外观变化</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有成长可感知性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">成长可感知性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">成长可感知性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">成长可感知性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">成长可感知性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">成长可感知性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">成长获取节奏</h3>
+                    <p class="dimension-definition">玩家获得成长的频率（每分钟/每局/每天）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">奖励间隔、成就感密度</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有成长获取节奏</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">成长获取节奏极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">成长获取节奏较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">成长获取节奏合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">成长获取节奏优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">成长获取节奏顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">成长上限设计</h3>
+                    <p class="dimension-definition">成长系统是否有封顶（有限/无限/赛季重置）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">长期目标、肝度需求、数值膨胀控制</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有成长上限设计</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">成长上限设计极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">成长上限设计较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">成长上限设计合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">成长上限设计优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">成长上限设计顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 画音维度 -->
+        <section id="audiovisual" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">🎨</div>
+                <h2 class="section-title" data-section-number="05">画音</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">画面风格统一性</h3>
+                    <p class="dimension-definition">美术风格是否一致（写实/卡通/像素/水墨等）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">风格定位、资源复用、视觉识别度</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有画面风格统一性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">画面风格统一性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">画面风格统一性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">画面风格统一性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">画面风格统一性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">画面风格统一性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">画面信息层次</h3>
+                    <p class="dimension-definition">UI与游戏画面的信息分级是否清晰</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">视觉聚焦、信息噪音、可读性</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有画面信息层次</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">画面信息层次极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">画面信息层次较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">画面信息层次合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">画面信息层次优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">画面信息层次顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">音乐适配性</h3>
+                    <p class="dimension-definition">BGM与游戏场景/节奏的契合度</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">情绪渲染、动态音乐、文化符号</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有音乐适配性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">音乐适配性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">音乐适配性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">音乐适配性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">音乐适配性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">音乐适配性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">音效功能性</h3>
+                    <p class="dimension-definition">音效在游戏反馈中的作用（提示/氛围/沉浸）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">音效与交互反馈、音效识别度</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有音效功能性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">音效功能性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">音效功能性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">音效功能性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">音效功能性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">音效功能性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 幻想维度 -->
+        <section id="fantasy" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">🌌</div>
+                <h2 class="section-title" data-section-number="06">幻想</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">世界观沉浸感</h3>
+                    <p class="dimension-definition">游戏世界构建的完整性与代入感</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">设定自洽性、环境叙事（世界观与关卡、系统的融入度）</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有世界观沉浸感</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">世界观沉浸感极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">世界观沉浸感较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">世界观沉浸感合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">世界观沉浸感优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">世界观沉浸感顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">角色代入方式</h3>
+                    <p class="dimension-definition">玩家如何与游戏角色建立连接（自定义/预设/无主角）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">自由度、个性化、情感投射</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有角色代入方式</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">角色代入方式极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">角色代入方式较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">角色代入方式合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">角色代入方式优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">角色代入方式顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">幻想类型定位</h3>
+                    <p class="dimension-definition">游戏满足的幻想需求（力量/探险/社交/创造）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">明确的幻想类型方向</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有幻想类型定位</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">幻想类型定位极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">幻想类型定位较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">幻想类型定位合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">幻想类型定位优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">幻想类型定位顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">虚拟现实感</h3>
+                    <p class="dimension-definition">游戏世界的真实感与可信度</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">物理模拟、AI行为、交互细节</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有虚拟现实感</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">虚拟现实感极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">虚拟现实感较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">虚拟现实感合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">虚拟现实感优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">虚拟现实感顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 竞争维度 -->
+        <section id="competition" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">🏆</div>
+                <h2 class="section-title" data-section-number="07">竞争</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">竞争模式类型</h3>
+                    <p class="dimension-definition">竞争的表现形式（PVP/排行榜/异步竞技）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">模式多样性、公平性设计</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有竞争模式类型</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">竞争模式类型极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">竞争模式类型较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">竞争模式类型合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">竞争模式类型优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">竞争模式类型顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">竞争驱动强度</h3>
+                    <p class="dimension-definition">游戏对竞争的激励程度（核心/可选/无）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">奖励差异、排名可见性、赛季机制</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有竞争驱动强度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">竞争驱动强度极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">竞争驱动强度较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">竞争驱动强度合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">竞争驱动强度优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">竞争驱动强度顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">竞争公平性</h3>
+                    <p class="dimension-definition">付费/时长/运气对竞争结果的影响</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">Pay-to-Win程度、匹配机制、技能占比</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有竞争公平性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">竞争公平性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">竞争公平性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">竞争公平性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">竞争公平性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">竞争公平性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">竞争规模梯度</h3>
+                    <p class="dimension-definition">竞争的参与人数范围（1v1/小队/百人/全服）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">社交压力、规模多样性</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有竞争规模梯度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">竞争规模梯度极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">竞争规模梯度较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">竞争规模梯度合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">竞争规模梯度优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">竞争规模梯度顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 剧情维度 -->
+        <section id="story" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">📖</div>
+                <h2 class="section-title" data-section-number="08">剧情</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">叙事能力</h3>
+                    <p class="dimension-definition">故事讲述的完整性与吸引力</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">剧本质量、叙事手法、情节冲突</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有叙事能力</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">叙事能力极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">叙事能力较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">叙事能力合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">叙事能力优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">叙事能力顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">剧情演出质量</h3>
+                    <p class="dimension-definition">剧情表现形式的完成度（过场/对话/环境叙事）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">演出投入、配音质量、镜头语言</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有剧情演出质量</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">剧情演出质量极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">剧情演出质量较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">剧情演出质量合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">剧情演出质量优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">剧情演出质量顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">剧情分支设计</h3>
+                    <p class="dimension-definition">玩家选择对剧情的影响程度</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">分支数量、选择的意义、重玩价值</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有剧情分支设计</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">剧情分支设计极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">剧情分支设计较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">剧情分支设计合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">剧情分支设计优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">剧情分支设计顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">剧情原创性</h3>
+                    <p class="dimension-definition">故事的创新性与独特性</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">题材创新、叙事手法、文化融合</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有剧情原创性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">剧情原创性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">剧情原创性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">剧情原创性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">剧情原创性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">剧情原创性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 破坏维度 -->
+        <section id="destruction" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">💥</div>
+                <h2 class="section-title" data-section-number="09">破坏</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">破坏程度</h3>
+                    <p class="dimension-definition">游戏中可破坏元素的范围与深度</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">可破坏物占比、破坏层次、持久性</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有破坏程度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">破坏程度极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">破坏程度较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">破坏程度合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">破坏程度优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">破坏程度顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">破坏视听反馈</h3>
+                    <p class="dimension-definition">破坏行为的视觉/听觉表现力</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">粒子效果、音效冲击、屏幕震动</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有破坏视听反馈</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">破坏视听反馈极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">破坏视听反馈较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">破坏视听反馈合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">破坏视听反馈优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">破坏视听反馈顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">破坏真实性</h3>
+                    <p class="dimension-definition">破坏效果的物理真实性与合理性</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">物理引擎、材质差异、连锁反应</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有破坏真实性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">破坏真实性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">破坏真实性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">破坏真实性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">破坏真实性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">破坏真实性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 情感维度 -->
+        <section id="emotion" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">❤️</div>
+                <h2 class="section-title" data-section-number="10">情感</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">角色情感共鸣</h3>
+                    <p class="dimension-definition">玩家对角色遭遇的情感投入</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">角色塑造深度、情感弧线、代入感</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有角色情感共鸣</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">角色情感共鸣极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">角色情感共鸣较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">角色情感共鸣合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">角色情感共鸣优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">角色情感共鸣顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">情感调动手法</h3>
+                    <p class="dimension-definition">游戏调动玩家情感的方式（音乐/剧情/演出）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">情绪节奏、多感官配合、情感设计</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有情感调动手法</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">情感调动手法极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">情感调动手法较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">情感调动手法合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">情感调动手法优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">情感调动手法顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">情感类型覆盖</h3>
+                    <p class="dimension-definition">游戏触发的情感类型（喜/悲/惊/治愈）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">情感多样性、核心情感定位</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有情感类型覆盖</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">情感类型覆盖极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">情感类型覆盖较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">情感类型覆盖合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">情感类型覆盖优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">情感类型覆盖顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">情感留存度</h3>
+                    <p class="dimension-definition">游戏结束后情感记忆的持续时间</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">情感冲击力、记忆点设计</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有情感留存度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">情感留存度极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">情感留存度较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">情感留存度合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">情感留存度优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">情感留存度顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 人设维度 -->
+        <section id="character" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">👤</div>
+                <h2 class="section-title" data-section-number="11">人设</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">角色个性鲜明度</h3>
+                    <p class="dimension-definition">角色性格特征的辨识度与记忆点</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">人设符号化、台词风格、行为逻辑</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有角色个性鲜明度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">角色个性鲜明度极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">角色个性鲜明度较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">角色个性鲜明度合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">角色个性鲜明度优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">角色个性鲜明度顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">角色设计完整性</h3>
+                    <p class="dimension-definition">角色背景故事与动机的完善程度</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">人物小传、成长弧线、关系网</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有角色设计完整性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">角色设计完整性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">角色设计完整性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">角色设计完整性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">角色设计完整性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">角色设计完整性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">角色多样性</h3>
+                    <p class="dimension-definition">角色类型的丰富度（性别/年龄/性格/种族）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">代表性、差异化、文化包容</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有角色多样性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">角色多样性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">角色多样性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">角色多样性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">角色多样性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">角色多样性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">角色视觉辨识度</h3>
+                    <p class="dimension-definition">角色外观的独特性与可识别性</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">剪影识别、色彩符号、设计语言</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有角色视觉辨识度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">角色视觉辨识度极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">角色视觉辨识度较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">角色视觉辨识度合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">角色视觉辨识度优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">角色视觉辨识度顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 设计维度 -->
+        <section id="design" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">⚙️</div>
+                <h2 class="section-title" data-section-number="12">设计</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">系统设计合理性</h3>
+                    <p class="dimension-definition">游戏机制的逻辑自洽与平衡性</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">规则一致性、数值平衡、循环设计</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有系统设计合理性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">系统设计合理性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">系统设计合理性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">系统设计合理性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">系统设计合理性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">系统设计合理性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">交互设计易用性</h3>
+                    <p class="dimension-definition">UI/UX的操作便捷性与学习成本</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">信息架构、操作流程、容错设计</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有交互设计易用性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">交互设计易用性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">交互设计易用性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">交互设计易用性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">交互设计易用性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">交互设计易用性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">个性化表达空间</h3>
+                    <p class="dimension-definition">玩家自定义与个性展示的自由度</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">捏脸/装扮/玩法风格/创意工具</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有个性化表达空间</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">个性化表达空间极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">个性化表达空间较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">个性化表达空间合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">个性化表达空间优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">个性化表达空间顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">无障碍设计</h3>
+                    <p class="dimension-definition">对特殊群体的友好度（色盲/听障/新手）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">辅助功能、难度选项、引导设计</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有无障碍设计</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">无障碍设计极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">无障碍设计较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">无障碍设计合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">无障碍设计优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">无障碍设计顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 收集维度 -->
+        <section id="collection" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">🎁</div>
+                <h2 class="section-title" data-section-number="13">收集</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">收集目标多样性</h3>
+                    <p class="dimension-definition">可收集对象的类型与数量</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">收集品种类、稀有度分级、主题性</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有收集目标多样性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">收集目标多样性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">收集目标多样性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">收集目标多样性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">收集目标多样性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">收集目标多样性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">收集完整性奖励</h3>
+                    <p class="dimension-definition">集齐收藏品的奖励设计</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">完成奖励价值、收集动力</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有收集完整性奖励</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">收集完整性奖励极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">收集完整性奖励较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">收集完整性奖励合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">收集完整性奖励优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">收集完整性奖励顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">收集随机性程度</h3>
+                    <p class="dimension-definition">收集依赖运气的程度（保底/纯随机/确定性）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">抽卡机制、掉落率、保底机制</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有收集随机性程度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">收集随机性程度极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">收集随机性程度较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">收集随机性程度合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">收集随机性程度优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">收集随机性程度顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">收集展示系统</h3>
+                    <p class="dimension-definition">收藏品的展示与炫耀机制</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">图鉴系统、展示空间、社交分享</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有收集展示系统</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">收集展示系统极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">收集展示系统较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">收集展示系统合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">收集展示系统优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">收集展示系统顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 探索维度 -->
+        <section id="exploration" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">🗺️</div>
+                <h2 class="section-title" data-section-number="14">探索</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">地图丰富度</h3>
+                    <p class="dimension-definition">场景设计的复杂度与密度</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">场景数量、结构层次、隐藏要素</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有地图丰富度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">地图丰富度极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">地图丰富度较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">地图丰富度合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">地图丰富度优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">地图丰富度顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">探索奖励机制</h3>
+                    <p class="dimension-definition">探索行为的即时与长期回报</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">奖励的惊喜感、探索成就、秘密区域</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有探索奖励机制</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">探索奖励机制极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">探索奖励机制较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">探索奖励机制合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">探索奖励机制优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">探索奖励机制顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">探索自由度</h3>
+                    <p class="dimension-definition">玩家探索路线的自主选择空间</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">线性/半开放/开放世界、解锁机制</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有探索自由度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">探索自由度极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">探索自由度较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">探索自由度合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">探索自由度优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">探索自由度顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">探索新鲜感维持</h3>
+                    <p class="dimension-definition">持续探索的动力与惊喜设计</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">场景差异化、随机事件、环境叙事</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有探索新鲜感维持</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">探索新鲜感维持极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">探索新鲜感维持较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">探索新鲜感维持合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">探索新鲜感维持优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">探索新鲜感维持顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 团队维度 -->
+        <section id="team" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">👥</div>
+                <h2 class="section-title" data-section-number="15">团队</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">协作必要性</h3>
+                    <p class="dimension-definition">游戏对团队配合的依赖程度</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">单人可玩性、团队加成、角色分工</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有协作必要性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">协作必要性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">协作必要性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">协作必要性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">协作必要性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">协作必要性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">协作对象类型</h3>
+                    <p class="dimension-definition">合作对象（好友/陌生人/AI/异步）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">社交门槛、匹配系统、跨平台</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有协作对象类型</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">协作对象类型极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">协作对象类型较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">协作对象类型合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">协作对象类型优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">协作对象类型顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">社交功能完善度</h3>
+                    <p class="dimension-definition">游戏内社交工具的丰富性</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">语音/文字/表情/组队/公会</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有社交功能完善度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">社交功能完善度极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">社交功能完善度较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">社交功能完善度合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">社交功能完善度优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">社交功能完善度顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">团队规模适配</h3>
+                    <p class="dimension-definition">游戏支持的团队人数范围</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">2人/5人/10人+、不同模式适配</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有团队规模适配</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">团队规模适配极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">团队规模适配较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">团队规模适配合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">团队规模适配优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">团队规模适配顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 休闲维度 -->
+        <section id="casual" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">☕</div>
+                <h2 class="section-title" data-section-number="16">休闲</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">游戏压力程度</h3>
+                    <p class="dimension-definition">游戏的紧张度与放松度</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">节奏控制、节奏的起伏、时间压力</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有游戏压力程度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">游戏压力程度极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">游戏压力程度较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">游戏压力程度合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">游戏压力程度优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">游戏压力程度顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">碎片时间适配性</h3>
+                    <p class="dimension-definition">单局/单次游戏的时长</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">暂停友好、存档机制、局时控制</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有碎片时间适配性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">碎片时间适配性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">碎片时间适配性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">碎片时间适配性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">碎片时间适配性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">碎片时间适配性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">游戏节奏自主性</h3>
+                    <p class="dimension-definition">玩家对游戏节奏的控制权</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">暂停/快进/自动战斗、节奏调节</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有游戏节奏自主性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">游戏节奏自主性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">游戏节奏自主性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">游戏节奏自主性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">游戏节奏自主性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">游戏节奏自主性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">低投入可玩性</h3>
+                    <p class="dimension-definition">不全神贯注时的游戏体验</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">放置元素、自动功能、容错率</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有低投入可玩性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">低投入可玩性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">低投入可玩性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">低投入可玩性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">低投入可玩性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">低投入可玩性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 题材维度 -->
+        <section id="theme" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">🎭</div>
+                <h2 class="section-title" data-section-number="17">题材</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">题材类型定位</h3>
+                    <p class="dimension-definition">题材的明确归类（奇幻/科幻/历史/现代等）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">类型识别度、市场定位</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有题材类型定位</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">题材类型定位极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">题材类型定位较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">题材类型定位合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">题材类型定位优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">题材类型定位顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">题材差异化程度</h3>
+                    <p class="dimension-definition">与市场现有题材的区分度</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">创新点数量、融合独特性、竞品对比</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有题材差异化程度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">题材差异化程度极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">题材差异化程度较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">题材差异化程度合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">题材差异化程度优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">题材差异化程度顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">文化共鸣强度</h3>
+                    <p class="dimension-definition">目标受众的情感连接与文化认同</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">文化符号、集体记忆、情感触点</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有文化共鸣强度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">文化共鸣强度极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">文化共鸣强度较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">文化共鸣强度合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">文化共鸣强度优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">文化共鸣强度顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">题材内容风险</h3>
+                    <p class="dimension-definition">题材的敏感性与审核通过风险</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">暴力/政治/宗教、分级要求、地区限制</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有题材内容风险</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">题材内容风险极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">题材内容风险较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">题材内容风险合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">题材内容风险优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">题材内容风险顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- IP维度 -->
+        <section id="ip" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">©️</div>
+                <h2 class="section-title" data-section-number="18">IP</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">IP类型与适配性</h3>
+                    <p class="dimension-definition">IP是否契合游戏类型（原创/授权/联名/改编）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">IP-玩法契合度、粉丝期待管理</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有IP类型与适配性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">IP类型与适配性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">IP类型与适配性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">IP类型与适配性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">IP类型与适配性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">IP类型与适配性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">IP受众认知度</h3>
+                    <p class="dimension-definition">目标市场对IP的熟悉程度与好感度</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">品牌知名度、粉丝基础、市场调研</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有IP受众认知度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">IP受众认知度极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">IP受众认知度较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">IP受众认知度合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">IP受众认知度优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">IP受众认知度顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">IP授权成本风险</h3>
+                    <p class="dimension-definition">授权费用、合约限制、使用期限</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">投资回报率、法律风险、续约可能性</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有IP授权成本风险</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">IP授权成本风险极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">IP授权成本风险较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">IP授权成本风险合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">IP授权成本风险优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">IP授权成本风险顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">IP扩展性潜力</h3>
+                    <p class="dimension-definition">IP可否衍生系列/DLC/周边产品</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">世界观完整性、叙事空间、商业延展</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有IP扩展性潜力</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">IP扩展性潜力极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">IP扩展性潜力较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">IP扩展性潜力合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">IP扩展性潜力优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">IP扩展性潜力顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 商业化维度 -->
+        <section id="monetization" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">💰</div>
+                <h2 class="section-title" data-section-number="19">商业化</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">付费模式设计</h3>
+                    <p class="dimension-definition">游戏的收费方式（买断/内购/订阅/广告）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">模式适配性、用户接受度、市场趋势</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有付费模式设计</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">付费模式设计极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">付费模式设计较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">付费模式设计合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">付费模式设计优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">付费模式设计顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">ARPU预期值</h3>
+                    <p class="dimension-definition">单用户平均收入的预测与优化</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">定价策略、转化率、付费点设计</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有ARPU预期值</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">ARPU预期值极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">ARPU预期值较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">ARPU预期值合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">ARPU预期值优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">ARPU预期值顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">用户生命周期价值</h3>
+                    <p class="dimension-definition">玩家长期贡献的收入预期（LTV）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">留存率、复购率、付费深度</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有用户生命周期价值</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">用户生命周期价值极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">用户生命周期价值较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">用户生命周期价值合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">用户生命周期价值优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">用户生命周期价值顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">成本回收周期</h3>
+                    <p class="dimension-definition">达到盈亏平衡所需的时间</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">开发成本、推广成本、收入曲线</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有成本回收周期</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">成本回收周期极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">成本回收周期较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">成本回收周期合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">成本回收周期优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">成本回收周期顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">可扩展变现空间</h3>
+                    <p class="dimension-definition">DLC/季票/联动活动的持续变现潜力</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">内容扩展计划、运营节奏、IP联动</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有可扩展变现空间</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">可扩展变现空间极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">可扩展变现空间较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">可扩展变现空间合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">可扩展变现空间优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">可扩展变现空间顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- 技术维度 -->
+        <section id="technology" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">🔧</div>
+                <h2 class="section-title" data-section-number="20">技术</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">技术稳定性</h3>
+                    <p class="dimension-definition">游戏运行的稳定性与bug率</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">崩溃率、卡顿频率、测试覆盖</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有技术稳定性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">技术稳定性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">技术稳定性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">技术稳定性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">技术稳定性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">技术稳定性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">跨平台流畅性</h3>
+                    <p class="dimension-definition">不同平台的性能表现一致性</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">帧数稳定、适配质量、云存档</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有跨平台流畅性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">跨平台流畅性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">跨平台流畅性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">跨平台流畅性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">跨平台流畅性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">跨平台流畅性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">技术创新性</h3>
+                    <p class="dimension-definition">使用的技术方案的先进性</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">引擎特性、算法创新、硬件利用</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有技术创新性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">技术创新性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">技术创新性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">技术创新性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">技术创新性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">技术创新性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card">
+                    <h3 class="dimension-title">技术扩展性</h3>
+                    <p class="dimension-definition">后续更新与功能添加的技术支持</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">代码架构、工具链、模块化设计</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有技术扩展性</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">技术扩展性极差，几乎没有，行业下游</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">技术扩展性较差，低于行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">技术扩展性合格，达到行业平均水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">技术扩展性优秀，达到行业上游水平</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">技术扩展性顶尖，业内标杆水平</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop" onclick="scrollToTop()">
+        ↑
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 Terry Game Lab. Powered by passion for games.</p>
+    </footer>
+
+    <script>
+        // Back to Top functionality
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('show');
+            } else {
+                backToTopButton.classList.remove('show');
+            }
+        });
+        
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
