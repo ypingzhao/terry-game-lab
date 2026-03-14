@@ -39,7 +39,7 @@
             mix-blend-mode: overlay;
         }
         
-        /* CRT Scanline Effect */
+        /* CRT Monitor Effect - Full Filter */
         body::after {
             content: '';
             position: fixed;
@@ -48,22 +48,43 @@
             width: 100%;
             height: 100%;
             background: 
+                /* Scanlines */
                 repeating-linear-gradient(
                     0deg,
-                    rgba(0, 0, 0, 0.15),
-                    rgba(0, 0, 0, 0.15) 1px,
+                    rgba(0, 0, 0, 0.25),
+                    rgba(0, 0, 0, 0.25) 1px,
                     transparent 1px,
                     transparent 2px
                 ),
+                /* Pixel Grid */
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(255, 0, 0, 0.05),
+                    rgba(0, 255, 0, 0.05) 1px,
+                    rgba(0, 0, 255, 0.05) 2px,
+                    transparent 3px
+                ),
+                /* Vignette */
                 radial-gradient(
                     circle at center,
                     transparent 0%,
-                    rgba(0, 0, 0, 0.2) 90%,
-                    rgba(0, 0, 0, 0.4) 100%
+                    rgba(0, 0, 0, 0.3) 80%,
+                    rgba(0, 0, 0, 0.6) 100%
+                ),
+                /* CRT Curvature */
+                radial-gradient(
+                    ellipse at center,
+                    transparent 0%,
+                    transparent 80%,
+                    rgba(0, 0, 0, 0.4) 95%,
+                    rgba(0, 0, 0, 0.8) 100%
                 );
             pointer-events: none;
             z-index: 9999;
-            animation: scanline 6s linear infinite;
+            animation: 
+                scanlineFlicker 0.5s infinite,
+                screenWarp 10s ease-in-out infinite alternate;
+            mix-blend-mode: overlay;
         }
         
         /* CRT Signal Sweep */
@@ -72,28 +93,58 @@
             top: -100%;
             left: 0;
             width: 100%;
-            height: 20%;
+            height: 15%;
             background: linear-gradient(
                 to bottom,
                 transparent 0%,
-                rgba(0, 255, 255, 0.1) 50%,
+                rgba(0, 255, 255, 0.2) 50%,
+                rgba(255, 0, 255, 0.1) 75%,
                 transparent 100%
             );
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
             pointer-events: none;
             z-index: 10000;
-            animation: sweep 30s linear infinite;
+            animation: sweep 20s linear infinite;
+            filter: blur(5px);
         }
         
-        @keyframes scanline {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(2px); }
+        /* CRT Flicker Effect */
+        .crt-flicker {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.02);
+            pointer-events: none;
+            z-index: 10001;
+            animation: flicker 0.1s infinite;
+            mix-blend-mode: overlay;
+            opacity: 0.5;
+        }
+        
+        @keyframes scanlineFlicker {
+            0% { opacity: 0.9; }
+            50% { opacity: 1; }
+            100% { opacity: 0.9; }
         }
         
         @keyframes sweep {
             0% { top: -100%; opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
             100% { top: 100%; opacity: 0; }
+        }
+        
+        @keyframes flicker {
+            0% { opacity: 0.4; }
+            50% { opacity: 0.6; }
+            100% { opacity: 0.4; }
+        }
+        
+        @keyframes screenWarp {
+            0% { transform: scale(1.005); }
+            100% { transform: scale(1); }
         }
         
         .container {
@@ -260,8 +311,9 @@
     </style>
 </head>
 <body>
-    <!-- CRT Sweep Effect -->
+    <!-- CRT Effects -->
     <div class="crt-sweep"></div>
+    <div class="crt-flicker"></div>
 
     <div class="container">
         <h1>Terry Game Lab</h1>
