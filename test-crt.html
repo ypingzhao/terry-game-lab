@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRT Test</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+        
+        /* CRT Effect - Very Strong */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.4),
+                rgba(0, 0, 0, 0.4) 2px,
+                transparent 2px,
+                transparent 4px
+            );
+            pointer-events: none;
+            z-index: 9999;
+            animation: scanline 0.2s linear infinite;
+        }
+        
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(
+                circle at center,
+                transparent 0%,
+                rgba(0, 0, 0, 0.6) 90%,
+                rgba(0, 0, 0, 0.9) 100%
+            );
+            pointer-events: none;
+            z-index: 9998;
+        }
+        
+        .sweep {
+            position: fixed;
+            top: -50%;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                rgba(0, 255, 0, 0.3) 50%,
+                transparent 100%
+            );
+            animation: sweep 10s linear infinite;
+            z-index: 10000;
+            pointer-events: none;
+            box-shadow: 0 0 100px rgba(0, 255, 0, 0.5);
+        }
+        
+        @keyframes scanline {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(4px); }
+        }
+        
+        @keyframes sweep {
+            0% { top: -50%; }
+            100% { top: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="sweep"></div>
+    <div>
+        <h1>CRT TEST SCREEN</h1>
+        <p>If you see scanlines, green sweep, and vignette - it's working!</p>
+        <p>SCAN LINES: ✅</p>
+        <p>VIGNETTE: ✅</p>
+        <p>SWEEP EFFECT: ✅</p>
+    </div>
+</body>
+</html>
