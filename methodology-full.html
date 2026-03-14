@@ -1,670 +1,40 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>游戏设计方法论 - 完整维度版 | Terry Game Lab</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --card-bg: rgba(255, 255, 255, 0.08);
-            --card-border: rgba(255, 255, 255, 0.15);
-            --text-primary: #ffffff;
-            --text-secondary: rgba(255, 255, 255, 0.85);
-            --text-muted: rgba(255, 255, 255, 0.6);
-            --accent-gold: #ffd700;
-            --accent-cyan: #a8edea;
-            --score-0: #ff4757;
-            --score-1: #ff6b6b;
-            --score-2: #ffa502;
-            --score-3: #ffd93d;
-            --score-4: #6bcb77;
-            --score-5: #1e90ff;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: var(--primary-gradient);
-            min-height: 100vh;
-            color: var(--text-primary);
-            line-height: 1.7;
-        }
-        
-        /* Header */
-        .header {
-            background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(20px);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid var(--card-border);
-        }
-        
-        .nav-container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-        
-        .logo:hover {
-            opacity: 0.9;
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
-        
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-        
-        .nav-links a:hover,
-        .nav-links a.active {
-            color: var(--accent-gold);
-        }
-        
-        /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 4rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        .hero h1 {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 1.5rem;
-            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
-            letter-spacing: 2px;
-            background: linear-gradient(45deg, #ffffff, #ffd700);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .version-badge {
-            display: inline-block;
-            background: rgba(255, 215, 0, 0.2);
-            color: var(--accent-gold);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-top: 1rem;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-        }
-        
-        /* Quick Nav */
-        .quick-nav {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            max-width: 1400px;
-            margin: 0 auto 4rem;
-            border: 1px solid var(--card-border);
-        }
-        
-        .quick-nav h3 {
-            font-size: 1.4rem;
-            margin-bottom: 1.5rem;
-            color: var(--accent-gold);
-        }
-        
-        .nav-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 1rem;
-        }
-        
-        .nav-tag {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.8rem 1.2rem;
-            border-radius: 12px;
-            text-align: center;
-            text-decoration: none;
-            color: var(--text-primary);
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
-            font-size: 0.95rem;
-        }
-        
-        .nav-tag:hover {
-            background: rgba(255, 215, 0, 0.2);
-            border-color: var(--accent-gold);
-            transform: translateY(-2px);
-        }
-        
-        /* Scoring Guide */
-        .scoring-guide {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            max-width: 1400px;
-            margin: 0 auto 4rem;
-            border: 1px solid var(--card-border);
-        }
-        
-        .scoring-guide h3 {
-            font-size: 1.4rem;
-            margin-bottom: 1.5rem;
-            color: var(--accent-gold);
-        }
-        
-        .score-levels {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-        
-        .score-level-item {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            padding: 0.8rem;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
-        }
-        
-        .score-dot {
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-        
-        .score-dot.score-0 { background: var(--score-0); }
-        .score-dot.score-1 { background: var(--score-1); }
-        .score-dot.score-2 { background: var(--score-2); }
-        .score-dot.score-3 { background: var(--score-3); }
-        .score-dot.score-4 { background: var(--score-4); }
-        .score-dot.score-5 { background: var(--score-5); }
-        
-        .score-label {
-            font-weight: 600;
-            min-width: 60px;
-        }
-        
-        .score-desc {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-        
-        /* Main Content */
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 0 2rem 5rem;
-        }
-        
-        .dimension-section {
-            margin-bottom: 5rem;
-            scroll-margin-top: 120px;
-        }
-        
-        .section-header {
-            display: flex;
-            align-items: center;
-            gap: 1.2rem;
-            margin-bottom: 2.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 2px solid var(--card-border);
-        }
-        
-        .section-icon {
-            font-size: 2.5rem;
-            width: 70px;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--secondary-gradient);
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(245, 87, 108, 0.3);
-        }
-        
-        .section-title {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--text-primary);
-        }
-        
-        .items-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-            gap: 2rem;
-        }
-        
-        .dimension-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 2rem;
-            border: 1px solid var(--card-border);
-            transition: all 0.3s ease;
-        }
-        
-        .dimension-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-            border-color: rgba(255, 215, 0, 0.3);
-        }
-        
-        .dimension-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: var(--accent-cyan);
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .dimension-definition {
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-            font-size: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--card-border);
-            font-style: italic;
-        }
-        
-        .score-section {
-            background: rgba(0, 0, 0, 0.15);
-            border-radius: 12px;
-            padding: 1.5rem;
-        }
-        
-        .score-label {
-            font-weight: 600;
-            color: var(--accent-gold);
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-        
-        .score-criteria {
-            margin-bottom: 1rem;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            padding: 0.5rem;
-            background: rgba(255, 215, 0, 0.1);
-            border-radius: 8px;
-            border-left: 3px solid var(--accent-gold);
-        }
-        
-        .score-grid {
-            display: grid;
-            gap: 0.8rem;
-        }
-        
-        .score-item {
-            display: flex;
-            gap: 0.8rem;
-            align-items: flex-start;
-            padding: 0.6rem;
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
-            transition: background 0.2s ease;
-        }
-        
-        .score-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-        
-        .score-value {
-            min-width: 30px;
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-        
-        .score-text {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            flex: 1;
-        }
-        
-        /* Footer */
-        footer {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 2rem;
-            text-align: center;
-            border-top: 1px solid var(--card-border);
-        }
-        
-        footer p {
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-container {
-                padding: 1rem;
-            }
-            
-            .logo {
-                font-size: 1.4rem;
-            }
-            
-            .nav-links {
-                display: none;
-            }
-            
-            .hero {
-                padding: 3rem 1rem;
-            }
-            
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .hero p {
-                font-size: 1rem;
-            }
-            
-            .quick-nav {
-                margin: 0 1rem 3rem;
-                padding: 1.5rem;
-            }
-            
-            .nav-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .scoring-guide {
-                margin: 0 1rem 3rem;
-                padding: 1.5rem;
-            }
-            
-            .score-levels {
-                grid-template-columns: 1fr;
-            }
-            
-            .container {
-                padding: 0 1rem 3rem;
-            }
-            
-            .section-title {
-                font-size: 1.6rem;
-            }
-            
-            .items-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .dimension-card {
-                padding: 1.5rem;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Header -->
-    <header class="header">
-        <div class="nav-container">
-            <a href="index.html" class="logo">
-                🎮 Terry Game Lab
-            </a>
-            <ul class="nav-links">
-                <li><a href="index.html">首页</a></li>
-                <li><a href="methodology.html">精简版方法论</a></li>
-                <li><a href="methodology-full.html" class="active">完整版维度表</a></li>
-                <li><a href="#">游戏评测</a></li>
-            </ul>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <h1>🎮 游戏设计方法论 - 完整版</h1>
-        <p>基于67个专业评估维度的科学游戏评判体系，覆盖从核心玩法到商业化的全流程设计标准</p>
-        <span class="version-badge">📊 维度版本：2026.03 | 评估粒度：0-5分制</span>
-    </section>
-
-    <!-- Scoring Guide -->
-    <section class="scoring-guide">
-        <h3>📋 评分标准说明</h3>
-        <div class="score-levels">
-            <div class="score-level-item">
-                <span class="score-dot score-0"></span>
-                <span class="score-label">0分</span>
-                <span class="score-desc">完全没有/缺失</span>
-            </div>
-            <div class="score-level-item">
-                <span class="score-dot score-1"></span>
-                <span class="score-label">1分</span>
-                <span class="score-desc">极差/行业下游</span>
-            </div>
-            <div class="score-level-item">
-                <span class="score-dot score-2"></span>
-                <span class="score-label">2分</span>
-                <span class="score-desc">较差/低于平均</span>
-            </div>
-            <div class="score-level-item">
-                <span class="score-dot score-3"></span>
-                <span class="score-label">3分</span>
-                <span class="score-desc">合格/行业平均</span>
-            </div>
-            <div class="score-level-item">
-                <span class="score-dot score-4"></span>
-                <span class="score-label">4分</span>
-                <span class="score-desc">优秀/行业上游</span>
-            </div>
-            <div class="score-level-item">
-                <span class="score-dot score-5"></span>
-                <span class="score-label">5分</span>
-                <span class="score-desc">顶尖/业内标杆</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- Quick Navigation -->
-    <section class="quick-nav">
-        <h3>⚡ 快速导航</h3>
-        <div class="nav-grid">
-            <a href="#challenge" class="nav-tag">⚔️ 挑战</a>
-            <a href="#control" class="nav-tag">🎮 操作</a>
-            <a href="#strategy" class="nav-tag">🧠 策略</a>
-            <a href="#growth" class="nav-tag">📈 成长</a>
-            <a href="#audiovisual" class="nav-tag">🎨 画音</a>
-            <a href="#fantasy" class="nav-tag">🌌 幻想</a>
-            <a href="#competition" class="nav-tag">🏆 竞争</a>
-            <a href="#story" class="nav-tag">📖 剧情</a>
-            <a href="#destruction" class="nav-tag">💥 破坏</a>
-            <a href="#emotion" class="nav-tag">❤️ 情感</a>
-            <a href="#character" class="nav-tag">👤 人设</a>
-            <a href="#design" class="nav-tag">⚙️ 设计</a>
-            <a href="#collection" class="nav-tag">🎁 收集</a>
-            <a href="#exploration" class="nav-tag">🗺️ 探索</a>
-            <a href="#team" class="nav-tag">👥 团队</a>
-            <a href="#casual" class="nav-tag">☕ 休闲</a>
-            <a href="#theme" class="nav-tag">🎭 题材</a>
-            <a href="#ip" class="nav-tag">©️ IP</a>
-            <a href="#monetization" class="nav-tag">💰 商业化</a>
-            <a href="#technology" class="nav-tag">🔧 技术</a>
-        </div>
-    </section>
-
-    <!-- Main Content -->
-    <main class="container">
-        <!-- 挑战维度 -->
-        <section id="challenge" class="dimension-section">
-            <div class="section-header">
-                <div class="section-icon">⚔️</div>
-                <h2 class="section-title">挑战</h2>
-            </div>
-            
-            <div class="items-grid">
-                <div class="dimension-card">
-                    <h3 class="dimension-title">挑战难度梯度</h3>
-                    <p class="dimension-definition">从新手教程到高难度内容的难度曲线设计是否合理</p>
-                    <div class="score-section">
-                        <div class="score-label">评估维度</div>
-                        <div class="score-criteria">难度曲线平滑度、学习曲线、挫败感控制</div>
-                        <div class="score-grid">
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-0)">0</span>
-                                <span class="score-text">完全没有难度设计，玩家全程无挑战</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-1)">1</span>
-                                <span class="score-text">难度曲线极其陡峭，新手劝退，挫败感极强</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-2)">2</span>
-                                <span class="score-text">难度波动大，时常出现卡关，挫败感明显</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-3)">3</span>
-                                <span class="score-text">难度曲线基本平滑，学习曲线合理，挫败感可控</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-4)">4</span>
-                                <span class="score-text">难度设计精良，学习曲线完美，挫败感转化为成就感</span>
-                            </div>
-                            <div class="score-item">
                                 <span class="score-value" style="color: var(--score-5)">5</span>
-                                <span class="score-text">难度曲线堪称教科书级，每个挑战都恰到好处，业内标杆</span>
+                                <span class="score-text">反馈极致，打击感堪称完美，多感官配合，业内标杆</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="dimension-card">
-                    <h3 class="dimension-title">挑战类型多样性</h3>
-                    <p class="dimension-definition">游戏提供的挑战类型（操作/策略/解谜/反应）的丰富程度</p>
+                    <h3 class="dimension-title">操作学习曲线</h3>
+                    <p class="dimension-definition">掌握基本操作和高级技巧所需时间</p>
                     <div class="score-section">
                         <div class="score-label">评估维度</div>
-                        <div class="score-criteria">挑战类型数量、机制组合、玩法层次</div>
+                        <div class="score-criteria">教程完整性、上手难度、深度技巧</div>
                         <div class="score-grid">
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-0)">0</span>
-                                <span class="score-text">没有任何挑战元素</span>
+                                <span class="score-text">没有教程，完全不知道怎么操作</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-1)">1</span>
-                                <span class="score-text">只有1种挑战类型，极其单调</span>
+                                <span class="score-text">教程缺失，上手极难，没有深度技巧</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-2)">2</span>
-                                <span class="score-text">有2种挑战类型，但组合少，层次单一</span>
+                                <span class="score-text">教程不完善，上手难度高，深度技巧少</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-3)">3</span>
-                                <span class="score-text">有3种以上挑战类型，有一定机制组合，层次清晰</span>
+                                <span class="score-text">教程完整，上手难度适中，有一定深度技巧</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-4)">4</span>
-                                <span class="score-text">挑战类型丰富，机制组合多样，玩法层次分明</span>
+                                <span class="score-text">教程优秀，易上手难精通，深度技巧丰富</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-5)">5</span>
-                                <span class="score-text">挑战类型极其丰富，机制组合开创性，玩法层次极深，业内标杆</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="dimension-card">
-                    <h3 class="dimension-title">失败惩罚机制</h3>
-                    <p class="dimension-definition">玩家失败后的惩罚程度（轻度/中度/重度/永久死亡）</p>
-                    <div class="score-section">
-                        <div class="score-label">评估维度</div>
-                        <div class="score-criteria">重玩成本、进度保留、资源损失</div>
-                        <div class="score-grid">
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-0)">0</span>
-                                <span class="score-text">没有失败概念，玩家永远不会输</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-1)">1</span>
-                                <span class="score-text">失败惩罚极重，永久死亡/损失巨大，重玩成本极高</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-2)">2</span>
-                                <span class="score-text">失败惩罚较重，进度损失大，重玩成本高</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-3)">3</span>
-                                <span class="score-text">失败惩罚适中，保留部分进度，重玩成本合理</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-4)">4</span>
-                                <span class="score-text">失败惩罚设计合理，损失可控，重玩成本低</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-5)">5</span>
-                                <span class="score-text">失败惩罚堪称完美，惩罚转化为学习动力，业内标杆</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="dimension-card">
-                    <h3 class="dimension-title">挑战目标</h3>
-                    <p class="dimension-definition">游戏提供了明确的短中长期的追求目标</p>
-                    <div class="score-section">
-                        <div class="score-label">评估维度</div>
-                        <div class="score-criteria">目标设计数量类型、目标设计合理性</div>
-                        <div class="score-grid">
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-0)">0</span>
-                                <span class="score-text">没有任何目标，玩家不知道该做什么</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-1)">1</span>
-                                <span class="score-text">目标模糊，数量极少，设计不合理</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-2)">2</span>
-                                <span class="score-text">有基本目标，但类型单一，合理性一般</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-3)">3</span>
-                                <span class="score-text">短中长期目标明确，类型多样，设计合理</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-4)">4</span>
-                                <span class="score-text">目标体系完善，数量丰富，设计科学，驱动力强</span>
-                            </div>
-                            <div class="score-item">
-                                <span class="score-value" style="color: var(--score-5)">5</span>
-                                <span class="score-text">目标设计开创性，玩家自发追求，业内标杆</span>
+                                <span class="score-text">教程堪称教科书，三分钟上手，无限深度，业内标杆</span>
                             </div>
                         </div>
                     </div>
@@ -672,109 +42,460 @@
             </div>
         </section>
 
-        <!-- 操作维度 -->
-        <section id="control" class="dimension-section">
+        <!-- 策略维度 -->
+        <section id="strategy" class="dimension-section">
             <div class="section-header">
-                <div class="section-icon">🎮</div>
-                <h2 class="section-title">操作</h2>
+                <div class="section-icon">🧠</div>
+                <h2 class="section-title">策略</h2>
             </div>
             
             <div class="items-grid">
                 <div class="dimension-card">
-                    <h3 class="dimension-title">操作响应速度</h3>
-                    <p class="dimension-definition">输入指令到游戏反馈的延迟时间</p>
+                    <h3 class="dimension-title">策略深度</h3>
+                    <p class="dimension-definition">游戏机制允许的策略组合与变化空间</p>
                     <div class="score-section">
                         <div class="score-label">评估维度</div>
-                        <div class="score-criteria">帧数稳定性、输入延迟ms数</div>
+                        <div class="score-criteria">有效策略数量、策略层次、思考空间</div>
                         <div class="score-grid">
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-0)">0</span>
-                                <span class="score-text">完全没有响应，操作无效</span>
+                                <span class="score-text">没有任何策略空间，完全线性</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-1)">1</span>
-                                <span class="score-text">输入延迟>100ms，帧数<30，卡顿严重</span>
+                                <span class="score-text">只有1种有效策略，没有选择空间</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-2)">2</span>
-                                <span class="score-text">输入延迟50-100ms，帧数30-45，偶有卡顿</span>
+                                <span class="score-text">策略数量少，层次单一，思考空间有限</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-3)">3</span>
-                                <span class="score-text">输入延迟30-50ms，帧数45-60，基本流畅</span>
+                                <span class="score-text">有多种有效策略，层次分明，有一定思考空间</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-4)">4</span>
-                                <span class="score-text">输入延迟10-30ms，帧数稳定60，非常流畅</span>
+                                <span class="score-text">策略组合丰富，层次深，思考空间大</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-5)">5</span>
-                                <span class="score-text">输入延迟<10ms，帧数稳定120+，零感知延迟，业内标杆</span>
+                                <span class="score-text">策略空间近乎无限，深度极深，不断有新策略被开发，业内标杆</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="dimension-card">
-                    <h3 class="dimension-title">操作精细化程度</h3>
-                    <p class="dimension-definition">游戏对操作精确度的要求（粗放/精准/极致）</p>
+                    <h3 class="dimension-title">策略类型</h3>
+                    <p class="dimension-definition">策略的表现形式（资源管理/阵容搭配/路线规划等）</p>
                     <div class="score-section">
                         <div class="score-label">评估维度</div>
-                        <div class="score-criteria">容错率、判定框、连招复杂度</div>
+                        <div class="score-criteria">策略维度数量、机制耦合度</div>
                         <div class="score-grid">
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-0)">0</span>
-                                <span class="score-text">不需要任何操作，全自动运行</span>
+                                <span class="score-text">没有策略类型</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-1)">1</span>
-                                <span class="score-text">操作极其粗放，容错率100%，不需要任何精度</span>
+                                <span class="score-text">只有1种策略类型，极其单一</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-2)">2</span>
-                                <span class="score-text">操作精度要求低，容错率高，判定框大</span>
+                                <span class="score-text">有2种策略类型，机制耦合度低</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-3)">3</span>
-                                <span class="score-text">有一定精度要求，容错率适中，判定合理，连招有一定复杂度</span>
+                                <span class="score-text">有3种以上策略类型，机制有一定耦合度</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-4)">4</span>
-                                <span class="score-text">精度要求高，容错率低，判定精确，连招复杂度高</span>
+                                <span class="score-text">策略类型丰富，机制耦合度高，互相影响</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-5)">5</span>
-                                <span class="score-text">精度要求极致，判定完美，操作深度极深，业内标杆</span>
+                                <span class="score-text">策略类型极其丰富，机制耦合精妙，开创性设计，业内标杆</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="dimension-card">
-                    <h3 class="dimension-title">操作反馈质量</h3>
-                    <p class="dimension-definition">操作后的视觉/听觉/触觉反馈清晰度</p>
+                    <h3 class="dimension-title">策略容错性</h3>
+                    <p class="dimension-definition">策略失误后的可挽回程度</p>
                     <div class="score-section">
                         <div class="score-label">评估维度</div>
-                        <div class="score-criteria">打击感、震动反馈、音效配合</div>
+                        <div class="score-criteria">试错成本、策略调整窗口期</div>
                         <div class="score-grid">
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-0)">0</span>
-                                <span class="score-text">操作后没有任何反馈</span>
+                                <span class="score-text">没有容错性，失误直接游戏结束</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-1)">1</span>
-                                <span class="score-text">反馈极差，几乎感觉不到操作效果</span>
+                                <span class="score-text">容错性极低，失误完全无法挽回，试错成本极高</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-2)">2</span>
-                                <span class="score-text">反馈较弱，打击感差，音效配合一般</span>
+                                <span class="score-text">容错性低，失误很难挽回，试错成本高</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-3)">3</span>
-                                <span class="score-text">反馈清晰，有一定打击感，音效配合合理</span>
+                                <span class="score-text">有一定容错性，失误可以挽回，试错成本适中</span>
                             </div>
                             <div class="score-item">
                                 <span class="score-value" style="color: var(--score-4)">4</span>
-                                <span class="score-text">反馈强烈，打击感优秀，音效配合完美，有震动反馈</span>
+                                <span class="score-text">容错性高，失误容易挽回，试错成本低</span>
                             </div>
                             <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">容错性设计完美，鼓励试错，调整空间大，业内标杆</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">策略趣味延续性</h3>
+                    <p class="dimension-definition">策略趣味随版本/玩家发现的变化潜力</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">平衡性设计、策略寿命、更新频率</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">策略趣味为0，完全无趣</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">策略很快玩腻，寿命极短，平衡性差</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">策略趣味延续性差，很快就腻，平衡性一般</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">有一定延续性，策略寿命中等，平衡性尚可</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">延续性好，策略寿命长，平衡性优秀，更新及时</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">策略趣味常年不衰，不断有新玩法，平衡性完美，业内标杆</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 成长维度 -->
+        <section id="growth" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">📈</div>
+                <h2 class="section-title">成长</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">成长系统类型</h3>
+                    <p class="dimension-definition">成长机制的表现形式（等级/技能树/装备/符文等）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">系统复杂度、自由度、深度</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">没有成长系统</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">成长系统极其简单，只有1种类型，没有深度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">成长系统简单，类型少，深度有限，自由度低</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">成长系统类型多样，有一定深度和自由度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">成长系统丰富，深度高，自由度大，组合多样</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">成长系统设计开创性，深度无限，自由度极高，业内标杆</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">成长可感知性</h3>
+                    <p class="dimension-definition">成长带来的能力提升是否能被玩家明显感知</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">数值跃升幅度、技能解锁频率、外观变化</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">成长完全没有感知，和没成长一样</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">成长感知极弱，几乎感觉不到提升</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">成长感知较弱，提升不明显，反馈少</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">成长感知明显，有数值提升和技能解锁，有一定反馈</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">成长感知强烈，提升明显，反馈丰富，有外观变化</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">成长感知堪称完美，每一步提升都有强烈反馈，业内标杆</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">成长获取节奏</h3>
+                    <p class="dimension-definition">玩家获得成长的频率（每分钟/每局/每天）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">奖励间隔、成就感密度</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有成长获取</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">成长获取极慢，几天才有一点提升，成就感极低</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">成长获取慢，间隔长，成就感低</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">成长获取节奏适中，间隔合理，有一定成就感</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">成长获取节奏良好，频率适中，成就感强</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">成长节奏堪称教科书，小步快跑，成就感不断，业内标杆</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">成长上限设计</h3>
+                    <p class="dimension-definition">成长系统是否有封顶（有限/无限/赛季重置）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">长期目标、肝度需求、数值膨胀控制</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">没有成长上限设计</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">上限设计极差，要么很快到顶，要么无限肝，数值膨胀严重</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">上限设计较差，肝度不合理，数值膨胀明显</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">上限设计合理，肝度适中，数值膨胀可控</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">上限设计优秀，长期目标清晰，数值膨胀控制良好</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">上限设计精妙，完美平衡长期目标和肝度，零数值膨胀，业内标杆</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 画音维度 -->
+        <section id="audiovisual" class="dimension-section">
+            <div class="section-header">
+                <div class="section-icon">🎨</div>
+                <h2 class="section-title">画音</h2>
+            </div>
+            
+            <div class="items-grid">
+                <div class="dimension-card">
+                    <h3 class="dimension-title">画面风格统一性</h3>
+                    <p class="dimension-definition">美术风格是否一致（写实/卡通/像素/水墨等）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">风格定位、资源复用、视觉识别度</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">完全没有美术风格，混乱不堪</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">美术风格极不统一，各种元素混杂，识别度为0</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">美术风格统一性较差，时有违和元素，识别度低</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">美术风格基本统一，有明确风格定位，有一定识别度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">美术风格高度统一，定位清晰，识别度高</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">美术风格开创性，高度统一，识别度极强，形成独特美学，业内标杆</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">画面信息层次</h3>
+                    <p class="dimension-definition">UI与游戏画面的信息分级是否清晰</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">视觉聚焦、信息噪音、可读性</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">信息完全混乱，什么都看不清</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">信息层次极差，噪音极多，完全无法聚焦，可读性为0</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">信息层次较差，噪音较多，聚焦困难，可读性低</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">信息层次基本清晰，有一定聚焦，噪音可控，可读性尚可</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">信息层次清晰，视觉聚焦良好，噪音少，可读性高</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">信息层次设计完美，零噪音，聚焦精准，可读性极佳，业内标杆</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">音乐适配性</h3>
+                    <p class="dimension-definition">BGM与游戏场景/节奏的契合度</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">情绪渲染、动态音乐、文化符号</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">没有音乐</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">音乐与场景完全不搭，破坏情绪，极其出戏</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">音乐适配性较差，契合度低，情绪渲染弱</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">音乐基本适配场景，有一定情绪渲染作用</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">音乐适配性优秀，完美契合场景，情绪渲染到位，有动态音乐</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">音乐堪称艺术品，与游戏完美融合，成为文化符号，业内标杆</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dimension-card">
+                    <h3 class="dimension-title">音效功能性</h3>
+                    <p class="dimension-definition">音效在游戏反馈中的作用（提示/氛围/沉浸）</p>
+                    <div class="score-section">
+                        <div class="score-label">评估维度</div>
+                        <div class="score-criteria">音效与交互反馈、音效识别度</div>
+                        <div class="score-grid">
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-0)">0</span>
+                                <span class="score-text">没有音效</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-1)">1</span>
+                                <span class="score-text">音效劣质，完全没有功能性，反而干扰体验</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-2)">2</span>
+                                <span class="score-text">音效功能性差，反馈不清晰，识别度低</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-3)">3</span>
+                                <span class="score-text">音效有基本功能，反馈清晰，有一定识别度</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-4)">4</span>
+                                <span class="score-text">音效功能性强，反馈精准，识别度高，增强沉浸感</span>
+                            </div>
+                            <div class="score-item">
+                                <span class="score-value" style="color: var(--score-5)">5</span>
+                                <span class="score-text">音效设计完美，功能性和艺术性兼备，成为记忆点，业内标杆</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 Terry Game Lab. Powered by passion for games.</p>
+    </footer>
+</body>
+</html>
