@@ -753,20 +753,20 @@
         // 页面加载完成后自动加载新闻
         document.addEventListener('DOMContentLoaded', async () => {
             await loadSourcesConfig();
-            // 优先从静态缓存加载（永久保存，在服务器上）
-            if (await loadCachedNewsFromFile()) {
-                // 静态缓存加载成功，直接显示
-                // 如果缓存超过24小时，悄悄尝试更新，不打扰用户
-                const latestNewsTime = Math.max(...allNews.map(n => n.time.getTime()));
-                if (Date.now() - latestNewsTime > 24 * 60 * 60 * 1000) {
-                    console.log('缓存较旧，悄悄更新...');
-                    loadNewsSilent();
+            // 优先从静态缓存加载（永久保存在GitHub仓库）
+            try {
+                const loaded = await loadCachedNewsFromFile();
+                if (loaded) {
+                    // 静态缓存加载成功，直接显示
+                    // 新闻更新由GitHub Actions定时自动抓取，更新后提交到仓库
+                    // 前端不需要每次都抓取，直接读缓存即可
+                    return;
                 }
-                return;
+            } catch (e) {
+                console.error('加载静态缓存异常:', e);
             }
-            // 静态缓存加载失败，尝试浏览器本地缓存
+            // 只有当静态缓存为空时，才尝试抓取
             if (!loadCachedNewsLocal()) {
-                // 都没有，重新加载
                 loadNews();
             }
         });
