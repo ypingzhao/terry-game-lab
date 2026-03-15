@@ -383,9 +383,18 @@
     
     <script>
         // Countdown Timer
-        let countdownTime = 30 * 60; // 30 minutes remaining for full methodology development
+        let countdownTime = 30 * 60; // 30 minutes default
+        
+        const COUNTDOWN_END_KEY = 'terry-game-lab-countdown-end';
+        const DEVELOPMENT_COMPLETE_KEY = 'terry-game-lab-development-complete';
         
         function updateCountdown() {
+            // 检查是否已经永久标记为完成
+            if (isDevelopmentComplete()) {
+                showCompletedStatus();
+                return;
+            }
+            
             const hours = Math.floor(countdownTime / 3600);
             const minutes = Math.floor((countdownTime % 3600) / 60);
             const seconds = countdownTime % 60;
@@ -397,34 +406,60 @@
             if (countdownTime > 0) {
                 countdownTime--;
             } else {
-                // Countdown finished - replace with waiting status
-                document.querySelector('.countdown-title').textContent = '✅ 开发完成';
-                document.querySelector('.countdown').innerHTML = `
-                    <div style="font-size: 1.2rem; color: #00ff9d; text-shadow: 0 0 10px #00ff9d, 0 0 20px #00ff9d;">
-                        等待新需求...
-                    </div>
-                `;
-                document.querySelector('.countdown').style.borderColor = '#00ff9d';
-                document.querySelector('.countdown').style.boxShadow = '0 0 20px rgba(0, 255, 157, 0.5), inset 0 0 20px rgba(0, 255, 157, 0.1)';
+                // Countdown finished - 永久标记完成
+                markDevelopmentComplete();
+                showCompletedStatus();
             }
         }
         
-        // Countdown persistence
-        const countdownKey = 'terry-game-lab-countdown';
-        const countdownEndKey = 'terry-game-lab-countdown-end';
+        function isDevelopmentComplete() {
+            return localStorage.getItem(DEVELOPMENT_COMPLETE_KEY) === 'true';
+        }
+        
+        function markDevelopmentComplete() {
+            localStorage.setItem(DEVELOPMENT_COMPLETE_KEY, 'true');
+        }
+        
+        function showCompletedStatus() {
+            document.querySelector('.countdown-title').textContent = '✅ 开发完成';
+            document.querySelector('.countdown').innerHTML = `
+                <div style="font-size: 1.2rem; color: #00ff9d; text-shadow: 0 0 10px #00ff9d, 0 0 20px #00ff9d;">
+                    等待新需求...
+                </div>
+            `;
+            document.querySelector('.countdown').style.borderColor = '#00ff9d';
+            document.querySelector('.countdown').style.boxShadow = '0 0 20px rgba(0, 255, 157, 0.5), inset 0 0 20px rgba(0, 255, 157, 0.1)';
+        }
         
         // Initialize countdown
         function initCountdown() {
-            const endTime = localStorage.getItem(countdownEndKey);
+            // 检查URL参数是否需要重置
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('reset-countdown') !== null) {
+                // 重置所有状态
+                localStorage.removeItem(DEVELOPMENT_COMPLETE_KEY);
+                localStorage.removeItem(COUNTDOWN_END_KEY);
+                // 清除参数后 reload
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+            
+            // 如果已经永久完成，不需要倒计时
+            if (isDevelopmentComplete()) {
+                countdownTime = 0;
+                showCompletedStatus();
+                return;
+            }
+            
+            const endTime = localStorage.getItem(COUNTDOWN_END_KEY);
             const now = Date.now();
             
-            if (endTime && now < endTime) {
+            if (endTime && now < parseInt(endTime)) {
                 // Resume existing countdown
-                countdownTime = Math.ceil((endTime - now) / 1000);
+                countdownTime = Math.ceil((parseInt(endTime) - now) / 1000);
             } else {
                 // Start new countdown
                 countdownTime = 30 * 60; // 30 minutes
-                localStorage.setItem(countdownEndKey, now + countdownTime * 1000);
+                localStorage.setItem(COUNTDOWN_END_KEY, (now + countdownTime * 1000).toString());
             }
         }
         
@@ -432,19 +467,6 @@
         setInterval(updateCountdown, 1000);
         initCountdown();
         updateCountdown(); // Initial update
-        
-        // Auto-refresh only when countdown finishes
-        function checkCompletion() {
-            const endTime = localStorage.getItem(countdownEndKey);
-            if (endTime && Date.now() >= endTime) {
-                // Countdown finished, refresh once
-                localStorage.removeItem(countdownEndKey);
-                window.location.reload();
-            }
-        }
-        
-        // Check every minute for completion
-        setInterval(checkCompletion, 60000);
     </script>
 </body>
 </html>
