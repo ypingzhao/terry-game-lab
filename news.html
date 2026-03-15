@@ -740,7 +740,7 @@
             
             // 只保留最近90天的新闻，避免文件过大
             const ninetyDaysAgo = Date.now() - 90 * 24 * 60 * 60 * 1000;
-            merged = merged.filter(n => n.time.getTime() > ninetyDaysAgo);
+            merged = merged.filter(n => (typeof n.time === 'number' ? n.time : n.time.getTime()) > ninetyDaysAgo);
             
             // 最多保留200条新闻
             if (merged.length > 200) {
