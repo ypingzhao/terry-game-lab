@@ -382,15 +382,12 @@
     </div>
     
     <script>
-        // Countdown Timer
-        let countdownTime = 30 * 60; // 30 minutes default
-        
-        const COUNTDOWN_END_KEY = 'terry-game-lab-countdown-end';
-        const DEVELOPMENT_COMPLETE_KEY = 'terry-game-lab-development-complete';
+        // Countdown Timer - 从配置文件读取开发状态
+        let countdownTime = 0;
+        let developmentInProgress = false;
         
         function updateCountdown() {
-            // 检查是否已经永久标记为完成
-            if (isDevelopmentComplete()) {
+            if (!developmentInProgress) {
                 showCompletedStatus();
                 return;
             }
@@ -406,18 +403,9 @@
             if (countdownTime > 0) {
                 countdownTime--;
             } else {
-                // Countdown finished - 永久标记完成
-                markDevelopmentComplete();
+                // Time's up
                 showCompletedStatus();
             }
-        }
-        
-        function isDevelopmentComplete() {
-            return localStorage.getItem(DEVELOPMENT_COMPLETE_KEY) === 'true';
-        }
-        
-        function markDevelopmentComplete() {
-            localStorage.setItem(DEVELOPMENT_COMPLETE_KEY, 'true');
         }
         
         function showCompletedStatus() {
@@ -431,42 +419,68 @@
             document.querySelector('.countdown').style.boxShadow = '0 0 20px rgba(0, 255, 157, 0.5), inset 0 0 20px rgba(0, 255, 157, 0.1)';
         }
         
-        // Initialize countdown
-        function initCountdown() {
-            // 检查URL参数是否需要重置
-            const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('reset-countdown') !== null) {
-                // 重置所有状态
-                localStorage.removeItem(DEVELOPMENT_COMPLETE_KEY);
-                localStorage.removeItem(COUNTDOWN_END_KEY);
-                // 清除参数后 reload
-                window.history.replaceState({}, document.title, window.location.pathname);
-            }
-            
-            // 如果已经永久完成，不需要倒计时
-            if (isDevelopmentComplete()) {
-                countdownTime = 0;
-                showCompletedStatus();
-                return;
-            }
-            
-            const endTime = localStorage.getItem(COUNTDOWN_END_KEY);
-            const now = Date.now();
-            
-            if (endTime && now < parseInt(endTime)) {
-                // Resume existing countdown
-                countdownTime = Math.ceil((parseInt(endTime) - now) / 1000);
-            } else {
-                // Start new countdown
-                countdownTime = 30 * 60; // 30 minutes
-                localStorage.setItem(COUNTDOWN_END_KEY, (now + countdownTime * 1000).toString());
-            }
+        function showCountdownStatus(title) {
+            document.querySelector('.countdown-title').textContent = title || '🚧 剩余开发时间';
+            // 保持原有倒计时HTML结构不变
         }
         
+        // 从配置文件加载开发状态
+        async function loadDevelopmentStatus() {
+            try {
+                const response = await fetch('development-status.json?' + new Date().getTime());
+                if (response.ok) {
+                    const status = await response.json();
+                    developmentInProgress = status.inProgress || false;
+                    
+                    if (developmentInProgress && status.endTime) {
+                        // 有开发任务，计算剩余时间
+                        const now = Date.now();
+                        const endTime = new Date(status.endTime).getTime();
+                        
+                        if (now < endTime) {
+                            countdownTime = Math.ceil((endTime - now) / 1000);
+                            showCountdownStatus(status.title || '🚧 剩余开发时间');
+                        } else {
+                            // 已经过期，标记为完成
+                            developmentInProgress = false;
+                            showCompletedStatus();
+                        }
+                    } else {
+                        // 没有开发任务，直接显示完成
+                        developmentInProgress = false;
+                        showCompletedStatus();
+                    }
+                } else {
+                    // 配置文件读取失败，默认显示完成
+                    developmentInProgress = false;
+                    showCompletedStatus();
+                }
+            } catch (e) {
+                console.warn('读取开发状态配置失败:', e);
+                developmentInProgress = false;
+                showCompletedStatus();
+            }
+            
+            // 初始更新一次
+            updateCountdown();
+        }
+        
+        // 检查URL参数是否需要重置（兼容旧版）
+        (function checkReset() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('reset-countdown') !== null) {
+                // 清除旧浏览器缓存
+                localStorage.removeItem('terry-game-lab-development-complete');
+                localStorage.removeItem('terry-game-lab-countdown-end');
+                // 清除参数
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        })();
+        
+        // 初始化：加载配置然后开始倒计时
+        loadDevelopmentStatus();
         // Update every second
         setInterval(updateCountdown, 1000);
-        initCountdown();
-        updateCountdown(); // Initial update
     </script>
 </body>
 </html>
