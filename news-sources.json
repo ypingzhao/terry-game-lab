@@ -3,13 +3,13 @@
     "name": "游戏葡萄",
     "url": "https://youxiputao.com/feed",
     "categories": ["industry"],
-    "enabled": false
+    "enabled": true
   },
   {
     "name": "GameRes",
     "url": "https://www.gameres.com/rss",
     "categories": ["industry"],
-    "enabled": false
+    "enabled": true
   },
   {
     "name": "游研社",
@@ -27,18 +27,66 @@
     "name": "17173",
     "url": "https://www.17173.com/rss.xml",
     "categories": ["game"],
-    "enabled": false
+    "enabled": true
   },
   {
     "name": "新浪游戏",
     "url": "https://games.sina.com.cn/rss",
     "categories": ["industry", "company"],
-    "enabled": false
+    "enabled": true
   },
   {
     "name": "游戏茶馆",
     "url": "https://www.youxichaguan.com/feed",
     "categories": ["industry", "investment"],
+    "enabled": true
+  },
+  {
+    "name": "Indie Games Plus",
+    "url": "https://indiegamesplus.com/feed",
+    "categories": ["game", "industry"],
+    "enabled": true
+  },
+  {
+    "name": "Kotaku Gaming",
+    "url": "https://kotaku.com/rss",
+    "categories": ["game", "industry"],
+    "enabled": true
+  },
+  {
+    "name": "Polygon",
+    "url": "https://www.polygon.com/rss/index.xml",
+    "categories": ["game", "industry"],
+    "enabled": true
+  },
+  {
+    "name": "Rock Paper Shotgun",
+    "url": "https://www.rockpapershotgun.com/feed",
+    "categories": ["game"],
+    "enabled": true
+  },
+  {
+    "name": "Eurogamer",
+    "url": "https://www.eurogamer.net/?format=rss",
+    "categories": ["game", "industry"],
+    "enabled": true
+  },
+  {
+    "name": "PC Gamer",
+    "url": "https://www.pcgamer.com/rss/",
+    "categories": ["game"],
+    "enabled": true
+  },
+  {
+    "name": "IGN Games",
+    "url": "https://www.ign.com/rss/articles",
+    "categories": ["game"],
+    "enabled": true
+  },
+  {
+    "name": "GamesIndustry.biz",
+    "url": "https://www.gamesindustry.biz/rss/news",
+    "categories": ["industry"],
     "enabled": true
   }
 ]
