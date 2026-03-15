@@ -19,7 +19,7 @@
   },
   {
     "name": "GameLook",
-    "url": "http://www.gamelook.com.cn/feed",
+    "url": "https://www.gamelook.com.cn/feed/",
     "category": "industry",
     "enabled": true
   },

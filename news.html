@@ -396,8 +396,16 @@
         let allNews = [];
         let currentCategory = 'all';
         
-        // 使用RSS转换服务（演示用途）
-        const CORS_PROXY = 'https://api.allorigins.win/raw?url=';
+        // 使用RSS转换服务（尝试多个CORS代理，提高成功率）
+        const CORS_PROXIES = [
+            'https://api.allorigins.win/raw?url=',
+            'https://api.codetabs.com/v1/proxy?quest=',
+            'https://cors-anywhere.herokuapp.com/'
+        ];
+        let currentProxyIndex = 0;
+        function getCORSProxy() {
+            return CORS_PROXIES[currentProxyIndex];
+        }
         
         async function parseRSSFeed(source, xmlText) {
             try {
@@ -440,17 +448,21 @@
             
             try {
                 const newsPromises = NEWS_SOURCES.map(async (source) => {
-                    try {
-                        const response = await fetch(CORS_PROXY + encodeURIComponent(source.url));
-                        if (!response.ok) {
-                            throw new Error(`HTTP error: ${response.status}`);
+                    // 尝试每个代理
+                    for (let i = 0; i < CORS_PROXIES.length; i++) {
+                        try {
+                            const proxy = CORS_PROXIES[i];
+                            const response = await fetch(proxy + encodeURIComponent(source.url));
+                            if (response.ok) {
+                                const text = await response.text();
+                                return await parseRSSFeed(source, text);
+                            }
+                        } catch (e) {
+                            console.warn(`代理 ${i+1} 获取 ${source.name} 失败，尝试下一个:`, e.message);
                         }
-                        const text = await response.text();
-                        return await parseRSSFeed(source, text);
-                    } catch (e) {
-                        console.error(`获取 ${source.name} 失败:`, e);
-                        return [];
                     }
+                    console.error(`所有代理都无法获取 ${source.name}`);
+                    return [];
                 });
                 
                 const results = await Promise.allSettled(newsPromises);
