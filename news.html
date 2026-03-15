@@ -481,20 +481,41 @@
                 // 按时间排序
                 allNews.sort((a, b) => b.time - a.time);
                 
+                // 如果已有静态缓存，合并去重
+                try {
+                    const response = await fetch('cached-news.json');
+                    if (response.ok) {
+                        const existing = await response.json();
+                        allNews = mergeNews(existing, allNews);
+                    }
+                } catch (e) {
+                    // 忽略，继续使用新抓取的
+                }
+                
                 // 更新最后更新时间
                 document.getElementById('last-update').textContent = new Date().toLocaleString('zh-CN');
+                
+                // 缓存到浏览器本地
+                localStorage.setItem('terry-game-news', JSON.stringify(allNews));
+                localStorage.setItem('terry-game-news-time', Date.now().toString());
                 
                 // 渲染新闻
                 renderNews();
                 
-                if (allNews.length === 0) {
+                // 显示保存提示
+                if (allNews.length > 0) {
+                    // 添加刷新提示
+                    setTimeout(() => {
+                        showSaveHint();
+                    }, 1000);
+                } else {
                     container.innerHTML = `
                         <div class="error">
                             <h3>暂时无法获取新闻资讯</h3>
                             <p>可能是由于CORS跨域限制。您可以：</p>
                             <ul style="margin-top: 1rem; text-align: left; list-style-position: inside;">
                                 <li>点击刷新按钮重新尝试</li>
-                                <li>部署后端RSS聚合服务来解决跨域问题</li>
+                                <li>获取成功后可导出JSON保存到 <code>cached-news.json</code></li>
                                 <li>添加更多可用的RSS源</li>
                             </ul>
                         </div>
@@ -508,6 +529,21 @@
                         <p>${e.message}</p>
                     </div>
                 `;
+            }
+            
+            function showSaveHint() {
+                const hintDiv = document.createElement('div');
+                hintDiv.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: rgba(0, 255, 255, 0.15); backdrop-filter: blur(10px); border: 1px solid #00ffff; border-radius: 10px; padding: 1rem; max-width: 350px;';
+                hintDiv.innerHTML = `
+                    <h4 style="margin-bottom: 0.5rem; color: #00ffff;">📥 已获取新闻</h4>
+                    <p style="font-size: 0.85rem; line-height: 1.5; opacity: 0.9;">
+                        按F12打开控制台，输入:<br>
+                        <code style="background: rgba(0,0,0,0.3); padding: 2px 5px; border-radius: 3px;">copy(JSON.stringify(allNews, null, 2))</code><br>
+                        复制后粘贴到 <code>cached-news.json</code> 提交到GitHub即可永久保存
+                    </p>
+                    <button onclick="this.parentElement.remove()" style="margin-top: 0.5rem; background: rgba(0, 255, 255, 0.3); border: 1px solid #00ffff; color: white; padding: 0.3rem 1rem; border-radius: 5px; cursor: pointer;">关闭</button>
+                `;
+                document.body.appendChild(hintDiv);
             }
         }
         
@@ -633,8 +669,35 @@
             return false;
         }
         
-        // 缓存到localStorage，2小时内有效
-        function loadCachedNews() {
+        // 从静态缓存文件加载（永久保存）
+        async function loadCachedNewsFromFile() {
+            try {
+                const response = await fetch('cached-news.json?' + new Date().getTime());
+                if (response.ok) {
+                    const cached = await response.json();
+                    if (cached.length > 0) {
+                        allNews = cached;
+                        // 按时间排序
+                        allNews.sort((a, b) => b.time - a.time);
+                        console.log(`从静态缓存加载了 ${allNews.length} 条新闻`);
+                        
+                        // 获取缓存更新时间（从文件的最新新闻推断）
+                        const latestTime = Math.max(...allNews.map(n => n.time.getTime()));
+                        document.getElementById('last-update').textContent = 
+                            '缓存: ' + new Date(latestTime).toLocaleString('zh-CN');
+                            
+                        renderNews();
+                        return true;
+                    }
+                }
+            } catch (e) {
+                console.warn('加载静态缓存失败:', e);
+            }
+            return false;
+        }
+        
+        // 浏览器端缓存（2小时内有效，加速访问）
+        function loadCachedNewsLocal() {
             const cached = localStorage.getItem('terry-game-news');
             const cacheTime = localStorage.getItem('terry-game-news-time');
             
@@ -650,13 +713,94 @@
             return false;
         }
         
+        // 合并新抓取的新闻到缓存，去重
+        function mergeNews(existingNews, newNews) {
+            const urlMap = new Map();
+            
+            // 先添加已有新闻
+            existingNews.forEach(n => {
+                urlMap.set(n.link, n);
+            });
+            
+            // 添加新新闻（相同URL会覆盖，保证最新）
+            newNews.forEach(n => {
+                urlMap.set(n.link, n);
+            });
+            
+            // 转换回数组，按时间排序
+            let merged = Array.from(urlMap.values());
+            merged.sort((a, b) => b.time - a.time);
+            
+            // 只保留最近90天的新闻，避免文件过大
+            const ninetyDaysAgo = Date.now() - 90 * 24 * 60 * 60 * 1000;
+            merged = merged.filter(n => n.time.getTime() > ninetyDaysAgo);
+            
+            // 最多保留200条新闻
+            if (merged.length > 200) {
+                merged = merged.slice(0, 200);
+            }
+            
+            return merged;
+        }
+        
         // 页面加载完成后自动加载新闻
         document.addEventListener('DOMContentLoaded', async () => {
             await loadSourcesConfig();
-            if (!loadCachedNews()) {
+            // 优先从静态缓存加载（永久保存，在服务器上）
+            if (await loadCachedNewsFromFile()) {
+                // 静态缓存加载成功，直接显示
+                // 如果缓存超过24小时，悄悄尝试更新，不打扰用户
+                const latestNewsTime = Math.max(...allNews.map(n => n.time.getTime()));
+                if (Date.now() - latestNewsTime > 24 * 60 * 60 * 1000) {
+                    console.log('缓存较旧，悄悄更新...');
+                    loadNewsSilent();
+                }
+                return;
+            }
+            // 静态缓存加载失败，尝试浏览器本地缓存
+            if (!loadCachedNewsLocal()) {
+                // 都没有，重新加载
                 loadNews();
             }
         });
+        
+        // 静默更新，不干扰用户看缓存内容
+        async function loadNewsSilent() {
+            try {
+                const newsPromises = NEWS_SOURCES.map(async (source) => {
+                    for (let i = 0; i < CORS_PROXIES.length; i++) {
+                        try {
+                            const proxy = CORS_PROXIES[i];
+                            const response = await fetch(proxy + encodeURIComponent(source.url));
+                            if (response.ok) {
+                                const text = await response.text();
+                                return await parseRSSFeed(source, text);
+                            }
+                        } catch (e) {
+                            console.warn(`代理 ${i+1} 获取 ${source.name} 失败`);
+                        }
+                    }
+                    return [];
+                });
+                
+                const results = await Promise.allSettled(newsPromises);
+                let newNews = [];
+                results.forEach(result => {
+                    if (result.status === 'fulfilled' && result.value.length > 0) {
+                        newNews = newNews.concat(result.value);
+                    }
+                });
+                
+                if (newNews.length > 0) {
+                    allNews = mergeNews(allNews, newNews);
+                    allNews.sort((a, b) => b.time - a.time);
+                    renderNews();
+                    console.log(`静默更新完成，现在共 ${allNews.length} 条新闻`);
+                }
+            } catch (e) {
+                console.warn('静默更新失败:', e);
+            }
+        }
     </script>
 </body>
 </html>
