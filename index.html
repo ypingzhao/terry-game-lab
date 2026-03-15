@@ -430,18 +430,18 @@
                 const response = await fetch('development-status.json?' + new Date().getTime());
                 if (response.ok) {
                     const status = await response.json();
-                    developmentInProgress = status.inProgress || false;
+                    developmentInProgress = status.inProgress === true;
                     
-                    if (developmentInProgress && status.endTime) {
+                    if (developmentInProgress && status.endTime !== null && status.endTime !== undefined) {
                         // 有开发任务，计算剩余时间
                         const now = Date.now();
                         const endTime = new Date(status.endTime).getTime();
                         
-                        if (now < endTime) {
+                        if (!isNaN(endTime) && now < endTime) {
                             countdownTime = Math.ceil((endTime - now) / 1000);
                             showCountdownStatus(status.title || '🚧 剩余开发时间');
                         } else {
-                            // 已经过期，标记为完成
+                            // 已经过期或时间无效，标记为完成
                             developmentInProgress = false;
                             showCompletedStatus();
                         }
