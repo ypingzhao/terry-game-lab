@@ -380,39 +380,17 @@
     </div>
     
     <script>
-        // 游戏资讯RSS源列表（使用CORS代理访问）
-        // 注意：实际部署中建议使用后端RSS代理服务
-        const NEWS_SOURCES = [
-            {
-                name: '游戏葡萄',
-                url: 'https://www.yqqlm.com/feed',
-                category: 'industry',
-                color: 'rgba(255, 0, 255, 0.3)'
-            },
-            {
-                name: 'GameRes',
-                url: 'https://www.gameres.com/rss',
-                category: 'industry',
-                color: 'rgba(255, 165, 0, 0.3)'
-            },
-            {
-                name: '游研社',
-                url: 'https://www.yystv.cn/rss',
-                category: 'game',
-                color: 'rgba(50, 205, 50, 0.3)'
-            },
-            {
-                name: '17173',
-                url: 'https://www.17173.com/rss.xml',
-                category: 'game',
-                color: 'rgba(30, 144, 255, 0.3)'
-            },
-            {
-                name: '新浪游戏',
-                url: 'https://games.sina.com.cn/rss',
-                category: 'industry',
-                color: 'rgba(255, 69, 0, 0.3)'
-            }
+        // 游戏资讯RSS源列表 - 从配置文件加载
+        let NEWS_SOURCES = [];
+        const DEFAULT_COLORS = [
+            'rgba(255, 0, 255, 0.3)',
+            'rgba(255, 165, 0, 0.3)',
+            'rgba(50, 205, 50, 0.3)',
+            'rgba(30, 144, 255, 0.3)',
+            'rgba(255, 69, 0, 0.3)',
+            'rgba(0, 255, 255, 0.3)',
+            'rgba(138, 43, 226, 0.3)',
+            'rgba(0, 255, 127, 0.3)'
         ];
         
         let allNews = [];
@@ -593,10 +571,35 @@
             return names[category] || category;
         }
         
-        // 页面加载完成后自动加载新闻
-        document.addEventListener('DOMContentLoaded', () => {
-            loadNews();
-        });
+        // 加载RSS源配置
+        async function loadSourcesConfig() {
+            try {
+                const response = await fetch('news-sources.json?' + new Date().getTime());
+                if (response.ok) {
+                    const config = await response.json();
+                    // 只加载启用的源，并添加颜色
+                    NEWS_SOURCES = config
+                        .filter(source => source.enabled)
+                        .map((source, index) => ({
+                            ...source,
+                            color: DEFAULT_COLORS[index % DEFAULT_COLORS.length]
+                        }));
+                    console.log(`已加载 ${NEWS_SOURCES.length} 个启用的新闻源`);
+                    return true;
+                }
+            } catch (e) {
+                console.warn('加载配置文件失败，使用默认配置:', e);
+            }
+            
+            // 默认配置（降级方案）
+            NEWS_SOURCES = [
+                { name: '游戏葡萄', url: 'https://www.yqqlm.com/feed', category: 'industry', color: 'rgba(255, 0, 255, 0.3)' },
+                { name: 'GameRes', url: 'https://www.gameres.com/rss', category: 'industry', color: 'rgba(255, 165, 0, 0.3)' },
+                { name: '游研社', url: 'https://www.yystv.cn/rss', category: 'game', color: 'rgba(50, 205, 50, 0.3)' },
+                { name: 'GameLook', url: 'http://www.gamelook.com.cn/feed', category: 'industry', color: 'rgba(30, 144, 255, 0.3)' }
+            ];
+            return false;
+        }
         
         // 缓存到localStorage，2小时内有效
         function loadCachedNews() {
@@ -615,8 +618,9 @@
             return false;
         }
         
-        // 尝试使用缓存，避免频繁请求
-        document.addEventListener('DOMContentLoaded', () => {
+        // 页面加载完成后自动加载新闻
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadSourcesConfig();
             if (!loadCachedNews()) {
                 loadNews();
             }
