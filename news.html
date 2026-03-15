@@ -677,12 +677,19 @@
                     const cached = await response.json();
                     if (cached.length > 0) {
                         allNews = cached;
+                        // 确保time是数字（从JSON读取本来就是数字）
+                        // 如果是Date对象需要转换，JSON化后已经是number
+                        allNews.forEach(n => {
+                            if (typeof n.time !== 'number') {
+                                n.time = new Date(n.time).getTime();
+                            }
+                        });
                         // 按时间排序
                         allNews.sort((a, b) => b.time - a.time);
                         console.log(`从静态缓存加载了 ${allNews.length} 条新闻`);
                         
                         // 获取缓存更新时间（从文件的最新新闻推断）
-                        const latestTime = Math.max(...allNews.map(n => n.time.getTime()));
+                        const latestTime = Math.max(...allNews.map(n => n.time));
                         document.getElementById('last-update').textContent = 
                             '缓存: ' + new Date(latestTime).toLocaleString('zh-CN');
                             
