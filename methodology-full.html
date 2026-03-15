@@ -270,7 +270,7 @@
         
         /* Main Content */
         .container {
-            max-width: 1600px;
+            max-width: 1700px;
             margin: 0 auto;
             padding: 0 2rem 5rem;
         }
@@ -372,7 +372,7 @@
         .items-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 2.5rem;
+            gap: 2rem;
         }
         
         @media (max-width: 1024px) {
@@ -386,7 +386,7 @@
             background: var(--card-bg);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            padding: 2rem;
+            padding: 2rem 1.5rem;
             border: 1px solid var(--card-border);
             transition: all 0.3s ease;
         }
@@ -422,7 +422,7 @@
         .score-section {
             background: rgba(0, 0, 0, 0.2);
             border-radius: 16px;
-            padding: 1.5rem;
+            padding: 1.5rem 1rem;
         }
         
         .score-section .score-label {
@@ -432,17 +432,21 @@
             font-size: 1.1rem;
             font-family: inherit;
             min-width: auto;
+            white-space: nowrap;
         }
         
         .score-criteria {
             margin-bottom: 1rem;
             color: var(--text-secondary);
-            font-size: 0.95rem;
-            padding: 0.75rem;
+            font-size: 0.85rem;
+            padding: 0.75rem 0.5rem;
             background: rgba(0, 245, 212, 0.1);
             border-radius: 10px;
             border-left: 3px solid var(--accent-gold);
             font-weight: 400;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
         
         .score-grid {
@@ -589,7 +593,7 @@
             <div class="score-level-item">
                 <span class="score-dot score-0"></span>
                 <span class="score-label">0分</span>
-                <span class="score-desc">完全没有/缺失</span>
+                <span class="score-desc">完全没有</span>
             </div>
             <div class="score-level-item">
                 <span class="score-dot score-1"></span>
