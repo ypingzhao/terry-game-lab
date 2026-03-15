@@ -1,25 +1,25 @@
 [
   {
     "name": "游戏葡萄",
-    "url": "https://www.yqqlm.com/feed",
+    "url": "https://youxiputao.com/feed",
     "categories": ["industry"],
-    "enabled": true
+    "enabled": false
   },
   {
     "name": "GameRes",
     "url": "https://www.gameres.com/rss",
     "categories": ["industry"],
-    "enabled": true
+    "enabled": false
   },
   {
     "name": "游研社",
-    "url": "https://www.yystv.cn/rss",
+    "url": "https://www.yystv.cn/rss-feed",
     "categories": ["game"],
     "enabled": true
   },
   {
     "name": "GameLook",
-    "url": "https://www.gamelook.com.cn/feed/",
+    "url": "https://www.gamelook.com.cn/feed",
     "categories": ["industry", "investment"],
     "enabled": true
   },
@@ -34,5 +34,11 @@
     "url": "https://games.sina.com.cn/rss",
     "categories": ["industry", "company"],
     "enabled": false
+  },
+  {
+    "name": "游戏茶馆",
+    "url": "https://www.youxichaguan.com/feed",
+    "categories": ["industry", "investment"],
+    "enabled": true
   }
 ]
