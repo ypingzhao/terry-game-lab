@@ -1,7 +1,56 @@
 {
-  "last_update": "2026-03-16T13:00:04.259042",
-  "total_count": 64,
+  "last_update": "2026-03-16T14:00:14.570789",
+  "total_count": 71,
   "news": [
+    {
+      "title": "外媒：阿里巴巴即将推出企业级AI旗舰应用",
+      "url": "https://36kr.com/newsflashes/3725181323246212?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T14:00:02.240262",
+      "published": "2026-03-16 13:30:24  +0800"
+    },
+    {
+      "title": "深成指午后翻红",
+      "url": "https://36kr.com/newsflashes/3725182835718790?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T14:00:02.240255",
+      "published": "2026-03-16 13:31:56  +0800"
+    },
+    {
+      "title": "报道称先正达将在英国投资1.2亿美元兴建全球研发中心",
+      "url": "https://36kr.com/newsflashes/3725195864472194?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T14:00:02.240249",
+      "published": "2026-03-16 13:45:11  +0800"
+    },
+    {
+      "title": "美的集团旗下汽车部件公司增资至12亿元",
+      "url": "https://36kr.com/newsflashes/3725201144167042?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T14:00:02.240243",
+      "published": "2026-03-16 13:50:33  +0800"
+    },
+    {
+      "title": "三星：预计内存短缺将在2028年结束",
+      "url": "https://36kr.com/newsflashes/3725206154901889?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T14:00:02.240236",
+      "published": "2026-03-16 13:55:39  +0800"
+    },
+    {
+      "title": "车规级碳化硅模块厂商再融资亿元，加速入局AI算力中心基建 | 硬氪首发",
+      "url": "https://36kr.com/p/3725161156639368?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T14:00:02.240178",
+      "published": "2026-03-16 13:11:09  +0800"
+    },
+    {
+      "title": "清越科技发布双品牌战略，将拓展服务机器人核心部件领域丨最前线",
+      "url": "https://36kr.com/p/3725098876140164?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T14:00:02.240158",
+      "published": "2026-03-16 13:11:31  +0800"
+    },
     {
       "title": "Pokémon Pokopia Update Coming, Bringing Improvements and Bug Fixes",
       "url": "https://www.ign.com/articles/pokemon-pokopia-update-coming-bringing-improvements-and-bug-fixes",
