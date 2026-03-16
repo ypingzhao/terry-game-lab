@@ -5,809 +5,195 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>游戏行业资讯 - Terry Game Lab</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent-gaming: #8b5cf6;
+            --border: #334155;
         }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-            min-height: 100vh;
-            color: white;
-            position: relative;
-            overflow-x: hidden;
-            padding: 2rem 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
         }
-        
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') 
-                center/cover no-repeat;
-            opacity: 0.15;
-            z-index: -1;
-            mix-blend-mode: overlay;
-        }
-        
-        /* CRT Monitor Effect - Full Filter */
-        body::after {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                repeating-linear-gradient(
-                    0deg,
-                    rgba(0, 0, 0, 0.25),
-                    rgba(0, 0, 0, 0.25) 1px,
-                    transparent 1px,
-                    transparent 2px
-                ),
-                repeating-linear-gradient(
-                    90deg,
-                    rgba(255, 0, 0, 0.05),
-                    rgba(0, 255, 0, 0.05) 1px,
-                    rgba(0, 0, 255, 0.05) 2px,
-                    transparent 3px
-                ),
-                radial-gradient(
-                    circle at center,
-                    transparent 0%,
-                    rgba(0, 0, 0, 0.3) 80%,
-                    rgba(0, 0, 0, 0.6) 100%
-                ),
-                radial-gradient(
-                    ellipse at center,
-                    transparent 0%,
-                    transparent 80%,
-                    rgba(0, 0, 0, 0.4) 95%,
-                    rgba(0, 0, 0, 0.8) 100%
-                );
-            pointer-events: none;
-            z-index: 9999;
-            animation: 
-                scanlineFlicker 0.5s infinite,
-                screenWarp 10s ease-in-out infinite alternate;
-            mix-blend-mode: overlay;
-        }
-        
-        /* CRT Signal Sweep */
-        .crt-sweep {
-            position: fixed;
-            top: -100%;
-            left: 0;
-            width: 100%;
-            height: 15%;
-            background: linear-gradient(
-                to bottom,
-                transparent 0%,
-                rgba(0, 255, 255, 0.2) 50%,
-                rgba(255, 0, 255, 0.1) 75%,
-                transparent 100%
-            );
-            box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
-            pointer-events: none;
-            z-index: 10000;
-            animation: sweep 20s linear infinite;
-            filter: blur(5px);
-        }
-        
-        /* CRT Flicker Effect */
-        .crt-flicker {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.02);
-            pointer-events: none;
-            z-index: 10001;
-            animation: flicker 0.1s infinite;
-            mix-blend-mode: overlay;
-            opacity: 0.5;
-        }
-        
-        @keyframes scanlineFlicker {
-            0% { opacity: 0.9; }
-            50% { opacity: 1; }
-            100% { opacity: 0.9; }
-        }
-        
-        @keyframes sweep {
-            0% { top: -100%; opacity: 0; }
-            5% { opacity: 1; }
-            95% { opacity: 1; }
-            100% { top: 100%; opacity: 0; }
-        }
-        
-        @keyframes flicker {
-            0% { opacity: 0.4; }
-            50% { opacity: 0.6; }
-            100% { opacity: 0.4; }
-        }
-        
-        @keyframes screenWarp {
-            0% { transform: scale(1.005); }
-            100% { transform: scale(1); }
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        
-        .header {
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        header {
             text-align: center;
-            margin-bottom: 3rem;
-        }
-        
-        .back-link {
-            display: inline-block;
-            color: #00ffff;
-            text-decoration: none;
-            margin-bottom: 1rem;
-            transition: all 0.3s ease;
-        }
-        
-        .back-link:hover {
-            text-shadow: 0 0 10px #00ffff;
-        }
-        
-        h1 {
-            font-size: 3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            letter-spacing: 2px;
-        }
-        
-        .subtitle {
-            font-size: 1.2rem;
-            font-weight: 300;
-            opacity: 0.9;
-        }
-        
-        .last-update {
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
-        
-        .refresh-btn {
-            background: rgba(0, 255, 255, 0.2);
-            border: 1px solid #00ffff;
-            color: white;
-            padding: 0.5rem 1.5rem;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-top: 1rem;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-        }
-        
-        .refresh-btn:hover {
-            background: rgba(0, 255, 255, 0.4);
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
-        }
-        
-        .filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-            justify-content: center;
+            padding: 3rem 0;
+            border-bottom: 1px solid var(--border);
             margin-bottom: 2rem;
         }
-        
-        .filter-tag {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent-gaming));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        .update-time {
+            display: inline-block;
+            background: var(--bg-card);
             padding: 0.5rem 1rem;
             border-radius: 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 1rem;
         }
-        
-        .filter-tag:hover, .filter-tag.active {
-            background: rgba(0, 255, 255, 0.3);
-            border-color: #00ffff;
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
-        }
-        
-        .news-grid {
+        .sources-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 1.5rem;
-            margin-bottom: 3rem;
         }
-        
-        .news-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
+        .source-card {
+            background: var(--bg-card);
+            border-radius: 16px;
             padding: 1.5rem;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .source-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .source-header {
             display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-        
-        .news-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        .news-source {
-            display: inline-block;
-            background: rgba(255, 0, 255, 0.3);
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            margin-bottom: 0.75rem;
-        }
-        
-        .news-category {
-            display: inline-block;
-            background: rgba(0, 255, 255, 0.3);
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            margin-left: 0.5rem;
-            margin-bottom: 0.75rem;
-        }
-        
-        .news-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-            line-height: 1.4;
-        }
-        
-        .news-title a {
-            color: white;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        
-        .news-title a:hover {
-            color: #00ffff;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-        }
-        
-        .news-summary {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            line-height: 1.6;
+            align-items: center;
+            gap: 0.75rem;
             margin-bottom: 1rem;
-            flex-grow: 1;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
         }
-        
-        .news-time {
-            font-size: 0.8rem;
-            opacity: 0.6;
-            align-self: flex-end;
-        }
-        
-        .loading {
-            text-align: center;
-            padding: 3rem;
+        .source-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--accent-gaming));
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 1.2rem;
-            opacity: 0.7;
         }
-        
-        .error {
-            text-align: center;
-            padding: 3rem;
-            color: #ff6b6b;
-            background: rgba(255, 107, 107, 0.1);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 107, 107, 0.3);
+        .source-name {
+            font-size: 1.25rem;
+            font-weight: 600;
         }
-        
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            opacity: 0.7;
+        .news-list {
+            list-style: none;
         }
-        
+        .news-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .news-item:last-child {
+            border-bottom: none;
+        }
+        .news-link {
+            color: var(--text-primary);
+            text-decoration: none;
+            display: block;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            transition: color 0.2s;
+        }
+        .news-link:hover {
+            color: var(--primary);
+        }
+        .news-time {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
         footer {
             text-align: center;
-            margin-top: 4rem;
-            font-size: 0.9rem;
-            opacity: 0.7;
+            padding: 2rem;
+            margin-top: 3rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
         }
-        
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .subtitle {
-                font-size: 1rem;
-            }
-            
-            .news-grid {
-                grid-template-columns: 1fr;
-                padding: 0 1rem;
-            }
-            
-            .container {
-                padding: 0 1rem;
-            }
+            .container { padding: 1rem; }
+            header h1 { font-size: 1.75rem; }
+            .sources-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <!-- CRT Effects -->
-    <div class="crt-sweep"></div>
-    <div class="crt-flicker"></div>
-
     <div class="container">
-        <div class="header">
-            <a href="index.html" class="back-link">← 返回首页</a>
-            <h1>📰 游戏行业资讯</h1>
-            <p class="subtitle">每日聚合全球游戏行业新闻动态，整合热门游戏媒体资讯</p>
-            <div class="last-update">最后更新: <span id="last-update">加载中...</span></div>
-            <button class="refresh-btn" onclick="loadNews()">🔄 刷新资讯</button>
-        </div>
+        <header>
+            <h1>🎮 游戏行业资讯</h1>
+            <p>聚合全球游戏新闻 · 实时更新行业动态</p>
+            <div class="update-time">⏰ 最后更新：2026-03-16 10:28:41</div>
+        </header>
+        
+        <div class="sources-grid">
 
-        <div class="filters">
-            <span class="filter-tag active" data-category="all" onclick="filterNews('all')">全部</span>
-            <span class="filter-tag" data-category="industry" onclick="filterNews('industry')">行业动态</span>
-            <span class="filter-tag" data-category="company" onclick="filterNews('company')">厂商动态</span>
-            <span class="filter-tag" data-category="game" onclick="filterNews('game')">新游发布</span>
-            <span class="filter-tag" data-category="investment" onclick="filterNews('investment')">投融资</span>
-            <span class="filter-tag" data-category="policy" onclick="filterNews('policy')">政策监管</span>
-        </div>
+            <div class="source-card">
+                <div class="source-header">
+                    <div class="source-icon">🎮</div>
+                    <div class="source-name">游民星空</div>
+                </div>
+                <ul class="news-list">
 
-        <div id="news-container">
-            <div class="loading">正在加载最新游戏资讯...</div>
-        </div>
+                    <li class="news-item">
+                        <a href="https://www.gamersky.com/news/202603/2102481.shtml" target="_blank" class="news-link">零：红蝶 重制版</a>
+                        <div class="news-time">03-16 10:28</div>
+                    </li>
 
+                    <li class="news-item">
+                        <a href="https://www.gamersky.com/news/202603/2102362.shtml" target="_blank" class="news-link">怪物猎人物语3：命运双龙</a>
+                        <div class="news-time">03-16 10:28</div>
+                    </li>
+
+                    <li class="news-item">
+                        <a href="https://www.gamersky.com/news/202602/2096887.shtml" target="_blank" class="news-link">生化危机9：安魂曲</a>
+                        <div class="news-time">03-16 10:28</div>
+                    </li>
+
+                    <li class="news-item">
+                        <a href="https://www.gamersky.com/news/202603/2105650.shtml" target="_blank" class="news-link">《红色沙漠》发售在即：冲不冲？</a>
+                        <div class="news-time">03-16 10:28</div>
+                    </li>
+
+                    <li class="news-item">
+                        <a href="https://www.gamersky.com/news/202603/2105791.shtml" target="_blank" class="news-link">狂扁小朋友厂商经典之作将重置！愚人节免费推出</a>
+                        <div class="news-time">03-16 10:28</div>
+                    </li>
+
+                    <li class="news-item">
+                        <a href="https://www.gamersky.com/news/202603/2105783.shtml" target="_blank" class="news-link">漫威金刚狼官宣进入发售倒计时!网友评论区却炸锅了</a>
+                        <div class="news-time">03-16 10:28</div>
+                    </li>
+
+                    <li class="news-item">
+                        <a href="https://www.gamersky.com/news/202603/2105764.shtml" target="_blank" class="news-link">《生化9》格蕾丝成人蝴蝶结MOD:从上到下全看光了</a>
+                        <div class="news-time">03-16 10:28</div>
+                    </li>
+
+                    <li class="news-item">
+                        <a href="https://www.gamersky.com/news/202603/2105762.shtml" target="_blank" class="news-link">《生化9》细节不如《大镖客2》？网友:卡普空产能高</a>
+                        <div class="news-time">03-16 10:28</div>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+        
         <footer>
-            <p>© 2024 Terry Game Lab. 资讯来源于公开游戏媒体RSS聚合。</p>
+            <p>© 2026 Terry Game Lab · 游戏行业资讯聚合</p>
+            <p>数据来源于各大游戏媒体，仅供参考</p>
         </footer>
     </div>
-    
-    <script>
-        // 游戏资讯RSS源列表 - 从配置文件加载
-        let NEWS_SOURCES = [];
-        const DEFAULT_COLORS = [
-            'rgba(255, 0, 255, 0.3)',
-            'rgba(255, 165, 0, 0.3)',
-            'rgba(50, 205, 50, 0.3)',
-            'rgba(30, 144, 255, 0.3)',
-            'rgba(255, 69, 0, 0.3)',
-            'rgba(0, 255, 255, 0.3)',
-            'rgba(138, 43, 226, 0.3)',
-            'rgba(0, 255, 127, 0.3)'
-        ];
-        
-        let allNews = [];
-        let currentCategory = 'all';
-        
-        // 使用RSS转换服务（尝试多个CORS代理，提高成功率）
-        const CORS_PROXIES = [
-            'https://api.allorigins.win/raw?url=',
-            'https://api.codetabs.com/v1/proxy?quest=',
-            'https://cors-anywhere.herokuapp.com/'
-        ];
-        let currentProxyIndex = 0;
-        function getCORSProxy() {
-            return CORS_PROXIES[currentProxyIndex];
-        }
-        
-        async function parseRSSFeed(source, xmlText) {
-            try {
-                const parser = new DOMParser();
-                const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
-                
-                // 处理解析错误
-                const parseError = xmlDoc.querySelector('parsererror');
-                if (parseError) {
-                    console.error(`RSS解析错误: ${source.name}`);
-                    return [];
-                }
-                
-                const items = xmlDoc.querySelectorAll('item');
-                return Array.from(items).slice(0, 5).map(item => {
-                    const title = item.querySelector('title')?.textContent || '';
-                    const link = item.querySelector('link')?.textContent || '';
-                    const description = item.querySelector('description')?.textContent || '';
-                    const pubDate = item.querySelector('pubDate')?.textContent || '';
-                    
-                    // 支持单个分类字符串或多个分类数组
-                    const categories = Array.isArray(source.categories) ? source.categories : [source.category || source.categories];
-                    
-                    return {
-                        title: title,
-                        link: link,
-                        summary: description.replace(/<[^>]*>/g, '').slice(0, 200) + '...',
-                        time: new Date(pubDate),
-                        source: source.name,
-                        categories: categories,
-                        sourceColor: source.color
-                    };
-                });
-            } catch (e) {
-                console.error(`获取 ${source.name} 资讯失败:`, e);
-                return [];
-            }
-        }
-        
-        async function loadNews() {
-            const container = document.getElementById('news-container');
-            container.innerHTML = '<div class="loading">正在获取最新游戏资讯...</div>';
-            
-            try {
-                const newsPromises = NEWS_SOURCES.map(async (source) => {
-                    // 尝试每个代理
-                    for (let i = 0; i < CORS_PROXIES.length; i++) {
-                        try {
-                            const proxy = CORS_PROXIES[i];
-                            const response = await fetch(proxy + encodeURIComponent(source.url));
-                            if (response.ok) {
-                                const text = await response.text();
-                                return await parseRSSFeed(source, text);
-                            }
-                        } catch (e) {
-                            console.warn(`代理 ${i+1} 获取 ${source.name} 失败，尝试下一个:`, e.message);
-                        }
-                    }
-                    console.error(`所有代理都无法获取 ${source.name}`);
-                    return [];
-                });
-                
-                const results = await Promise.allSettled(newsPromises);
-                allNews = [];
-                
-                results.forEach(result => {
-                    if (result.status === 'fulfilled' && result.value.length > 0) {
-                        allNews = allNews.concat(result.value);
-                    }
-                });
-                
-                // 按时间排序
-                allNews.sort((a, b) => b.time - a.time);
-                
-                // 如果已有静态缓存，合并去重
-                try {
-                    const response = await fetch('cached-news.json');
-                    if (response.ok) {
-                        const existing = await response.json();
-                        allNews = mergeNews(existing, allNews);
-                    }
-                } catch (e) {
-                    // 忽略，继续使用新抓取的
-                }
-                
-                // 更新最后更新时间
-                document.getElementById('last-update').textContent = new Date().toLocaleString('zh-CN');
-                
-                // 缓存到浏览器本地
-                localStorage.setItem('terry-game-news', JSON.stringify(allNews));
-                localStorage.setItem('terry-game-news-time', Date.now().toString());
-                
-                // 渲染新闻
-                renderNews();
-                
-                // 显示保存提示
-                if (allNews.length > 0) {
-                    // 添加刷新提示
-                    setTimeout(() => {
-                        showSaveHint();
-                    }, 1000);
-                } else {
-                    container.innerHTML = `
-                        <div class="error">
-                            <h3>暂时无法获取新闻资讯</h3>
-                            <p>可能是由于CORS跨域限制。您可以：</p>
-                            <ul style="margin-top: 1rem; text-align: left; list-style-position: inside;">
-                                <li>点击刷新按钮重新尝试</li>
-                                <li>获取成功后可导出JSON保存到 <code>cached-news.json</code></li>
-                                <li>添加更多可用的RSS源</li>
-                            </ul>
-                        </div>
-                    `;
-                }
-            } catch (e) {
-                console.error('加载新闻失败:', e);
-                container.innerHTML = `
-                    <div class="error">
-                        <h3>加载失败</h3>
-                        <p>${e.message}</p>
-                    </div>
-                `;
-            }
-            
-            function showSaveHint() {
-                const hintDiv = document.createElement('div');
-                hintDiv.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: rgba(0, 255, 255, 0.15); backdrop-filter: blur(10px); border: 1px solid #00ffff; border-radius: 10px; padding: 1rem; max-width: 350px;';
-                hintDiv.innerHTML = `
-                    <h4 style="margin-bottom: 0.5rem; color: #00ffff;">📥 已获取新闻</h4>
-                    <p style="font-size: 0.85rem; line-height: 1.5; opacity: 0.9;">
-                        按F12打开控制台，输入:<br>
-                        <code style="background: rgba(0,0,0,0.3); padding: 2px 5px; border-radius: 3px;">copy(JSON.stringify(allNews, null, 2))</code><br>
-                        复制后粘贴到 <code>cached-news.json</code> 提交到GitHub即可永久保存
-                    </p>
-                    <button onclick="this.parentElement.remove()" style="margin-top: 0.5rem; background: rgba(0, 255, 255, 0.3); border: 1px solid #00ffff; color: white; padding: 0.3rem 1rem; border-radius: 5px; cursor: pointer;">关闭</button>
-                `;
-                document.body.appendChild(hintDiv);
-            }
-        }
-        
-        function renderNews() {
-            const container = document.getElementById('news-container');
-            const filteredNews = currentCategory === 'all' 
-                ? allNews 
-                : allNews.filter(news => news.categories.includes(currentCategory));
-            
-            if (filteredNews.length === 0) {
-                container.innerHTML = '<div class="empty-state">该分类暂无新闻资讯</div>';
-                return;
-            }
-            
-            let html = '<div class="news-grid">';
-            
-            filteredNews.forEach(news => {
-                const timeStr = formatTime(news.time);
-                const categoryTags = news.categories.map(cat => 
-                    `<span class="news-category">${getCategoryName(cat)}</span>`
-                ).join('');
-                html += `
-                    <div class="news-card">
-                        <div>
-                            <span class="news-source" style="background: ${news.sourceColor}">${news.source}</span>
-                            ${categoryTags}
-                            <h3 class="news-title"><a href="${news.link}" target="_blank" rel="noopener">${news.title}</a></h3>
-                            <p class="news-summary">${news.summary}</p>
-                        </div>
-                        <div class="news-time">${timeStr}</div>
-                    </div>
-                `;
-            });
-            
-            html += '</div>';
-            container.innerHTML = html;
-        }
-        
-        function filterNews(category) {
-            currentCategory = category;
-            
-            // 更新active状态
-            document.querySelectorAll('.filter-tag').forEach(tag => {
-                if (tag.dataset.category === category) {
-                    tag.classList.add('active');
-                } else {
-                    tag.classList.remove('active');
-                }
-            });
-            
-            renderNews();
-        }
-        
-        function formatTime(date) {
-            const now = new Date();
-            const diff = now - date;
-            const minutes = Math.floor(diff / (1000 * 60));
-            const hours = Math.floor(diff / (1000 * 60 * 60));
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            
-            if (diff < 1000 * 60 * 60) {
-                return `${minutes}分钟前`;
-            } else if (diff < 1000 * 60 * 60 * 24) {
-                return `${hours}小时前`;
-            } else if (days < 7) {
-                return `${days}天前`;
-            } else {
-                return date.toLocaleDateString('zh-CN');
-            }
-        }
-        
-        function getCategoryName(category) {
-            const names = {
-                industry: '行业动态',
-                company: '厂商',
-                game: '新游',
-                investment: '投融资',
-                policy: '政策'
-            };
-            return names[category] || category;
-        }
-        
-        // 加载RSS源配置
-        async function loadSourcesConfig() {
-            try {
-                const response = await fetch('news-sources.json?' + new Date().getTime());
-                if (response.ok) {
-                    const config = await response.json();
-                    // 只加载启用的源，并添加颜色，兼容旧配置格式
-                    NEWS_SOURCES = config
-                        .filter(source => source.enabled)
-                        .map((source, index) => {
-                            // 兼容旧配置：如果是category，转换为categories数组
-                            if (source.category && !source.categories) {
-                                source.categories = [source.category];
-                            }
-                            return {
-                                ...source,
-                                color: DEFAULT_COLORS[index % DEFAULT_COLORS.length]
-                            };
-                        });
-                    console.log(`已加载 ${NEWS_SOURCES.length} 个启用的新闻源`);
-                    return true;
-                }
-            } catch (e) {
-                console.warn('加载配置文件失败，使用默认配置:', e);
-            }
-            
-            // 默认配置（降级方案）
-            NEWS_SOURCES = [
-                { name: '游戏葡萄', url: 'https://www.yqqlm.com/feed', categories: ['industry'], color: 'rgba(255, 0, 255, 0.3)' },
-                { name: 'GameRes', url: 'https://www.gameres.com/rss', categories: ['industry'], color: 'rgba(255, 165, 0, 0.3)' },
-                { name: '游研社', url: 'https://www.yystv.cn/rss', categories: ['game'], color: 'rgba(50, 205, 50, 0.3)' },
-                { name: 'GameLook', url: 'https://www.gamelook.com.cn/feed/', categories: ['industry', 'investment'], color: 'rgba(30, 144, 255, 0.3)' }
-            ];
-            // 兼容旧配置格式
-            NEWS_SOURCES = NEWS_SOURCES.map(s => {
-                if (s.category && !s.categories) {
-                    s.categories = [s.category];
-                }
-                return s;
-            });
-            return false;
-        }
-        
-        // 从静态缓存文件加载（永久保存）
-        async function loadCachedNewsFromFile() {
-            try {
-                const response = await fetch('cached-news.json?' + new Date().getTime());
-                if (response.ok) {
-                    const cached = await response.json();
-                    if (cached.length > 0) {
-                        allNews = cached;
-                        // 确保time是数字（从JSON读取本来就是数字）
-                        // 如果是Date对象需要转换，JSON化后已经是number
-                        allNews.forEach(n => {
-                            if (typeof n.time !== 'number') {
-                                n.time = new Date(n.time).getTime();
-                            }
-                        });
-                        // 按时间排序
-                        allNews.sort((a, b) => b.time - a.time);
-                        console.log(`从静态缓存加载了 ${allNews.length} 条新闻`);
-                        
-                        // 获取缓存更新时间（从文件的最新新闻推断）
-                        const latestTime = Math.max(...allNews.map(n => n.time));
-                        document.getElementById('last-update').textContent = 
-                            '缓存: ' + new Date(latestTime).toLocaleString('zh-CN');
-                            
-                        renderNews();
-                        return true;
-                    }
-                }
-            } catch (e) {
-                console.warn('加载静态缓存失败:', e);
-            }
-            return false;
-        }
-        
-        // 浏览器端缓存（2小时内有效，加速访问）
-        function loadCachedNewsLocal() {
-            const cached = localStorage.getItem('terry-game-news');
-            const cacheTime = localStorage.getItem('terry-game-news-time');
-            
-            if (cached && cacheTime) {
-                const now = Date.now();
-                if (now - parseInt(cacheTime) < 2 * 60 * 60 * 1000) {
-                    allNews = JSON.parse(cached);
-                    document.getElementById('last-update').textContent = new Date(parseInt(cacheTime)).toLocaleString('zh-CN');
-                    renderNews();
-                    return true;
-                }
-            }
-            return false;
-        }
-        
-        // 合并新抓取的新闻到缓存，去重
-        function mergeNews(existingNews, newNews) {
-            const urlMap = new Map();
-            
-            // 先添加已有新闻
-            existingNews.forEach(n => {
-                urlMap.set(n.link, n);
-            });
-            
-            // 添加新新闻（相同URL会覆盖，保证最新）
-            newNews.forEach(n => {
-                urlMap.set(n.link, n);
-            });
-            
-            // 转换回数组，按时间排序
-            let merged = Array.from(urlMap.values());
-            merged.sort((a, b) => b.time - a.time);
-            
-            // 只保留最近90天的新闻，避免文件过大
-            const ninetyDaysAgo = Date.now() - 90 * 24 * 60 * 60 * 1000;
-            merged = merged.filter(n => (typeof n.time === 'number' ? n.time : n.time.getTime()) > ninetyDaysAgo);
-            
-            // 最多保留200条新闻
-            if (merged.length > 200) {
-                merged = merged.slice(0, 200);
-            }
-            
-            return merged;
-        }
-        
-        // 页面加载完成后自动加载新闻
-        document.addEventListener('DOMContentLoaded', async () => {
-            await loadSourcesConfig();
-            // 优先从静态缓存加载（永久保存在GitHub仓库）
-            try {
-                const loaded = await loadCachedNewsFromFile();
-                if (loaded) {
-                    // 静态缓存加载成功，直接显示
-                    // 新闻更新由GitHub Actions定时自动抓取，更新后提交到仓库
-                    // 前端不需要每次都抓取，直接读缓存即可
-                    return;
-                }
-            } catch (e) {
-                console.error('加载静态缓存异常:', e);
-            }
-            // 只有当静态缓存为空时，才尝试抓取
-            if (!loadCachedNewsLocal()) {
-                loadNews();
-            }
-        });
-        
-        // 静默更新，不干扰用户看缓存内容
-        async function loadNewsSilent() {
-            try {
-                const newsPromises = NEWS_SOURCES.map(async (source) => {
-                    for (let i = 0; i < CORS_PROXIES.length; i++) {
-                        try {
-                            const proxy = CORS_PROXIES[i];
-                            const response = await fetch(proxy + encodeURIComponent(source.url));
-                            if (response.ok) {
-                                const text = await response.text();
-                                return await parseRSSFeed(source, text);
-                            }
-                        } catch (e) {
-                            console.warn(`代理 ${i+1} 获取 ${source.name} 失败`);
-                        }
-                    }
-                    return [];
-                });
-                
-                const results = await Promise.allSettled(newsPromises);
-                let newNews = [];
-                results.forEach(result => {
-                    if (result.status === 'fulfilled' && result.value.length > 0) {
-                        newNews = newNews.concat(result.value);
-                    }
-                });
-                
-                if (newNews.length > 0) {
-                    allNews = mergeNews(allNews, newNews);
-                    allNews.sort((a, b) => b.time - a.time);
-                    renderNews();
-                    console.log(`静默更新完成，现在共 ${allNews.length} 条新闻`);
-                }
-            } catch (e) {
-                console.warn('静默更新失败:', e);
-            }
-        }
-    </script>
 </body>
 </html>
