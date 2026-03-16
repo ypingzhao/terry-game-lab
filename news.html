@@ -14,6 +14,8 @@
             --text-secondary: #94a3b8;
             --accent-gaming: #8b5cf6;
             --border: #334155;
+            --success: #10b981;
+            --warning: #f59e0b;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -23,6 +25,8 @@
             line-height: 1.6;
         }
         .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        
+        /* Header */
         header {
             text-align: center;
             padding: 3rem 0;
@@ -49,6 +53,55 @@
             color: var(--text-secondary);
             margin-top: 1rem;
         }
+        
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        .stat-card {
+            background: var(--bg-card);
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tab:hover, .tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* News Grid */
         .sources-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -125,6 +178,7 @@
             .container { padding: 1rem; }
             header h1 { font-size: 1.75rem; }
             .sources-grid { grid-template-columns: 1fr; }
+            .tabs { overflow-x: auto; }
         }
     </style>
 </head>
@@ -133,12 +187,40 @@
         <header>
             <h1>🎮 游戏行业资讯</h1>
             <p>聚合全球游戏新闻 · 实时更新行业动态</p>
-            <div class="update-time">⏰ 最后更新：2026-03-16 10:29:44</div>
+            <div class="update-time">⏰ 最后更新：2026-03-16 11:29:04</div>
         </header>
+        
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">9</div>
+                <div class="stat-label">总新闻数</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">1</div>
+                <div class="stat-label">国内媒体</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">0</div>
+                <div class="stat-label">国际媒体</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">1</div>
+                <div class="stat-label">活跃来源</div>
+            </div>
+        </div>
+        
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" onclick="filterSource('all')">全部</div>
+            <div class="tab" onclick="filterSource('cn')">国内</div>
+            <div class="tab" onclick="filterSource('intl')">国际</div>
+            <div class="tab" onclick="filterSource(&quot;游民星空&quot;)">游民星空</div>
+        </div>
         
         <div class="sources-grid">
 
-            <div class="source-card">
+            <div class="source-card" data-source="游民星空" data-type="cn">
                 <div class="source-header">
                     <div class="source-icon">🎮</div>
                     <div class="source-name">游民星空</div>
@@ -147,42 +229,47 @@
 
                     <li class="news-item">
                         <a href="https://www.gamersky.com/news/202603/2102481.shtml" target="_blank" class="news-link">零：红蝶 重制版</a>
-                        <div class="news-time">03-16 10:29</div>
+                        <div class="news-time">03-16 11:29</div>
                     </li>
 
                     <li class="news-item">
                         <a href="https://www.gamersky.com/news/202603/2102362.shtml" target="_blank" class="news-link">怪物猎人物语3：命运双龙</a>
-                        <div class="news-time">03-16 10:29</div>
+                        <div class="news-time">03-16 11:29</div>
                     </li>
 
                     <li class="news-item">
                         <a href="https://www.gamersky.com/news/202602/2096887.shtml" target="_blank" class="news-link">生化危机9：安魂曲</a>
-                        <div class="news-time">03-16 10:29</div>
+                        <div class="news-time">03-16 11:29</div>
                     </li>
 
                     <li class="news-item">
                         <a href="https://www.gamersky.com/news/202603/2105650.shtml" target="_blank" class="news-link">《红色沙漠》发售在即：冲不冲？</a>
-                        <div class="news-time">03-16 10:29</div>
+                        <div class="news-time">03-16 11:29</div>
                     </li>
 
                     <li class="news-item">
-                        <a href="https://www.gamersky.com/news/202603/2105791.shtml" target="_blank" class="news-link">狂扁小朋友厂商经典之作将重置！愚人节免费推出</a>
-                        <div class="news-time">03-16 10:29</div>
+                        <a href="https://www.gamersky.com/news/202603/2105892.shtml" target="_blank" class="news-link">《羊蹄山》主演雨姐晒新照！游戏或有新内容？</a>
+                        <div class="news-time">03-16 11:29</div>
                     </li>
 
                     <li class="news-item">
-                        <a href="https://www.gamersky.com/news/202603/2105783.shtml" target="_blank" class="news-link">漫威金刚狼官宣进入发售倒计时!网友评论区却炸锅了</a>
-                        <div class="news-time">03-16 10:29</div>
+                        <a href="https://www.gamersky.com/news/202603/2105878.shtml" target="_blank" class="news-link">科乐美免费游戏上D加密！真能把订阅费赚回来吗？</a>
+                        <div class="news-time">03-16 11:29</div>
                     </li>
 
                     <li class="news-item">
-                        <a href="https://www.gamersky.com/news/202603/2105764.shtml" target="_blank" class="news-link">《生化9》格蕾丝成人蝴蝶结MOD:从上到下全看光了</a>
-                        <div class="news-time">03-16 10:29</div>
+                        <a href="https://www.gamersky.com/news/202603/2105877.shtml" target="_blank" class="news-link">《生化9》暗藏&quot;预制件&quot;？或为维罗妮卡、RE1铺路</a>
+                        <div class="news-time">03-16 11:29</div>
                     </li>
 
                     <li class="news-item">
-                        <a href="https://www.gamersky.com/news/202603/2105762.shtml" target="_blank" class="news-link">《生化9》细节不如《大镖客2》？网友:卡普空产能高</a>
-                        <div class="news-time">03-16 10:29</div>
+                        <a href="https://www.gamersky.com/news/202603/2105875.shtml" target="_blank" class="news-link">万代不卖了！《Fate》新作发行商变更 无限期延期</a>
+                        <div class="news-time">03-16 11:29</div>
+                    </li>
+
+                    <li class="news-item">
+                        <a href="https://www.gamersky.com/news/202603/2105864.shtml" target="_blank" class="news-link">顽皮狗新作页面曝光？结果竟是旧闻！玩家想疯了</a>
+                        <div class="news-time">03-16 11:29</div>
                     </li>
 
                 </ul>
@@ -192,8 +279,37 @@
         
         <footer>
             <p>© 2026 Terry Game Lab · 游戏行业资讯聚合</p>
-            <p>数据来源于各大游戏媒体，仅供参考</p>
+            <p>每小时自动更新 · 数据来源于各大游戏媒体</p>
         </footer>
     </div>
+    
+    <script>
+        function filterSource(type) {
+            const cards = document.querySelectorAll('.source-card');
+            const tabs = document.querySelectorAll('.tab');
+            
+            // Update active tab
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.textContent.includes('全部') && type === 'all') tab.classList.add('active');
+                if (tab.textContent.includes('国内') && type === 'cn') tab.classList.add('active');
+                if (tab.textContent.includes('国际') && type === 'intl') tab.classList.add('active');
+                if (tab.textContent === type) tab.classList.add('active');
+            });
+            
+            // Filter cards
+            cards.forEach(card => {
+                if (type === 'all') {
+                    card.style.display = 'block';
+                } else if (type === 'cn') {
+                    card.style.display = card.dataset.type === 'cn' ? 'block' : 'none';
+                } else if (type === 'intl') {
+                    card.style.display = card.dataset.type === 'intl' ? 'block' : 'none';
+                } else {
+                    card.style.display = card.dataset.source === type ? 'block' : 'none';
+                }
+            });
+        }
+    </script>
 </body>
 </html>
