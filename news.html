@@ -99,6 +99,64 @@
             border-color: var(--primary);
         }
         
+        /* Summary Card */
+        .summary-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+        }
+        .summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .summary-header h2 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .summary-stat {
+            text-align: center;
+            padding: 1rem;
+            background: rgba(99, 102, 241, 0.1);
+            border-radius: 12px;
+        }
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+        .summary-trending {
+            color: var(--text-primary);
+        }
+        .summary-trending h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+        }
+        .summary-trending ul {
+            padding-left: 1.5rem;
+        }
+        .summary-trending li {
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+        
         /* News Grid */
         .sources-grid {
             display: grid;
@@ -193,25 +251,64 @@
         <header>
             <h1>🎮 游戏行业资讯</h1>
             <p>聚合全球游戏新闻 · 每小时自动更新</p>
-            <div class="update-time">⏰ 最后更新：2026-03-16 14:00:14</div>
+            <div class="update-time">⏰ 最后更新：2026-03-16 14:57:47</div>
         </header>
+        
+        <!-- 新闻小结 -->
+
+        <div class="summary-card">
+            <div class="summary-header">
+                <h2>📝 最新新闻小结</h2>
+                <span class="update-time">更新于 2026-03-16 14:57</span>
+            </div>
+            <div class="summary-content">
+                <div class="summary-stats">
+                    <div class="summary-stat">
+                        <div class="stat-number">8</div>
+                        <div class="stat-label">新作发布</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="stat-number">7</div>
+                        <div class="stat-label">行业资本</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="stat-number">6</div>
+                        <div class="stat-label">公司动态</div>
+                    </div>
+                    <div class="summary-stat">
+                        <div class="stat-number">13</div>
+                        <div class="stat-label">技术创新</div>
+                    </div>
+                </div>
+                <div class="summary-trending">
+                    <h3>🔥 热门标题</h3>
+                    <ul>
+                        <li>鸿海2025年净利润1893.5亿元新台币</li>
+                        <li>哈啰租电动车平台下架全部租赁电动车，知情人士称内部已启动自查</li>
+                        <li>vivo今年已公布拍摄相关新专利</li>
+                        <li>英伟达CES同款机器人Reachy Mini登陆阿里速卖通</li>
+                        <li>“朗矽科技”完成近八千万元Pre-A轮融资</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         
         <!-- Stats -->
         <div class="stats-grid">
             <div class="stat-card">
-                <div class="stat-value">71</div>
+                <div class="stat-value">{total_news}</div>
                 <div class="stat-label">总新闻数</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">2</div>
+                <div class="stat-value">{len(cn_sources)}</div>
                 <div class="stat-label">国内媒体</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">2</div>
+                <div class="stat-value">{len(intl_sources)}</div>
                 <div class="stat-label">国际媒体</div>
             </div>
             <div class="stat-card">
-                <div class="stat-value">4/4</div>
+                <div class="stat-value">{successful_sources}/{total_sources}</div>
                 <div class="stat-label">活跃来源</div>
             </div>
         </div>
@@ -221,7 +318,7 @@
             <div class="tab active" onclick="filterSource('all')">全部</div>
             <div class="tab" onclick="filterSource('cn')">国内</div>
             <div class="tab" onclick="filterSource('intl')">国际</div>
-            <div class="tab" onclick="filterSource(&quot;36氪&quot;)">36氪</div><div class="tab" onclick="filterSource(&quot;IGN&quot;)">IGN</div><div class="tab" onclick="filterSource(&quot;GameSpot&quot;)">GameSpot</div><div class="tab" onclick="filterSource(&quot;游戏茶馆&quot;)">游戏茶馆</div>
+            {''.join([f'<div class="tab" onclick="filterSource(&quot;{s}&quot;)">{s}</div>' for s in list(grouped.keys())[:6]])}
         </div>
         
         <div class="sources-grid">
@@ -230,9 +327,39 @@
                 <div class="source-header">
                     <div class="source-icon">🎮</div>
                     <div class="source-name">36氪</div>
-                    <div class="news-count">30</div>
+                    <div class="news-count">36</div>
                 </div>
                 <ul class="news-list">
+
+                    <li class="news-item">
+                        <a href="https://36kr.com/newsflashes/3725240323553664?f=rss" target="_blank" class="news-link">鸿海2025年净利润1893.5亿元新台币</a>
+                        <div class="news-time">03-16 14:57</div>
+                    </li>
+
+                    <li class="news-item">
+                        <a href="https://36kr.com/newsflashes/3725242705246597?f=rss" target="_blank" class="news-link">哈啰租电动车平台下架全部租赁电动车，知情人士称内部已启动自查</a>
+                        <div class="news-time">03-16 14:57</div>
+                    </li>
+
+                    <li class="news-item">
+                        <a href="https://36kr.com/newsflashes/3725243441723776?f=rss" target="_blank" class="news-link">vivo今年已公布拍摄相关新专利</a>
+                        <div class="news-time">03-16 14:57</div>
+                    </li>
+
+                    <li class="news-item">
+                        <a href="https://36kr.com/newsflashes/3725258364484224?f=rss" target="_blank" class="news-link">英伟达CES同款机器人Reachy Mini登陆阿里速卖通</a>
+                        <div class="news-time">03-16 14:57</div>
+                    </li>
+
+                    <li class="news-item">
+                        <a href="https://36kr.com/newsflashes/3725259405687170?f=rss" target="_blank" class="news-link">“朗矽科技”完成近八千万元Pre-A轮融资</a>
+                        <div class="news-time">03-16 14:57</div>
+                    </li>
+
+                    <li class="news-item">
+                        <a href="https://36kr.com/p/3725233182062982?f=rss" target="_blank" class="news-link">补齐AI板块核心拼图，网络基建「卖铲人」飞速创新登陆港交所</a>
+                        <div class="news-time">03-16 14:57</div>
+                    </li>
 
                     <li class="news-item">
                         <a href="https://36kr.com/newsflashes/3725181323246212?f=rss" target="_blank" class="news-link">外媒：阿里巴巴即将推出企业级AI旗舰应用</a>
@@ -252,36 +379,6 @@
                     <li class="news-item">
                         <a href="https://36kr.com/newsflashes/3725201144167042?f=rss" target="_blank" class="news-link">美的集团旗下汽车部件公司增资至12亿元</a>
                         <div class="news-time">03-16 14:00</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://36kr.com/newsflashes/3725206154901889?f=rss" target="_blank" class="news-link">三星：预计内存短缺将在2028年结束</a>
-                        <div class="news-time">03-16 14:00</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://36kr.com/p/3725161156639368?f=rss" target="_blank" class="news-link">车规级碳化硅模块厂商再融资亿元，加速入局AI算力中心基建 | 硬氪首发</a>
-                        <div class="news-time">03-16 14:00</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://36kr.com/p/3725098876140164?f=rss" target="_blank" class="news-link">清越科技发布双品牌战略，将拓展服务机器人核心部件领域丨最前线</a>
-                        <div class="news-time">03-16 14:00</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://36kr.com/newsflashes/3725134448081285?f=rss" target="_blank" class="news-link">茅台集团仅参加成都春糖主会场展览，不设酒店展</a>
-                        <div class="news-time">03-16 13:00</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://36kr.com/newsflashes/3725139467156104?f=rss" target="_blank" class="news-link">巴克莱银行预计英国央行3月将维持利率不变</a>
-                        <div class="news-time">03-16 13:00</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://36kr.com/newsflashes/3725146867710338?f=rss" target="_blank" class="news-link">希瑞科技：预计本季度内完成第三轮融资</a>
-                        <div class="news-time">03-16 13:00</div>
                     </li>
 
                 </ul>
