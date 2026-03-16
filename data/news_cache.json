@@ -1,215 +1,320 @@
 {
-  "last_update": "2026-03-16T11:33:26.238200",
-  "total_count": 30,
+  "last_update": "2026-03-16T11:34:59.764268",
+  "total_count": 45,
   "news": [
+    {
+      "title": "又一国企宣布“清仓”房地产业务，发公告后股价涨停",
+      "url": "https://36kr.com/p/3725013049719168?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T11:34:45.168269",
+      "published": "2026-03-16 10:39:23  +0800"
+    },
+    {
+      "title": "《直播电商消费者满意度调查报告（2026）》发布，消费者呼吁强化源头治理",
+      "url": "https://36kr.com/p/3724972796361096?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T11:34:45.168293",
+      "published": "2026-03-16 10:02:08  +0800"
+    },
+    {
+      "title": "两位清华校友创业：获谷歌、英伟达系投资人押注，要把机器人数据采集成本降50倍丨36氪首发",
+      "url": "https://36kr.com/p/3724929366571399?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T11:34:45.168302",
+      "published": "2026-03-16 09:14:28  +0800"
+    },
+    {
+      "title": "8点1氪丨知名连锁店被曝大规模销售假烟，已查获非法卷烟139.99万支；“3·15晚会”曝光完整名单公布；Kimi估值涨至180亿美元",
+      "url": "https://36kr.com/p/3724860285319556?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T11:34:45.168309",
+      "published": "2026-03-16 08:07:10  +0800"
+    },
+    {
+      "title": "工业级AI视频厂商再融资，掌握120TB独家数据，营收破亿 | 硬氪首发",
+      "url": "https://36kr.com/p/3723669408987782?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T11:34:45.168316",
+      "published": "2026-03-15 11:53:57  +0800"
+    },
+    {
+      "title": "AWE首秀亮王牌：慕思，凭什么让一众科技大佬集体“躺平”？",
+      "url": "https://36kr.com/p/3722669939931524?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T11:34:45.168323",
+      "published": "2026-03-15 10:00:50  +0800"
+    },
+    {
+      "title": "中国最大家电展上，一批想帮你做家务的机器人来了！",
+      "url": "https://36kr.com/p/3722882943334789?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T11:34:45.168330",
+      "published": "2026-03-14 22:37:39  +0800"
+    },
+    {
+      "title": "腾讯龙虾团队答疑：龙虾的热度确实高过能力，但它是普通人拥抱 AI 浪潮的第一步",
+      "url": "https://36kr.com/p/3721355722684804?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T11:34:45.168336",
+      "published": "2026-03-14 19:19:44  +0800"
+    },
+    {
+      "title": "前华为北美高管团队创业AIDC算力电源赛道，正推进与国际大厂合作 | 硬氪首发",
+      "url": "https://36kr.com/p/3722683801909641?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T11:34:45.168343",
+      "published": "2026-03-14 19:10:52  +0800"
+    },
+    {
+      "title": "9点1氪丨济州航空空难一年后再现遇难者遗骸；中国区“苹果税”下调；市监局出手整治“误导性大小字”广告",
+      "url": "https://36kr.com/p/3722103811226244?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T11:34:45.168349",
+      "published": "2026-03-14 09:23:11  +0800"
+    },
+    {
+      "title": "A股三大指数午间休盘涨跌不一，贵州茅台涨超2%",
+      "url": "https://36kr.com/newsflashes/3725065383721353?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T11:34:45.168356",
+      "published": "2026-03-16 11:32:27  +0800"
+    },
+    {
+      "title": "vivo及iQOO发布部分产品调价说明",
+      "url": "https://36kr.com/newsflashes/3725061604391557?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T11:34:45.168363",
+      "published": "2026-03-16 11:28:37  +0800"
+    },
+    {
+      "title": "东吴证券：看好如祺出行Robotaxi商业化优势，预计2027年实现盈利",
+      "url": "https://36kr.com/newsflashes/3725052141173380?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T11:34:45.168369",
+      "published": "2026-03-16 11:18:59  +0800"
+    },
+    {
+      "title": "SmartMore Inc.向港交所提交上市申请书",
+      "url": "https://36kr.com/newsflashes/3725051327822468?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T11:34:45.168376",
+      "published": "2026-03-16 11:18:09  +0800"
+    },
+    {
+      "title": "智谱上调新模型API价格20%",
+      "url": "https://36kr.com/newsflashes/3725034205379205?f=rss",
+      "source": "36氪",
+      "fetch_time": "2026-03-16T11:34:45.168383",
+      "published": "2026-03-16 11:00:44  +0800"
+    },
     {
       "title": "Planet Of Lana II: Children Of The Leaf Review - A Cinematic Odyssey",
       "url": "https://www.gamespot.com/reviews/planet-of-lana-ii-children-of-the-leaf-review-a-cinematic-odyssey/1900-6418473/?ftag=CAD-01-10abi2f",
       "source": "GameSpot",
-      "fetch_time": "2026-03-16T11:33:25.097381",
+      "fetch_time": "2026-03-16T11:34:46.166488",
       "published": "Fri, 13 Mar 2026 11:40:00 -0700"
     },
     {
       "title": "Marathon Review-In-Progress - Incredible Highs, Painful Lows",
       "url": "https://www.gamespot.com/reviews/marathon-review-in-progress-incredible-highs-painful-lows/1900-6418472/?ftag=CAD-01-10abi2f",
       "source": "GameSpot",
-      "fetch_time": "2026-03-16T11:33:25.097402",
+      "fetch_time": "2026-03-16T11:34:46.166505",
       "published": "Wed, 11 Mar 2026 15:29:00 -0700"
     },
     {
       "title": "Monster Hunter Stories 3: Twisted Reflection Review - Monstie Mash",
       "url": "https://www.gamespot.com/reviews/monster-hunter-stories-3-twisted-reflection-review-monstie-mash/1900-6418469/?ftag=CAD-01-10abi2f",
       "source": "GameSpot",
-      "fetch_time": "2026-03-16T11:33:25.097411",
+      "fetch_time": "2026-03-16T11:34:46.166512",
       "published": "Mon, 09 Mar 2026 08:00:00 -0700"
     },
     {
       "title": "WWE 2K26 Review - The Main Event Wrestling Game We Need Right Now",
       "url": "https://www.gamespot.com/reviews/wwe-2k26-review-the-main-event-wrestling-game-we-need-right-now/1900-6418471/?ftag=CAD-01-10abi2f",
       "source": "GameSpot",
-      "fetch_time": "2026-03-16T11:33:25.097418",
+      "fetch_time": "2026-03-16T11:34:46.166519",
       "published": "Fri, 06 Mar 2026 14:25:00 -0800"
     },
     {
       "title": "Legacy Of Kain: Defiance Remastered Review - Redeemer And Destroyer",
       "url": "https://www.gamespot.com/reviews/legacy-of-kain-defiance-remastered-review-redeemer-and-destroyer/1900-6418470/?ftag=CAD-01-10abi2f",
       "source": "GameSpot",
-      "fetch_time": "2026-03-16T11:33:25.097425",
+      "fetch_time": "2026-03-16T11:34:46.166525",
       "published": "Fri, 06 Mar 2026 11:55:00 -0800"
     },
     {
       "title": "Scott Pilgrim EX Review - A Short But Sweet Millennial Nostalgia Romp",
       "url": "https://www.gamespot.com/reviews/scott-pilgrim-ex-review-a-short-but-sweet-millennial-nostalgia-romp/1900-6418468/?ftag=CAD-01-10abi2f",
       "source": "GameSpot",
-      "fetch_time": "2026-03-16T11:33:25.097432",
+      "fetch_time": "2026-03-16T11:34:46.166532",
       "published": "Thu, 05 Mar 2026 10:18:00 -0800"
     },
     {
       "title": "Esoteric Ebb Review - Chaotic Good",
       "url": "https://www.gamespot.com/reviews/esoteric-ebb-review-chaotic-good/1900-6418467/?ftag=CAD-01-10abi2f",
       "source": "GameSpot",
-      "fetch_time": "2026-03-16T11:33:25.097439",
+      "fetch_time": "2026-03-16T11:34:46.166538",
       "published": "Wed, 04 Mar 2026 10:40:00 -0800"
     },
     {
       "title": "God Of War: Sons Of Sparta Review - The Mildly Amusing Adventures Of Teen Kratos",
       "url": "https://www.gamespot.com/reviews/god-of-war-sons-of-sparta-review-the-mildly-amusing-adventures-of-teen-kratos/1900-6418466/?ftag=CAD-01-10abi2f",
       "source": "GameSpot",
-      "fetch_time": "2026-03-16T11:33:25.097445",
+      "fetch_time": "2026-03-16T11:34:46.166545",
       "published": "Tue, 03 Mar 2026 14:25:00 -0800"
     },
     {
       "title": "Pokemon Pokopia Review - The Pokemon Anniversary Gift I Didn't Know I Wanted",
       "url": "https://www.gamespot.com/reviews/pokemon-pokopia-review-the-pokemon-anniversary-gift-i-didnt-know-i-wanted/1900-6418465/?ftag=CAD-01-10abi2f",
       "source": "GameSpot",
-      "fetch_time": "2026-03-16T11:33:25.097452",
+      "fetch_time": "2026-03-16T11:34:46.166551",
       "published": "Mon, 02 Mar 2026 05:00:00 -0800"
     },
     {
       "title": "Resident Evil Requiem Review - Two-Headed Mutant",
       "url": "https://www.gamespot.com/reviews/resident-evil-requiem-review-two-headed-mutant/1900-6418464/?ftag=CAD-01-10abi2f",
       "source": "GameSpot",
-      "fetch_time": "2026-03-16T11:33:25.097459",
+      "fetch_time": "2026-03-16T11:34:46.166557",
       "published": "Wed, 25 Feb 2026 07:00:00 -0800"
     },
     {
       "title": "High On Life 2 Review - Skate 'N Gun",
       "url": "https://www.gamespot.com/reviews/high-on-life-2-review-skate-n-gun/1900-6418463/?ftag=CAD-01-10abi2f",
       "source": "GameSpot",
-      "fetch_time": "2026-03-16T11:33:25.097465",
+      "fetch_time": "2026-03-16T11:34:46.166564",
       "published": "Thu, 19 Feb 2026 13:50:00 -0800"
     },
     {
       "title": "Crisol: Theater of Idols Review - Drained Dry",
       "url": "https://www.gamespot.com/reviews/crisol-theater-of-idols-review-drained-dry/1900-6418462/?ftag=CAD-01-10abi2f",
       "source": "GameSpot",
-      "fetch_time": "2026-03-16T11:33:25.097472",
+      "fetch_time": "2026-03-16T11:34:46.166570",
       "published": "Wed, 18 Feb 2026 05:00:00 -0800"
     },
     {
       "title": "Reanimal Review - Doomed, But Not Alone",
       "url": "https://www.gamespot.com/reviews/reanimal-review/1900-6418461/?ftag=CAD-01-10abi2f",
       "source": "GameSpot",
-      "fetch_time": "2026-03-16T11:33:25.097479",
+      "fetch_time": "2026-03-16T11:34:46.166577",
       "published": "Wed, 11 Feb 2026 08:00:00 -0800"
     },
     {
       "title": "Mario Tennis Fever Review - Bringing The Heat",
       "url": "https://www.gamespot.com/reviews/mario-tennis-fever-review-bringing-the-heat/1900-6418460/?ftag=CAD-01-10abi2f",
       "source": "GameSpot",
-      "fetch_time": "2026-03-16T11:33:25.097486",
+      "fetch_time": "2026-03-16T11:34:46.166583",
       "published": "Tue, 10 Feb 2026 06:00:00 -0800"
     },
     {
       "title": "Romeo Is a Dead Man Review - Keep Sleeping, Dead Man",
       "url": "https://www.gamespot.com/reviews/romeo-is-a-dead-man-review-keep-sleeping-dead-man/1900-6418459/?ftag=CAD-01-10abi2f",
       "source": "GameSpot",
-      "fetch_time": "2026-03-16T11:33:25.097492",
+      "fetch_time": "2026-03-16T11:34:46.166589",
       "published": "Tue, 10 Feb 2026 06:00:00 -0800"
     },
     {
       "title": "Oscars Winners 2026: The Full List of Winners From the 98th Academy Awards",
       "url": "https://www.ign.com/articles/oscars-winners-2026-the-full-list-of-winners-from-the-98th-academy-awards",
       "source": "IGN",
-      "fetch_time": "2026-03-16T11:33:25.123756",
+      "fetch_time": "2026-03-16T11:34:46.300589",
       "published": "Sun, 15 Mar 2026 22:11:03 +0000"
     },
     {
       "title": "The Best Deals Today: Trails in the Sky 1st Chapter, Dragon Quest VII Reimagined, Nioh 3, and More",
       "url": "https://www.ign.com/articles/best-deals-for-march-15-2026",
       "source": "IGN",
-      "fetch_time": "2026-03-16T11:33:25.123772",
+      "fetch_time": "2026-03-16T11:34:46.300608",
       "published": "Sun, 15 Mar 2026 18:25:33 +0000"
     },
     {
       "title": "The Best Deals Today: Mario Kart World, Astro Bot, NZXT AIO, and More",
       "url": "https://www.ign.com/articles/best-deals-for-march-14-2026",
       "source": "IGN",
-      "fetch_time": "2026-03-16T11:33:25.123779",
+      "fetch_time": "2026-03-16T11:34:46.300614",
       "published": "Sat, 14 Mar 2026 14:00:00 +0000"
     },
     {
       "title": "Slay the Spire 2 Early Access Review",
       "url": "https://www.ign.com/articles/slay-the-spire-2-review-early-access",
       "source": "IGN",
-      "fetch_time": "2026-03-16T11:33:25.123785",
+      "fetch_time": "2026-03-16T11:34:46.300620",
       "published": "Fri, 13 Mar 2026 23:07:53 +0000"
     },
     {
       "title": "Arc Raiders Boss Says Bungie Did a 'Really Good Job' Addressing Feedback After 'Heavily Criticized' Marathon Playtest",
       "url": "https://www.ign.com/articles/arc-raiders-boss-says-bungie-did-a-really-good-job-addressing-feedback-after-heavily-criticized-marathon-playtest",
       "source": "IGN",
-      "fetch_time": "2026-03-16T11:33:25.123791",
+      "fetch_time": "2026-03-16T11:34:46.300626",
       "published": "Fri, 13 Mar 2026 21:25:16 +0000"
     },
     {
       "title": "Embark CEO Says 'Some' Arc Raiders AI Voice Lines Were Re-Recorded by Humans Post-Launch: 'There Is a Quality Difference'",
       "url": "https://www.ign.com/articles/embark-ceo-says-some-arc-raiders-ai-voice-lines-were-re-recorded-by-humans-post-launch-there-is-a-quality-difference",
       "source": "IGN",
-      "fetch_time": "2026-03-16T11:33:25.123797",
+      "fetch_time": "2026-03-16T11:34:46.300632",
       "published": "Fri, 13 Mar 2026 20:57:17 +0000"
     },
     {
       "title": "'It Is Getting Very Hard to Keep Players From Going All Over the Place' — Yes, the Donkey Kong Bananza Devs Are Watching Your Speedruns",
       "url": "https://www.ign.com/articles/it-is-getting-very-hard-to-keep-players-from-going-all-over-the-place-yes-the-donkey-kong-bananza-devs-are-watching-your-speedruns",
       "source": "IGN",
-      "fetch_time": "2026-03-16T11:33:25.123803",
+      "fetch_time": "2026-03-16T11:34:46.300638",
       "published": "Fri, 13 Mar 2026 19:31:08 +0000"
     },
     {
       "title": "\"If We Know People Want It, Never Say Never\" - The Simpsons Showrunner Offers New Hope for Hit & Run Sequel",
       "url": "https://www.ign.com/articles/the-simpsons-hit-run-sequel-remake-never-say-never-producer-matt-selman",
       "source": "IGN",
-      "fetch_time": "2026-03-16T11:33:25.123810",
+      "fetch_time": "2026-03-16T11:34:46.300644",
       "published": "Fri, 13 Mar 2026 18:13:14 +0000"
     },
     {
       "title": "Little Nightmares VR: Altered Echoes’ New Perspective Breathes New Life Into a Winning Formula",
       "url": "https://www.ign.com/articles/little-nightmares-vr-altered-echoes-new-perspective-breathes-new-life-into-a-winning-formula",
       "source": "IGN",
-      "fetch_time": "2026-03-16T11:33:25.123816",
+      "fetch_time": "2026-03-16T11:34:46.300650",
       "published": "Fri, 13 Mar 2026 17:04:49 +0000"
     },
     {
       "title": "Cyberpunk TCG Already Feels Unlike Any Other Card Game Out There, and I Can't Wait to Play More",
       "url": "https://www.ign.com/articles/cyberpunk-tcg-preview-kickstarter-exclusive-card-reveal",
       "source": "IGN",
-      "fetch_time": "2026-03-16T11:33:25.123821",
+      "fetch_time": "2026-03-16T11:34:46.300656",
       "published": "Fri, 13 Mar 2026 17:00:00 +0000"
     },
     {
       "title": "A Pokémon Pokopia Griefing Gang Is Doing Its Best Team Rocket Impression and Blowing Up Players' Precious Endgame Builds",
       "url": "https://www.ign.com/articles/a-pokemon-pokopia-griefing-gang-is-doing-its-best-team-rocket-impression-and-blowing-up-players-precious-endgame-builds",
       "source": "IGN",
-      "fetch_time": "2026-03-16T11:33:25.123827",
+      "fetch_time": "2026-03-16T11:34:46.300662",
       "published": "Fri, 13 Mar 2026 16:46:03 +0000"
     },
     {
       "title": "Donkey Kong Bananza Developers on Voxels, Sandboxes, and a Delicious Bacon Burger Prototype",
       "url": "https://www.ign.com/articles/donkey-kong-bananza-developers-on-voxels-sandboxes-and-a-delicious-bacon-burger-prototype",
       "source": "IGN",
-      "fetch_time": "2026-03-16T11:33:25.123833",
+      "fetch_time": "2026-03-16T11:34:46.300668",
       "published": "Fri, 13 Mar 2026 16:00:00 +0000"
     },
     {
       "title": "Bethesda Boss Todd Howard Will 'Stay the Course on Starfield,' Says Veteran Composer, Who Also Believes 'People Were Just Not Ready For It' at Launch",
       "url": "https://www.ign.com/articles/bethesda-boss-todd-howard-will-stay-the-course-on-starfield-says-veteran-composer-who-also-believes-people-were-just-not-ready-for-it-at-launch",
       "source": "IGN",
-      "fetch_time": "2026-03-16T11:33:25.123840",
+      "fetch_time": "2026-03-16T11:34:46.300673",
       "published": "Fri, 13 Mar 2026 15:16:08 +0000"
     },
     {
       "title": "This Week's Meager Destiny 2 Update Leaves Fans Feeling Like the Franchise is at Its Lowest Ebb Yet, While Bungie Focuses on Trying to Make Marathon a Success",
       "url": "https://www.ign.com/articles/this-weeks-meager-destiny-2-update-leaves-fans-feeling-like-the-franchise-is-at-its-lowest-ebb-yet-while-bungie-focuses-on-trying-to-make-marathon-a-success",
       "source": "IGN",
-      "fetch_time": "2026-03-16T11:33:25.123845",
+      "fetch_time": "2026-03-16T11:34:46.300679",
       "published": "Fri, 13 Mar 2026 11:46:24 +0000"
     },
     {
       "title": "Amid Reports of a Secret DLC for The Witcher 3, CD Projekt Rules Out Further Content for Cyberpunk 2077",
       "url": "https://www.ign.com/articles/amid-reports-of-a-secret-dlc-for-the-witcher-3-cd-projekt-rules-out-further-content-for-cyberpunk-2077",
       "source": "IGN",
-      "fetch_time": "2026-03-16T11:33:25.123851",
+      "fetch_time": "2026-03-16T11:34:46.300685",
       "published": "Fri, 13 Mar 2026 11:27:18 +0000"
     }
   ]
