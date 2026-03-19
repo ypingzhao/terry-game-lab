@@ -5,602 +5,955 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>游戏行业资讯 - Terry Game Lab</title>
     <style>
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --bg-dark: #0f172a;
-            --bg-card: #1e293b;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --accent-gaming: #8b5cf6;
-            --border: #334155;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: var(--bg-dark);
-            color: var(--text-primary);
-            line-height: 1.6;
-        }
-        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
-        
-        /* Header */
-        header {
-            text-align: center;
-            padding: 3rem 0;
-            border-bottom: 1px solid var(--border);
-            margin-bottom: 2rem;
-        }
-        header h1 {
-            font-size: 2.5rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent-gaming));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
-        }
-        header p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-        }
-        .update-time {
-            display: inline-block;
-            background: var(--bg-card);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            margin-top: 1rem;
-        }
-        
-        /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-        .stat-card {
-            background: var(--bg-card);
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            margin-top: 0.5rem;
-        }
-        
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-        .tab {
-            padding: 0.75rem 1.5rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .tab:hover, .tab.active {
-            background: var(--primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
             color: white;
-            border-color: var(--primary);
+            position: relative;
+            overflow-x: hidden;
+            padding: 2rem 0;
         }
         
-        /* Summary Card */
-        .summary-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 2rem;
-            border: 1px solid var(--border);
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') 
+                center/cover no-repeat;
+            opacity: 0.15;
+            z-index: -1;
+            mix-blend-mode: overlay;
+        }
+        
+        /* CRT Monitor Effect - Full Filter */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(0, 0, 0, 0.25),
+                    rgba(0, 0, 0, 0.25) 1px,
+                    transparent 1px,
+                    transparent 2px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    rgba(255, 0, 0, 0.05),
+                    rgba(0, 255, 0, 0.05) 1px,
+                    rgba(0, 0, 255, 0.05) 2px,
+                    transparent 3px
+                ),
+                radial-gradient(
+                    circle at center,
+                    transparent 0%,
+                    rgba(0, 0, 0, 0.3) 80%,
+                    rgba(0, 0, 0, 0.6) 100%
+                ),
+                radial-gradient(
+                    ellipse at center,
+                    transparent 0%,
+                    transparent 80%,
+                    rgba(0, 0, 0, 0.4) 95%,
+                    rgba(0, 0, 0, 0.8) 100%
+                );
+            pointer-events: none;
+            z-index: 9999;
+            animation: 
+                scanlineFlicker 0.5s infinite,
+                screenWarp 10s ease-in-out infinite alternate;
+            mix-blend-mode: overlay;
+        }
+        
+        /* CRT Signal Sweep */
+        .crt-sweep {
+            position: fixed;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 15%;
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                rgba(0, 255, 255, 0.2) 50%,
+                rgba(255, 0, 255, 0.1) 75%,
+                transparent 100%
+            );
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.3);
+            pointer-events: none;
+            z-index: 10000;
+            animation: sweep 20s linear infinite;
+            filter: blur(5px);
+        }
+        
+        /* CRT Flicker Effect */
+        .crt-flicker {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.02);
+            pointer-events: none;
+            z-index: 10001;
+            animation: flicker 0.1s infinite;
+            mix-blend-mode: overlay;
+            opacity: 0.5;
+        }
+        
+        @keyframes scanlineFlicker {
+            0% { opacity: 0.9; }
+            50% { opacity: 1; }
+            100% { opacity: 0.9; }
+        }
+        
+        @keyframes sweep {
+            0% { top: -100%; opacity: 0; }
+            5% { opacity: 1; }
+            95% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
+        
+        @keyframes flicker {
+            0% { opacity: 0.4; }
+            50% { opacity: 0.6; }
+            100% { opacity: 0.4; }
+        }
+        
+        @keyframes screenWarp {
+            0% { transform: scale(1.005); }
+            100% { transform: scale(1); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .back-link {
+            display: inline-block;
+            color: #00ffff;
+            text-decoration: none;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .back-link:hover {
+            text-shadow: 0 0 10px #00ffff;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            letter-spacing: 2px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            opacity: 0.9;
+        }
+        
+        .last-update {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        /* 新闻小结样式 */
+        .news-summary {
             margin-bottom: 2rem;
         }
-        .summary-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border);
+        
+        .summary-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        .summary-header h2 {
+        
+        .summary-card h3 {
             font-size: 1.5rem;
-            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
         }
+        
         .summary-stats {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 1rem;
             margin-bottom: 1.5rem;
         }
-        .summary-stat {
-            text-align: center;
-            padding: 1rem;
-            background: rgba(99, 102, 241, 0.1);
+        
+        .stat-item {
+            background: rgba(0, 255, 255, 0.1);
             border-radius: 12px;
-        }
-        .stat-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        .stat-label {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            margin-top: 0.25rem;
-        }
-        .summary-trending {
-            color: var(--text-primary);
-        }
-        .summary-trending h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.75rem;
-            color: var(--text-primary);
-        }
-        .summary-trending ul {
-            padding-left: 1.5rem;
-        }
-        .summary-trending li {
-            margin-bottom: 0.5rem;
-            color: var(--text-secondary);
+            padding: 1rem;
+            text-align: center;
+            border: 1px solid rgba(0, 255, 255, 0.2);
         }
         
-        /* News Grid */
-        .sources-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 1.5rem;
+        .stat-number {
+            display: block;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00ffff;
         }
-        .source-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 1.5rem;
-            border: 1px solid var(--border);
-            transition: transform 0.2s, box-shadow 0.2s;
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
-        .source-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-        .source-header {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
+        
+        .hot-titles {
             margin-bottom: 1rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid var(--border);
         }
-        .source-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: linear-gradient(135deg, var(--primary), var(--accent-gaming));
+        
+        .hot-titles h4 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: #ff00ff;
+        }
+        
+        .hot-titles ul {
+            list-style: none;
+            padding: 0;
+            columns: 2;
+            gap: 1rem;
+        }
+        
+        .hot-titles li {
+            margin-bottom: 0.8rem;
+            break-inside: avoid;
+        }
+        
+        .hot-titles a {
+            color: white;
+            text-decoration: none;
+            font-size: 0.9rem;
+            opacity: 0.9;
+            transition: all 0.3s ease;
+            line-height: 1.5;
+        }
+        
+        .hot-titles a:hover {
+            color: #00ffff;
+            text-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
+            padding-left: 5px;
+        }
+        
+        .summary-card .last-update {
+            text-align: right;
+            margin-top: 1rem;
+            margin-bottom: 0;
+            font-style: italic;
+        }
+        
+        .refresh-btn {
+            background: rgba(0, 255, 255, 0.2);
+            border: 1px solid #00ffff;
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .refresh-btn:hover {
+            background: rgba(0, 255, 255, 0.4);
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.5);
+        }
+        
+        .filters {
             display: flex;
-            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
             justify-content: center;
-            font-size: 1.2rem;
+            margin-bottom: 2rem;
         }
-        .source-name {
-            font-size: 1.25rem;
-            font-weight: 600;
+        
+        .filter-tag {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
-        .news-count {
-            margin-left: auto;
-            background: rgba(99, 102, 241, 0.2);
+        
+        .filter-tag:hover, .filter-tag.active {
+            background: rgba(0, 255, 255, 0.3);
+            border-color: #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.3);
+        }
+        
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .news-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .news-source {
+            display: inline-block;
+            background: rgba(255, 0, 255, 0.3);
             padding: 0.25rem 0.75rem;
             border-radius: 12px;
-            font-size: 0.8rem;
-            color: var(--primary);
-        }
-        .news-list {
-            list-style: none;
-        }
-        .news-item {
-            padding: 0.75rem 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-        .news-item:last-child {
-            border-bottom: none;
-        }
-        .news-link {
-            color: var(--text-primary);
-            text-decoration: none;
-            display: block;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            transition: color 0.2s;
-        }
-        .news-link:hover {
-            color: var(--primary);
-        }
-        .news-time {
             font-size: 0.75rem;
-            color: var(--text-secondary);
-            margin-top: 0.25rem;
+            margin-bottom: 0.75rem;
         }
+        
+        .news-category {
+            display: inline-block;
+            background: rgba(0, 255, 255, 0.3);
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-left: 0.5rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .news-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+        
+        .news-title a {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .news-title a:hover {
+            color: #00ffff;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        
+        .news-summary {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+        
+        .news-time {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            align-self: flex-end;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.2rem;
+            opacity: 0.7;
+        }
+        
+        .error {
+            text-align: center;
+            padding: 3rem;
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            opacity: 0.7;
+        }
+        
         footer {
             text-align: center;
-            padding: 2rem;
-            margin-top: 3rem;
-            border-top: 1px solid var(--border);
-            color: var(--text-secondary);
-            font-size: 0.875rem;
+            margin-top: 4rem;
+            font-size: 0.9rem;
+            opacity: 0.7;
         }
+        
         @media (max-width: 768px) {
-            .container { padding: 1rem; }
-            header h1 { font-size: 1.75rem; }
-            .sources-grid { grid-template-columns: 1fr; }
-            .tabs { overflow-x: auto; }
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .subtitle {
+                font-size: 1rem;
+            }
+            
+            .news-grid {
+                grid-template-columns: 1fr;
+                padding: 0 1rem;
+            }
+            
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .hot-titles ul {
+                columns: 1;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- CRT Effects -->
+    <div class="crt-sweep"></div>
+    <div class="crt-flicker"></div>
+
     <div class="container">
-        <header>
-            <h1>🎮 游戏行业资讯</h1>
-            <p>聚合全球游戏新闻 · 每小时自动更新</p>
-            <div class="update-time">⏰ 最后更新：2026-03-16 17:00:03</div>
-        </header>
-        
-        <!-- 新闻小结 -->
-
-        <div class="summary-card">
-            <div class="summary-header">
-                <h2>📝 游戏行业新闻小结</h2>
-                <span class="update-time">更新于 2026-03-16 17:00</span>
-            </div>
-            <div class="summary-content">
-                <div class="summary-stats">
-                    <div class="summary-stat">
-                        <div class="stat-number">14</div>
-                        <div class="stat-label">新作发布</div>
-                    </div>
-                    <div class="summary-stat">
-                        <div class="stat-number">8</div>
-                        <div class="stat-label">行业资本</div>
-                    </div>
-                    <div class="summary-stat">
-                        <div class="stat-number">2</div>
-                        <div class="stat-label">公司动态</div>
-                    </div>
-                    <div class="summary-stat">
-                        <div class="stat-number">0</div>
-                        <div class="stat-label">技术创新</div>
-                    </div>
-                </div>
-                <div class="summary-trending">
-                    <h3>🔥 热门游戏标题</h3>
-                    <ul>
-                        <li>好未来发布首个专为教师打造的AI原生桌面智能体九章龙虾</li>
-                        <li>南网储能：拟投资73.79亿元建设广东新丰抽水蓄能电站</li>
-                        <li>湖南高速投资控股公司增资至30亿元</li>
-                        <li>清���科技发布双品牌战略，将拓展服务机器人核心部件领域丨最前线</li>
-                        <li>松下发布中国事业新战略：明星单品、套系家电加码，强调“Made by China”出海丨最前线</li>
-                    </ul>
-                </div>
-            </div>
+        <div class="header">
+            <a href="index.html" class="back-link">← 返回首页</a>
+            <h1>📰 游戏行业资讯</h1>
+            <p class="subtitle">每日聚合全球游戏行业新闻动态，整合热门游戏媒体资讯</p>
+            <div class="last-update">最后更新: <span id="last-update">加载中...</span></div>
+            <button class="refresh-btn" onclick="loadNews()">🔄 刷新资讯</button>
         </div>
-        
-        <!-- Stats -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-value">{total_news}</div>
-                <div class="stat-label">总新闻数</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">{len(cn_sources)}</div>
-                <div class="stat-label">国内媒体</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">{len(intl_sources)}</div>
-                <div class="stat-label">国际媒体</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value">{successful_sources}/{total_sources}</div>
-                <div class="stat-label">活跃来源</div>
-            </div>
+
+        <div id="news-summary-container"></div>
+
+
+
+<!-- 新闻小结 START -->
+<div class="news-summary">
+  <div class="summary-card">
+    <h3>📊 今日资讯小结</h3>
+    <div class="summary-stats">
+      <div class="stat-item">
+        <span class="stat-number">60</span>
+        <span class="stat-label">总资讯</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">50</span>
+        <span class="stat-label">新游发布</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">10</span>
+        <span class="stat-label">行业资本</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">0</span>
+        <span class="stat-label">公司动态</span>
+      </div>
+    </div>
+    <div class="hot-titles">
+      <h4>🔥 最新热门</h4>
+      <ul>
+        <li><a href="https://youxichaguan.com/archives/191776" target="_blank" rel="noopener">埋头苦干八个月，900万玩家期待的新作完成度如何了？</a></li>
+  <li><a href="https://youxichaguan.com/archives/191759" target="_blank" rel="noopener">国民游戏的增长红利:王者荣耀37次登上财报</a></li>
+  <li><a href="https://kotaku.com/crimson-desert-metacritic-scores-review-roundup-2000680110" target="_blank" rel="noopener">Crimson Desert Reviews Hail It As A Gorgeous And Impressive But Bland And Often Flawed Open-World Blockbuster</a></li>
+  <li><a href="https://www.polygon.com/crimson-desert-review-round-up/" target="_blank" rel="noopener">Crimson Desert reviews say it's not the second coming of open-world games</a></li>
+  <li><a href="https://www.polygon.com/crimson-desert-ps5-xbox-reviews/" target="_blank" rel="noopener">Crimson Desert reviews overlook PS5, Xbox version performance</a></li>
+  <li><a href="https://www.polygon.com/crimson-desert-impressions-early-hours/" target="_blank" rel="noopener">Crimson Desert review: 20 hours in, bigger open worlds aren't better</a></li>
+  <li><a href="https://www.rockpapershotgun.com/our-early-verdict-on-crimson-desert-bad-bugs-great-cats-and-an-open-world-that-could-use-a-big-bucket-of-yellow-paint" target="_blank" rel="noopener">Our early verdict on Crimson Desert: bad bugs, great cats, and an open world that could use a big bucket of yellow paint</a></li>
+  <li><a href="https://kotaku.com/tomb-raider-remake-crystal-dynamics-layoffs-2000680096" target="_blank" rel="noopener">Tomb Raider Studio Faces Fourth Round Of Layoffs In Just 12 Months</a></li>
+  <li><a href="https://kotaku.com/kpop-demon-hunters-concert-ejae-audrey-nuna-rei-ami-2000680075" target="_blank" rel="noopener">KPop Demon Hunters Concert Tour Could Be Coming To An Arena Near You</a></li>
+  <li><a href="https://www.polygon.com/spider-man-brand-new-day-animated-series-arc/" target="_blank" rel="noopener">Spider-Man: Brand New Day is for Animated Series fans who remember Man-Spider</a></li>
+  <li><a href="https://kotaku.com/xbox-quick-resume-update-turn-off-2000680058" target="_blank" rel="noopener">Xbox’s Best Feature In Years Just Got A Huge Fix</a></li>
+  <li><a href="https://kotaku.com/resident-evil-requiem-leon-married-wedding-ring-ada-claire-2000680062" target="_blank" rel="noopener">Resident Evil Dev Knows You’re Dying To Find Out Who Leon Married</a></li>
+  <li><a href="https://www.polygon.com/resident-evil-requiem-leon-kennedy-ring-married-director/" target="_blank" rel="noopener">Resident Evil Requiem director offers another hint about Leon's ring</a></li>
+  <li><a href="https://kotaku.com/slay-the-spire-2-tips-tricks-beginner-deckbuilding-2000680050" target="_blank" rel="noopener">A Slay The Spire 2 Guide For Getting Better And Surviving Your First Full Run</a></li>
+  <li><a href="https://www.polygon.com/cyberpunk-tcg-kickstarter-broke-records/" target="_blank" rel="noopener">Cyberpunk trading card game Kickstarter raises $8 million in 24 hours</a></li>
+      </ul>
+    </div>
+    <div class="last-update">最后更新：2026/3/19 11:04:47</div>
+  </div>
+</div>
+<!-- 新闻小结 END -->
+
+
+        <div class="filters">
+            <span class="filter-tag active" data-category="all" onclick="filterNews('all')">全部</span>
+            <span class="filter-tag" data-category="industry" onclick="filterNews('industry')">行业动态</span>
+            <span class="filter-tag" data-category="company" onclick="filterNews('company')">厂商动态</span>
+            <span class="filter-tag" data-category="game" onclick="filterNews('game')">新游发布</span>
+            <span class="filter-tag" data-category="investment" onclick="filterNews('investment')">投融资</span>
+            <span class="filter-tag" data-category="policy" onclick="filterNews('policy')">政策监管</span>
         </div>
-        
-        <!-- Tabs -->
-        <div class="tabs">
-            <div class="tab active" onclick="filterSource('all')">全部</div>
-            <div class="tab" onclick="filterSource('cn')">国内</div>
-            <div class="tab" onclick="filterSource('intl')">国际</div>
-            {''.join([f'<div class="tab" onclick="filterSource(&quot;{s}&quot;)">{s}</div>' for s in list(grouped.keys())[:6]])}
+
+        <div id="news-container">
+            <div class="loading">正在加载最新游戏资讯...</div>
         </div>
-        
-        <div class="sources-grid">
 
-            <div class="source-card" data-source="36氪" data-type="cn">
-                <div class="source-header">
-                    <div class="source-icon">🎮</div>
-                    <div class="source-name">36氪</div>
-                    <div class="news-count">49</div>
-                </div>
-                <ul class="news-list">
-
-                    <li class="news-item">
-                        <a href="https://36kr.com/newsflashes/3725361214913161?f=rss" target="_blank" class="news-link">好未来发布首个专为教师打造的AI原生桌面智能体九章龙虾</a>
-                        <div class="news-time">03-16 16:58</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://36kr.com/newsflashes/3725373879270019?f=rss" target="_blank" class="news-link">南网储能：拟投资73.79亿元建设广东新丰抽水蓄能电站</a>
-                        <div class="news-time">03-16 16:58</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://36kr.com/newsflashes/3725379404036487?f=rss" target="_blank" class="news-link">沃森生物：筹划公司控制权变更事项，明起停牌</a>
-                        <div class="news-time">03-16 16:58</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://36kr.com/newsflashes/3725374375999880?f=rss" target="_blank" class="news-link">周生生：预计2025财年来自持续经营业务的公司拥有人应占溢利16亿至17亿港元</a>
-                        <div class="news-time">03-16 16:58</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://36kr.com/newsflashes/3725372886268295?f=rss" target="_blank" class="news-link">智飞生物：改良型安卡拉痘苗病毒猴痘减毒活疫苗获得临床试验批准通知书，国内暂无猴痘疫苗获批上市使用</a>
-                        <div class="news-time">03-16 16:58</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://36kr.com/newsflashes/3725303355128455?f=rss" target="_blank" class="news-link">湖南高速投资控股公司增资至30亿元</a>
-                        <div class="news-time">03-16 15:56</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://36kr.com/newsflashes/3725310655363718?f=rss" target="_blank" class="news-link">李彦宏牵头成立的AI生命科学公司，被曝赴港上市</a>
-                        <div class="news-time">03-16 15:56</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://36kr.com/newsflashes/3725312802830981?f=rss" target="_blank" class="news-link">东兴证券：重大资产重组交易相关的审计等工作尚未完成</a>
-                        <div class="news-time">03-16 15:56</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://36kr.com/newsflashes/3725312217905792?f=rss" target="_blank" class="news-link">安徽建工：子公司中标两个高速公路工程项目</a>
-                        <div class="news-time">03-16 15:56</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://36kr.com/newsflashes/3725320673196678?f=rss" target="_blank" class="news-link">百川股份回应产品涨价：价格波动可持续性具有不确定性，暂无法预计后续价格及影响程度</a>
-                        <div class="news-time">03-16 15:56</div>
-                    </li>
-
-                </ul>
-            </div>
-
-            <div class="source-card" data-source="IGN" data-type="intl">
-                <div class="source-header">
-                    <div class="source-icon">🌐</div>
-                    <div class="source-name">IGN</div>
-                    <div class="news-count">16</div>
-                </div>
-                <ul class="news-list">
-
-                    <li class="news-item">
-                        <a href="https://www.ign.com/articles/pokemon-pokopia-update-coming-bringing-improvements-and-bug-fixes" target="_blank" class="news-link">Pokémon Pokopia Update Coming, Bringing Improvements and Bug Fixes</a>
-                        <div class="news-time">03-16 13:00</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://www.ign.com/articles/amid-reports-of-a-secret-dlc-for-the-witcher-3-cd-projekt-rules-out-further-content-for-cyberpunk-2077" target="_blank" class="news-link">Amid Reports of a Secret DLC for The Witcher 3, CD Projekt Rules Out Further Content for Cyberpunk 2077</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://www.ign.com/articles/this-weeks-meager-destiny-2-update-leaves-fans-feeling-like-the-franchise-is-at-its-lowest-ebb-yet-while-bungie-focuses-on-trying-to-make-marathon-a-success" target="_blank" class="news-link">This Week&#x27;s Meager Destiny 2 Update Leaves Fans Feeling Like the Franchise is at Its Lowest Ebb Yet, While Bungie Focuses on Trying to Make Marathon a Success</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://www.ign.com/articles/bethesda-boss-todd-howard-will-stay-the-course-on-starfield-says-veteran-composer-who-also-believes-people-were-just-not-ready-for-it-at-launch" target="_blank" class="news-link">Bethesda Boss Todd Howard Will &#x27;Stay the Course on Starfield,&#x27; Says Veteran Composer, Who Also Believes &#x27;People Were Just Not Ready For It&#x27; at Launch</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://www.ign.com/articles/donkey-kong-bananza-developers-on-voxels-sandboxes-and-a-delicious-bacon-burger-prototype" target="_blank" class="news-link">Donkey Kong Bananza Developers on Voxels, Sandboxes, and a Delicious Bacon Burger Prototype</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://www.ign.com/articles/a-pokemon-pokopia-griefing-gang-is-doing-its-best-team-rocket-impression-and-blowing-up-players-precious-endgame-builds" target="_blank" class="news-link">A Pokémon Pokopia Griefing Gang Is Doing Its Best Team Rocket Impression and Blowing Up Players&#x27; Precious Endgame Builds</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://www.ign.com/articles/cyberpunk-tcg-preview-kickstarter-exclusive-card-reveal" target="_blank" class="news-link">Cyberpunk TCG Already Feels Unlike Any Other Card Game Out There, and I Can&#x27;t Wait to Play More</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://www.ign.com/articles/little-nightmares-vr-altered-echoes-new-perspective-breathes-new-life-into-a-winning-formula" target="_blank" class="news-link">Little Nightmares VR: Altered Echoes’ New Perspective Breathes New Life Into a Winning Formula</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://www.ign.com/articles/the-simpsons-hit-run-sequel-remake-never-say-never-producer-matt-selman" target="_blank" class="news-link">&quot;If We Know People Want It, Never Say Never&quot; - The Simpsons Showrunner Offers New Hope for Hit &amp; Run Sequel</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://www.ign.com/articles/it-is-getting-very-hard-to-keep-players-from-going-all-over-the-place-yes-the-donkey-kong-bananza-devs-are-watching-your-speedruns" target="_blank" class="news-link">&#x27;It Is Getting Very Hard to Keep Players From Going All Over the Place&#x27; — Yes, the Donkey Kong Bananza Devs Are Watching Your Speedruns</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                </ul>
-            </div>
-
-            <div class="source-card" data-source="GameSpot" data-type="intl">
-                <div class="source-header">
-                    <div class="source-icon">🌐</div>
-                    <div class="source-name">GameSpot</div>
-                    <div class="news-count">15</div>
-                </div>
-                <ul class="news-list">
-
-                    <li class="news-item">
-                        <a href="https://www.gamespot.com/reviews/romeo-is-a-dead-man-review-keep-sleeping-dead-man/1900-6418459/?ftag=CAD-01-10abi2f" target="_blank" class="news-link">Romeo Is a Dead Man Review - Keep Sleeping, Dead Man</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://www.gamespot.com/reviews/mario-tennis-fever-review-bringing-the-heat/1900-6418460/?ftag=CAD-01-10abi2f" target="_blank" class="news-link">Mario Tennis Fever Review - Bringing The Heat</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://www.gamespot.com/reviews/reanimal-review/1900-6418461/?ftag=CAD-01-10abi2f" target="_blank" class="news-link">Reanimal Review - Doomed, But Not Alone</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://www.gamespot.com/reviews/crisol-theater-of-idols-review-drained-dry/1900-6418462/?ftag=CAD-01-10abi2f" target="_blank" class="news-link">Crisol: Theater of Idols Review - Drained Dry</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://www.gamespot.com/reviews/high-on-life-2-review-skate-n-gun/1900-6418463/?ftag=CAD-01-10abi2f" target="_blank" class="news-link">High On Life 2 Review - Skate &#x27;N Gun</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://www.gamespot.com/reviews/resident-evil-requiem-review-two-headed-mutant/1900-6418464/?ftag=CAD-01-10abi2f" target="_blank" class="news-link">Resident Evil Requiem Review - Two-Headed Mutant</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://www.gamespot.com/reviews/pokemon-pokopia-review-the-pokemon-anniversary-gift-i-didnt-know-i-wanted/1900-6418465/?ftag=CAD-01-10abi2f" target="_blank" class="news-link">Pokemon Pokopia Review - The Pokemon Anniversary Gift I Didn&#x27;t Know I Wanted</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://www.gamespot.com/reviews/god-of-war-sons-of-sparta-review-the-mildly-amusing-adventures-of-teen-kratos/1900-6418466/?ftag=CAD-01-10abi2f" target="_blank" class="news-link">God Of War: Sons Of Sparta Review - The Mildly Amusing Adventures Of Teen Kratos</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://www.gamespot.com/reviews/esoteric-ebb-review-chaotic-good/1900-6418467/?ftag=CAD-01-10abi2f" target="_blank" class="news-link">Esoteric Ebb Review - Chaotic Good</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://www.gamespot.com/reviews/scott-pilgrim-ex-review-a-short-but-sweet-millennial-nostalgia-romp/1900-6418468/?ftag=CAD-01-10abi2f" target="_blank" class="news-link">Scott Pilgrim EX Review - A Short But Sweet Millennial Nostalgia Romp</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                </ul>
-            </div>
-
-            <div class="source-card" data-source="游戏茶馆" data-type="cn">
-                <div class="source-header">
-                    <div class="source-icon">🎮</div>
-                    <div class="source-name">游戏茶馆</div>
-                    <div class="news-count">10</div>
-                </div>
-                <ul class="news-list">
-
-                    <li class="news-item">
-                        <a href="https://youxichaguan.com/archives/191468" target="_blank" class="news-link">《敢达争锋对决》神燃炎敢达实装！神树流奥义点燃近战战场！</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://youxichaguan.com/archives/191490" target="_blank" class="news-link">魔域口袋版317周年庆开启“全民欧皇”模式：免费送周年宠，雷神降临重构战力格局</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://youxichaguan.com/archives/191494" target="_blank" class="news-link">《潜水员戴夫》大型DLC「In the Jungle-丛林」将于6月18日上线</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://youxichaguan.com/archives/191489" target="_blank" class="news-link">《ATMOSFAR-异星遗航》Steam 愿望单突破15万 2026年第二季度展开抢先体验</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://youxichaguan.com/archives/191488" target="_blank" class="news-link">《折言》在游戏界奥斯卡——GDC 2026获得玩家选择奖！</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://youxichaguan.com/archives/191523" target="_blank" class="news-link">《中国足球模拟器》现已发售！</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://youxichaguan.com/archives/191533" target="_blank" class="news-link">坐拥3.5亿用户基盘却不想“赚快钱”，这款腾讯产品想重新定义品类未来</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://youxichaguan.com/archives/191557" target="_blank" class="news-link">全球AI风暴下，我在GDC看到游戏行业的答案</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://youxichaguan.com/archives/191566" target="_blank" class="news-link">SLG做成了，卡牌做成了…这家游戏公司还缺一个你</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                    <li class="news-item">
-                        <a href="https://youxichaguan.com/archives/191577" target="_blank" class="news-link">上线三月超1.5亿，米哈游分享：“和原神不一样，我就知道我们做对了”</a>
-                        <div class="news-time">03-16 12:37</div>
-                    </li>
-
-                </ul>
-            </div>
-
-        </div>
-        
         <footer>
-            <p>© 2026 Terry Game Lab · 游戏行业资讯聚合</p>
-            <p>通过RSS抓取 · 每小时自动更新 · 数据来源于各大游戏媒体</p>
+            <p>© 2024 Terry Game Lab. 资讯来源于公开游戏媒体RSS聚合。</p>
         </footer>
     </div>
     
     <script>
-        function filterSource(type) {
-            const cards = document.querySelectorAll('.source-card');
-            const tabs = document.querySelectorAll('.tab');
+        // 游戏资讯RSS源列表 - 从配置文件加载
+        let NEWS_SOURCES = [];
+        const DEFAULT_COLORS = [
+            'rgba(255, 0, 255, 0.3)',
+            'rgba(255, 165, 0, 0.3)',
+            'rgba(50, 205, 50, 0.3)',
+            'rgba(30, 144, 255, 0.3)',
+            'rgba(255, 69, 0, 0.3)',
+            'rgba(0, 255, 255, 0.3)',
+            'rgba(138, 43, 226, 0.3)',
+            'rgba(0, 255, 127, 0.3)'
+        ];
+        
+        let allNews = [];
+        let currentCategory = 'all';
+        
+        // 使用RSS转换服务（尝试多个CORS代理，提高成功率）
+        const CORS_PROXIES = [
+            'https://api.allorigins.win/raw?url=',
+            'https://api.codetabs.com/v1/proxy?quest=',
+            'https://cors-anywhere.herokuapp.com/'
+        ];
+        let currentProxyIndex = 0;
+        function getCORSProxy() {
+            return CORS_PROXIES[currentProxyIndex];
+        }
+        
+        async function parseRSSFeed(source, xmlText) {
+            try {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+                
+                // 处理解析错误
+                const parseError = xmlDoc.querySelector('parsererror');
+                if (parseError) {
+                    console.error(`RSS解析错误: ${source.name}`);
+                    return [];
+                }
+                
+                const items = xmlDoc.querySelectorAll('item');
+                return Array.from(items).slice(0, 15).map(item => {
+                    const title = item.querySelector('title')?.textContent || '';
+                    const link = item.querySelector('link')?.textContent || '';
+                    const description = item.querySelector('description')?.textContent || '';
+                    const pubDate = item.querySelector('pubDate')?.textContent || '';
+                    
+                    // 支持单个分类字符串或多个分类数组
+                    const categories = Array.isArray(source.categories) ? source.categories : [source.category || source.categories];
+                    
+                    return {
+                        title: title,
+                        link: link,
+                        summary: description.replace(/<[^>]*>/g, '').slice(0, 200) + '...',
+                        time: new Date(pubDate),
+                        source: source.name,
+                        categories: categories,
+                        sourceColor: source.color
+                    };
+                });
+            } catch (e) {
+                console.error(`获取 ${source.name} 资讯失败:`, e);
+                return [];
+            }
+        }
+        
+        async function loadNews() {
+            const container = document.getElementById('news-container');
+            container.innerHTML = '<div class="loading">正在获取最新游戏资讯...</div>';
             
-            // Update active tab
-            tabs.forEach(tab => {
-                tab.classList.remove('active');
-                if (tab.textContent.includes('全部') && type === 'all') tab.classList.add('active');
-                if (tab.textContent.includes('国内') && type === 'cn') tab.classList.add('active');
-                if (tab.textContent.includes('国际') && type === 'intl') tab.classList.add('active');
-                if (tab.textContent === type) tab.classList.add('active');
+            try {
+                const newsPromises = NEWS_SOURCES.map(async (source) => {
+                    // 尝试每个代理
+                    for (let i = 0; i < CORS_PROXIES.length; i++) {
+                        try {
+                            const proxy = CORS_PROXIES[i];
+                            const response = await fetch(proxy + encodeURIComponent(source.url));
+                            if (response.ok) {
+                                const text = await response.text();
+                                return await parseRSSFeed(source, text);
+                            }
+                        } catch (e) {
+                            console.warn(`代理 ${i+1} 获取 ${source.name} 失败，尝试下一个:`, e.message);
+                        }
+                    }
+                    console.error(`所有代理都无法获取 ${source.name}`);
+                    return [];
+                });
+                
+                const results = await Promise.allSettled(newsPromises);
+                allNews = [];
+                
+                results.forEach(result => {
+                    if (result.status === 'fulfilled' && result.value.length > 0) {
+                        allNews = allNews.concat(result.value);
+                    }
+                });
+                
+                // 按时间排序
+                allNews.sort((a, b) => b.time - a.time);
+                
+                // 如果已有静态缓存，合并去重
+                try {
+                    const response = await fetch('cached-news.json');
+                    if (response.ok) {
+                        const existing = await response.json();
+                        allNews = mergeNews(existing, allNews);
+                    }
+                } catch (e) {
+                    // 忽略，继续使用新抓取的
+                }
+                
+                // 更新最后更新时间
+                document.getElementById('last-update').textContent = new Date().toLocaleString('zh-CN');
+                
+                // 缓存到浏览器本地
+                localStorage.setItem('terry-game-news', JSON.stringify(allNews));
+                localStorage.setItem('terry-game-news-time', Date.now().toString());
+                
+                // 渲染新闻
+                renderNews();
+                
+                // 显示保存提示
+                if (allNews.length > 0) {
+                    // 添加刷新提示
+                    setTimeout(() => {
+                        showSaveHint();
+                    }, 1000);
+                } else {
+                    container.innerHTML = `
+                        <div class="error">
+                            <h3>暂时无法获取新闻资讯</h3>
+                            <p>可能是由于CORS跨域限制。您可以：</p>
+                            <ul style="margin-top: 1rem; text-align: left; list-style-position: inside;">
+                                <li>点击刷新按钮重新尝试</li>
+                                <li>获取成功后可导出JSON保存到 <code>cached-news.json</code></li>
+                                <li>添加更多可用的RSS源</li>
+                            </ul>
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                console.error('加载新闻失败:', e);
+                container.innerHTML = `
+                    <div class="error">
+                        <h3>加载失败</h3>
+                        <p>${e.message}</p>
+                    </div>
+                `;
+            }
+            
+            function showSaveHint() {
+                const hintDiv = document.createElement('div');
+                hintDiv.style.cssText = 'position: fixed; bottom: 20px; right: 20px; background: rgba(0, 255, 255, 0.15); backdrop-filter: blur(10px); border: 1px solid #00ffff; border-radius: 10px; padding: 1rem; max-width: 350px;';
+                hintDiv.innerHTML = `
+                    <h4 style="margin-bottom: 0.5rem; color: #00ffff;">📥 已获取新闻</h4>
+                    <p style="font-size: 0.85rem; line-height: 1.5; opacity: 0.9;">
+                        按F12打开控制台，输入:<br>
+                        <code style="background: rgba(0,0,0,0.3); padding: 2px 5px; border-radius: 3px;">copy(JSON.stringify(allNews, null, 2))</code><br>
+                        复制后粘贴到 <code>cached-news.json</code> 提交到GitHub即可永久保存
+                    </p>
+                    <button onclick="this.parentElement.remove()" style="margin-top: 0.5rem; background: rgba(0, 255, 255, 0.3); border: 1px solid #00ffff; color: white; padding: 0.3rem 1rem; border-radius: 5px; cursor: pointer;">关闭</button>
+                `;
+                document.body.appendChild(hintDiv);
+            }
+        }
+        
+        function renderNews() {
+            const container = document.getElementById('news-container');
+            const filteredNews = currentCategory === 'all' 
+                ? allNews 
+                : allNews.filter(news => news.categories.includes(currentCategory));
+            
+            if (filteredNews.length === 0) {
+                container.innerHTML = '<div class="empty-state">该分类暂无新闻资讯</div>';
+                return;
+            }
+            
+            let html = '<div class="news-grid">';
+            
+            filteredNews.forEach(news => {
+                const timeStr = formatTime(news.time);
+                const categoryTags = news.categories.map(cat => 
+                    `<span class="news-category">${getCategoryName(cat)}</span>`
+                ).join('');
+                html += `
+                    <div class="news-card">
+                        <div>
+                            <span class="news-source" style="background: ${news.sourceColor}">${news.source}</span>
+                            ${categoryTags}
+                            <h3 class="news-title"><a href="${news.link}" target="_blank" rel="noopener">${news.title}</a></h3>
+                            <p class="news-summary">${news.summary}</p>
+                        </div>
+                        <div class="news-time">${timeStr}</div>
+                    </div>
+                `;
             });
             
-            // Filter cards
-            cards.forEach(card => {
-                if (type === 'all') {
-                    card.style.display = 'block';
-                } else if (type === 'cn') {
-                    card.style.display = card.dataset.type === 'cn' ? 'block' : 'none';
-                } else if (type === 'intl') {
-                    card.style.display = card.dataset.type === 'intl' ? 'block' : 'none';
+            html += '</div>';
+            container.innerHTML = html;
+        }
+        
+        function filterNews(category) {
+            currentCategory = category;
+            
+            // 更新active状态
+            document.querySelectorAll('.filter-tag').forEach(tag => {
+                if (tag.dataset.category === category) {
+                    tag.classList.add('active');
                 } else {
-                    card.style.display = card.dataset.source === type ? 'block' : 'none';
+                    tag.classList.remove('active');
                 }
             });
+            
+            renderNews();
+        }
+        
+        function formatTime(date) {
+            const now = new Date();
+            const diff = now - date;
+            const minutes = Math.floor(diff / (1000 * 60));
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            
+            if (diff < 1000 * 60 * 60) {
+                return `${minutes}分钟前`;
+            } else if (diff < 1000 * 60 * 60 * 24) {
+                return `${hours}小时前`;
+            } else if (days < 7) {
+                return `${days}天前`;
+            } else {
+                return date.toLocaleDateString('zh-CN');
+            }
+        }
+        
+        function getCategoryName(category) {
+            const names = {
+                industry: '行业动态',
+                company: '厂商',
+                game: '新游',
+                investment: '投融资',
+                policy: '政策'
+            };
+            return names[category] || category;
+        }
+        
+        // 加载RSS源配置
+        async function loadSourcesConfig() {
+            try {
+                const response = await fetch('news-sources.json?' + new Date().getTime());
+                if (response.ok) {
+                    const config = await response.json();
+                    // 只加载启用的源，并添加颜色，兼容旧配置格式
+                    NEWS_SOURCES = config
+                        .filter(source => source.enabled)
+                        .map((source, index) => {
+                            // 兼容旧配置：如果是category，转换为categories数组
+                            if (source.category && !source.categories) {
+                                source.categories = [source.category];
+                            }
+                            return {
+                                ...source,
+                                color: DEFAULT_COLORS[index % DEFAULT_COLORS.length]
+                            };
+                        });
+                    console.log(`已加载 ${NEWS_SOURCES.length} 个启用的新闻源`);
+                    return true;
+                }
+            } catch (e) {
+                console.warn('加载配置文件失败，使用默认配置:', e);
+            }
+            
+            // 默认配置（降级方案）
+            NEWS_SOURCES = [
+                { name: '游戏葡萄', url: 'https://www.yqqlm.com/feed', categories: ['industry'], color: 'rgba(255, 0, 255, 0.3)' },
+                { name: 'GameRes', url: 'https://www.gameres.com/rss', categories: ['industry'], color: 'rgba(255, 165, 0, 0.3)' },
+                { name: '游研社', url: 'https://www.yystv.cn/rss', categories: ['game'], color: 'rgba(50, 205, 50, 0.3)' },
+                { name: 'GameLook', url: 'https://www.gamelook.com.cn/feed/', categories: ['industry', 'investment'], color: 'rgba(30, 144, 255, 0.3)' }
+            ];
+            // 兼容旧配置格式
+            NEWS_SOURCES = NEWS_SOURCES.map(s => {
+                if (s.category && !s.categories) {
+                    s.categories = [s.category];
+                }
+                return s;
+            });
+            return false;
+        }
+        
+        // 从静态缓存文件加载（永久保存）
+        async function loadCachedNewsFromFile() {
+            try {
+                const response = await fetch('cached-news.json?' + new Date().getTime());
+                if (response.ok) {
+                    const cached = await response.json();
+                    if (cached.length > 0) {
+                        allNews = cached;
+                        // 确保time是数字（从JSON读取本来就是数字）
+                        // 如果是Date对象需要转换，JSON化后已经是number
+                        allNews.forEach(n => {
+                            if (typeof n.time !== 'number') {
+                                n.time = new Date(n.time).getTime();
+                            }
+                        });
+                        // 按时间排序
+                        allNews.sort((a, b) => b.time - a.time);
+                        console.log(`从静态缓存加载了 ${allNews.length} 条新闻`);
+                        
+                        // 获取缓存更新时间（从文件的最新新闻推断）
+                        const latestTime = Math.max(...allNews.map(n => n.time));
+                        document.getElementById('last-update').textContent = 
+                            '缓存: ' + new Date(latestTime).toLocaleString('zh-CN');
+                            
+                        renderNews();
+                        return true;
+                    }
+                }
+            } catch (e) {
+                console.warn('加载静态缓存失败:', e);
+            }
+            return false;
+        }
+        
+        // 浏览器端缓存（2小时内有效，加速访问）
+        function loadCachedNewsLocal() {
+            const cached = localStorage.getItem('terry-game-news');
+            const cacheTime = localStorage.getItem('terry-game-news-time');
+            
+            if (cached && cacheTime) {
+                const now = Date.now();
+                if (now - parseInt(cacheTime) < 2 * 60 * 60 * 1000) {
+                    allNews = JSON.parse(cached);
+                    document.getElementById('last-update').textContent = new Date(parseInt(cacheTime)).toLocaleString('zh-CN');
+                    renderNews();
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        // 合并新抓取的新闻到缓存，去重
+        function mergeNews(existingNews, newNews) {
+            const urlMap = new Map();
+            
+            // 先添加已有新闻
+            existingNews.forEach(n => {
+                urlMap.set(n.link, n);
+            });
+            
+            // 添加新新闻（相同URL会覆盖，保证最新）
+            newNews.forEach(n => {
+                urlMap.set(n.link, n);
+            });
+            
+            // 转换回数组，按时间排序
+            let merged = Array.from(urlMap.values());
+            merged.sort((a, b) => b.time - a.time);
+            
+            // 只保留最近90天的新闻，避免文件过大
+            const ninetyDaysAgo = Date.now() - 90 * 24 * 60 * 60 * 1000;
+            merged = merged.filter(n => (typeof n.time === 'number' ? n.time : n.time.getTime()) > ninetyDaysAgo);
+            
+            // 最多保留200条新闻
+            if (merged.length > 200) {
+                merged = merged.slice(0, 200);
+            }
+            
+            return merged;
+        }
+        
+        // 页面加载完成后自动加载新闻
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadSourcesConfig();
+            // 优先从静态缓存加载（永久保存在GitHub仓库）
+            try {
+                const loaded = await loadCachedNewsFromFile();
+                if (loaded) {
+                    // 静态缓存加载成功，直接显示
+                    // 新闻更新由GitHub Actions定时自动抓取，更新后提交到仓库
+                    // 前端不需要每次都抓取，直接读缓存即可
+                    return;
+                }
+            } catch (e) {
+                console.error('加载静态缓存异常:', e);
+            }
+            // 只有当静态缓存为空时，才尝试抓取
+            if (!loadCachedNewsLocal()) {
+                loadNews();
+            }
+        });
+        
+        // 静默更新，不干扰用户看缓存内容
+        async function loadNewsSilent() {
+            try {
+                const newsPromises = NEWS_SOURCES.map(async (source) => {
+                    for (let i = 0; i < CORS_PROXIES.length; i++) {
+                        try {
+                            const proxy = CORS_PROXIES[i];
+                            const response = await fetch(proxy + encodeURIComponent(source.url));
+                            if (response.ok) {
+                                const text = await response.text();
+                                return await parseRSSFeed(source, text);
+                            }
+                        } catch (e) {
+                            console.warn(`代理 ${i+1} 获取 ${source.name} 失败`);
+                        }
+                    }
+                    return [];
+                });
+                
+                const results = await Promise.allSettled(newsPromises);
+                let newNews = [];
+                results.forEach(result => {
+                    if (result.status === 'fulfilled' && result.value.length > 0) {
+                        newNews = newNews.concat(result.value);
+                    }
+                });
+                
+                if (newNews.length > 0) {
+                    allNews = mergeNews(allNews, newNews);
+                    allNews.sort((a, b) => b.time - a.time);
+                    renderNews();
+                    console.log(`静默更新完成，现在共 ${allNews.length} 条新闻`);
+                }
+            } catch (e) {
+                console.warn('静默更新失败:', e);
+            }
         }
     </script>
 </body>
